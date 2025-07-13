@@ -1,0 +1,721 @@
+<!-- 记录取消提示框 -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="recordCancelToast" class="toast text-white" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg-dark text-white">
+            <strong class="me-auto">操作提示</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="recordCancelToastBody"></div>
+    </div>
+</div>
+
+<!-- 筛选记录模态框 -->
+<div class="modal fade" id="filterModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white">筛选业务记录</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="filter-form">
+                    <div class="mb-3">
+                        <label class="form-label">业务类型</label>
+                        <select class="form-select" id="filter-type">
+                            <option value="">全部</option>
+                            <option value="调度指令">调度指令</option>
+                            <option value="交易执行">交易执行</option>
+                            <option value="设备维护">设备维护</option>
+                            <option value="充电业务">充电业务</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">执行状态</label>
+                        <select class="form-select" id="filter-status">
+                            <option value="">全部</option>
+                            <option value="已完成">已完成</option>
+                            <option value="执行中">执行中</option>
+                            <option value="待执行">待执行</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">执行时间范围</label>
+                        <div class="input-group">
+                            <input type="datetime-local" class="form-control" id="filter-start-time">
+                            <span class="input-group-text">至</span>
+                            <input type="datetime-local" class="form-control" id="filter-end-time">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">关键词搜索</label>
+                        <div class="input-group">
+                            <select class="form-select" id="filter-field" style="max-width: 150px;">
+                                <option value="all">全部字段</option>
+                                <option value="recordId">记录ID</option>
+                                <option value="content">执行内容</option>
+                                <option value="target">目标对象</option>
+                            </select>
+                            <input type="text" class="form-control" id="filter-keyword" placeholder="输入搜索关键词">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer bg-dark border-top border-secondary">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-light" id="reset-filter">重置</button>
+                <button type="button" class="btn btn-primary" id="apply-filter">应用筛选</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 记录详情模态框 -->
+<div class="modal fade" id="recordDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white">业务记录详情</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">记录ID</label>
+                            <div class="form-control" id="detail-id">BIZ20240326001</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">业务类型</label>
+                            <div class="form-control" id="detail-type">调度指令</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">执行内容</label>
+                            <div class="form-control" id="detail-content">功率调整 (80kW → 120kW)</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">目标对象</label>
+                            <div class="form-control" id="detail-target">成都高新区A3站快充桩#5</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">执行时间</label>
+                            <div class="form-control" id="detail-execute-time">2024-03-26 09:15:23</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">完成时间</label>
+                            <div class="form-control" id="detail-complete-time">2024-03-26 09:16:45</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">状态</label>
+                            <div class="form-control">
+                                <span class="badge bg-success" id="detail-status">已完成</span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">执行结果</label>
+                            <div class="form-control" id="detail-result">
+                                功率调整成功，目标功率120kW已达到，充电桩运行正常，响应时间1.5秒，执行效率98.5%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h6>执行历史</h6>
+                    <div class="table-responsive">
+                        <table class="table table-centered table-nowrap mb-0">
+                            <thead>
+                                <tr>
+                                    <th style="width: 160px;">时间</th>
+                                    <th>事件</th>
+                                </tr>
+                            </thead>
+                            <tbody id="detail-timeline">
+                                <tr>
+                                    <td>2024-03-26 09:15:23</td>
+                                    <td>开始执行业务</td>
+                                </tr>
+                                <tr>
+                                    <td>2024-03-26 09:15:45</td>
+                                    <td>系统验证通过，参数校验完成</td>
+                                </tr>
+                                <tr>
+                                    <td>2024-03-26 09:16:30</td>
+                                    <td>执行指令下发，充电桩开始功率调整</td>
+                                </tr>
+                                <tr>
+                                    <td>2024-03-26 09:16:45</td>
+                                    <td class="text-success">业务执行完成，功率调整目标达成</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer bg-dark border-top border-secondary">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="export-detail">导出详情</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 新建工单模态框 -->
+<div class="modal fade" id="newWorkOrderModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white">新建检修工单</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="newWorkOrderForm" class="maintenance-form">
+                    <!-- 基本信息 -->
+                    <div class="form-section mb-4">
+                        <h6 class="form-section-title text-light mb-3">基本信息</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">工单类型</label>
+                                    <select class="form-select" id="maintenanceType" required>
+                                        <option value="">选择类型...</option>
+                                        <option value="routine">例行检修</option>
+                                        <option value="preventive">预防性检修</option>
+                                        <option value="corrective">故障检修</option>
+                                        <option value="predictive">预测性检修</option>
+                                        <option value="special">专项检修</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">优先级</label>
+                                    <select class="form-select" id="priority" required>
+                                        <option value="">选择优先级...</option>
+                                        <option value="emergency">紧急</option>
+                                        <option value="high">高</option>
+                                        <option value="medium">中</option>
+                                        <option value="low">低</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 设备信息 -->
+                    <div class="form-section mb-4">
+                        <h6 class="form-section-title text-light mb-3">设备信息</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">设备类型</label>
+                                    <select class="form-select" id="equipmentType" required>
+                                        <option value="">选择类型...</option>
+                                        <optgroup label="光伏发电设备">
+                                            <option value="photovoltaic_panel">光伏组件</option>
+                                            <option value="inverter">逆变器</option>
+                                            <option value="combiner_box">汇流箱</option>
+                                        </optgroup>
+                                        <optgroup label="风力发电设备">
+                                            <option value="wind_turbine">风力发电机组</option>
+                                            <option value="wind_blade">风机叶片</option>
+                                            <option value="wind_gearbox">风机变速箱</option>
+                                            <option value="wind_bearing">主轴承系统</option>
+                                        </optgroup>
+                                        <optgroup label="输配电设备">
+                                            <option value="transformer">变压器</option>
+                                            <option value="switchgear">开关柜</option>
+                                            <option value="cable">电缆</option>
+                                        </optgroup>
+                                        <optgroup label="监控设备">
+                                            <option value="monitoring">监控系统</option>
+                                            <option value="weather_station">气象站</option>
+                                            <option value="scada">SCADA系统</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">设备型号</label>
+                                    <input type="text" class="form-control" id="equipmentModel" placeholder="输入设备型号" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">制造商</label>
+                                    <input type="text" class="form-control" id="manufacturer" placeholder="输入制造商名称" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">安装日期</label>
+                                    <input type="date" class="form-control" id="installationDate" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mt-2">
+                            <div class="col-12">
+                                <h6 class="text-light mb-3">地理位置信息</h6>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">所属区域</label>
+                                    <select class="form-select" id="equipmentArea" required>
+                                        <option value="">选择区域...</option>
+                                        <option value="area_a">A区光伏方阵</option>
+                                        <option value="area_b">B区光伏方阵</option>
+                                        <option value="central_station">中央逆变器站</option>
+                                        <option value="substation">升压站</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">具体位置</label>
+                                    <input type="text" class="form-control" id="specificLocation" placeholder="例：A区3排5列" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">GPS坐标</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="latitude" placeholder="纬度">
+                                        <input type="text" class="form-control" id="longitude" placeholder="经度">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">安装位置</label>
+                                    <input type="text" class="form-control" id="mountPosition" placeholder="例：地面/屋顶/立柱" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mt-2">
+                            <div class="col-12">
+                                <h6 class="text-light mb-3">设备状态</h6>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">当前状态</label>
+                                    <select class="form-select" id="equipmentStatus" required>
+                                        <option value="">选择状态...</option>
+                                        <option value="normal">正常运行</option>
+                                        <option value="warning">性能警告</option>
+                                        <option value="fault">故障停运</option>
+                                        <option value="maintenance">维护中</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">运行时长</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="operationHours" required>
+                                        <span class="input-group-text">小时</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">故障描述</label>
+                                    <textarea class="form-control" id="faultDescription" rows="3" placeholder="描述设备当前存在的问题或异常现象..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 添加风机特定的检修条件 -->
+                        <div class="row g-3 mt-2 wind-specific-fields d-none">
+                            <div class="col-12">
+                                <h6 class="text-light mb-3">风机特定条件</h6>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">风速要求</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="windSpeedLimit" placeholder="最大允许风速">
+                                        <span class="input-group-text">m/s</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">高度要求</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="workHeight" placeholder="工作高度">
+                                        <span class="input-group-text">m</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">特殊工具</label>
+                                    <select class="form-select" id="specialTools" multiple>
+                                        <option value="torque_wrench">扭矩扳手</option>
+                                        <option value="vibration_analyzer">振动分析仪</option>
+                                        <option value="thermal_camera">红外热像仪</option>
+                                        <option value="ultrasonic">超声波检测仪</option>
+                                        <option value="oil_analyzer">油液分析仪</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">高空作业要求</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="heightWorkCert">
+                                        <label class="form-check-label text-light">高空作业证</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="safetyRope">
+                                        <label class="form-check-label text-light">安全绳</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="rescueEquipment">
+                                        <label class="form-check-label text-light">救援设备</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 检修计划 -->
+                    <div class="form-section mb-4">
+                        <h6 class="form-section-title text-light mb-3">检修计划</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">计划开始时间</label>
+                                    <input type="datetime-local" class="form-control" id="plannedStartTime" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">计划结束时间</label>
+                                    <input type="datetime-local" class="form-control" id="plannedEndTime" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">预计工期</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="estimatedDuration" min="0.5" step="0.5" required>
+                                        <span class="input-group-text">小时</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">工期要求</label>
+                                    <select class="form-select" id="timeRequirement" required>
+                                        <option value="normal">常规工期</option>
+                                        <option value="urgent">加急处理</option>
+                                        <option value="emergency">紧急抢修</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">天气要求</label>
+                                    <div class="weather-requirements">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="weather_sunny" checked>
+                                            <label class="form-check-label text-light" for="weather_sunny">晴天</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="weather_cloudy">
+                                            <label class="form-check-label text-light" for="weather_cloudy">多云</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="weather_overcast">
+                                            <label class="form-check-label text-light" for="weather_overcast">阴天</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">维修条件</label>
+                                    <div class="maintenance-conditions">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="condition_power" required>
+                                            <label class="form-check-label text-light" for="condition_power">
+                                                需要停电维修
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="condition_scaffold" required>
+                                            <label class="form-check-label text-light" for="condition_scaffold">
+                                                需要搭建脚手架
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="condition_crane" required>
+                                            <label class="form-check-label text-light" for="condition_crane">
+                                                需要吊装设备
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 检修内容 -->
+                    <div class="form-section mb-4">
+                        <h6 class="form-section-title text-light mb-3">检修内容</h6>
+                        <div class="table-responsive">
+                            <table class="table table-dark table-bordered" id="maintenanceItemsTable">
+                                <thead>
+                                    <tr>
+                                        <th>检查项目</th>
+                                        <th>标准值/要求</th>
+                                        <th>检测方法</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- 动态生成的检查项目行 -->
+                                </tbody>
+                            </table>
+                            <button type="button" class="btn btn-sm btn-info mt-2" onclick="maintenanceWorkOrder.addMaintenanceItem()">
+                                <i class="ri-add-line"></i> 添加检查项目
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 人员安排 -->
+                    <div class="form-section mb-4">
+                        <h6 class="form-section-title text-light mb-3">人员安排</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">负责人</label>
+                                    <select class="form-select" id="assignee" required>
+                                        <option value="">选择负责人...</option>
+                                        <option value="engineer1">张工 - 高级工程师</option>
+                                        <option value="engineer2">李工 - 电气工程师</option>
+                                        <option value="engineer3">王工 - 维护工程师</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label text-light">协助人员</label>
+                                    <select class="form-select" id="assistants" multiple>
+                                        <option value="engineer4">赵工 - 电气技术员</option>
+                                        <option value="engineer5">钱工 - 机械技术员</option>
+                                        <option value="engineer6">孙工 - 运维技术员</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 安全要求 -->
+                    <div class="form-section mb-4">
+                        <h6 class="form-section-title text-light mb-3">安全要求</h6>
+                        <div class="safety-requirements">
+                            <div class="mb-3">
+                                <label class="form-label text-light">必要的安全措施</label>
+                                <div class="safety-checks">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="safety_ppe" checked required>
+                                        <label class="form-check-label text-light" for="safety_ppe">
+                                            个人防护装备(安全帽、绝缘手套、防护眼镜等)
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="safety_power" checked required>
+                                        <label class="form-check-label text-light" for="safety_power">
+                                            电气安全措施(停电、验电、接地等)
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="safety_tools" checked required>
+                                        <label class="form-check-label text-light" for="safety_tools">
+                                            专业工具要求(绝缘工具、测试仪器等)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 备注说明 -->
+                    <div class="form-section">
+                        <div class="mb-3">
+                            <label class="form-label text-light">备注说明</label>
+                            <textarea class="form-control" id="notes" rows="3" placeholder="输入其他需要说明的事项..."></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer bg-dark border-top border-secondary">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="createWorkOrderBtn">创建工单</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 工单详情模态框 -->
+<div class="modal fade" id="workOrderDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title">工单详情</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="equipment-detail-card mb-4">
+                    <h5 class="mb-3">设备信息</h5>
+                    <div class="equipment-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">设备名称</div>
+                            <div class="spec-value">主变压器#1</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">设备类型</div>
+                            <div class="spec-value">变压器</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">运行时长</div>
+                            <div class="spec-value">3650天</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">上次检修</div>
+                            <div class="spec-value">2024-01-15</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="maintenance-timeline">
+                    <div class="timeline-item completed">
+                        <h6>创建工单</h6>
+                        <p>2024-04-01 09:00:00</p>
+                        <small class="text-muted">由系统管理员创建</small>
+                    </div>
+                    <div class="timeline-item completed">
+                        <h6>分配负责人</h6>
+                        <p>2024-04-01 09:15:00</p>
+                        <small class="text-muted">指派给张工</small>
+                    </div>
+                    <div class="timeline-item">
+                        <h6>开始检修</h6>
+                        <p>2024-04-01 10:00:00</p>
+                        <small class="text-muted">检修团队到达现场</small>
+                    </div>
+                    <div class="timeline-item">
+                        <h6>完成检修</h6>
+                        <p>待完成</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary">导出报告</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 充电站监控模态框 -->
+<div class="modal fade" id="monitoringModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title">充电站监控 - <span id="monitoringStationName"></span></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="monitoring-panel mb-4">
+                            <h6 class="mb-3">实时数据</h6>
+                            <div class="monitoring-data">
+                                <!-- 实时数据由JS动态更新 -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="monitoring-panel mb-4">
+                            <h6 class="mb-3">端口状态</h6>
+                            <div class="port-status">
+                                <!-- 端口状态由JS动态更新 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="monitoring-panel">
+                    <h6 class="mb-3">实时监控图表</h6>
+                    <div id="monitoringChart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 充电预约模态框 -->
+<div class="modal fade" id="reservationModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title">充电预约 - <span id="reservationStationName"></span></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="reservation-calendar">
+                    <!-- 预约日历由JS动态生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 维护管理模态框 -->
+<div class="modal fade" id="maintenanceModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title">维护管理 - <span id="maintenanceStationName"></span></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="maintenance-history">
+                    <!-- 维护历史记录由JS动态生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 添加风机特定的脚本 -->
+<script>
+// 设备类型变更事件
+document.getElementById('equipmentType')?.addEventListener('change', function(e) {
+    const windSpecificFields = document.querySelector('.wind-specific-fields');
+    if (e.target.value.startsWith('wind_')) {
+        windSpecificFields.classList.remove('d-none');
+    } else {
+        windSpecificFields.classList.add('d-none');
+    }
+});
+
+// 创建工单按钮事件
+document.addEventListener('DOMContentLoaded', function() {
+    const createBtn = document.getElementById('createWorkOrderBtn');
+    if (createBtn) {
+        createBtn.addEventListener('click', function() {
+            if (window.maintenanceWorkOrder && typeof window.maintenanceWorkOrder.createWorkOrder === 'function') {
+                window.maintenanceWorkOrder.createWorkOrder();
+            } else {
+                console.error('maintenanceWorkOrder 实例未正确初始化');
+            }
+        });
+    }
+});
+</script> 

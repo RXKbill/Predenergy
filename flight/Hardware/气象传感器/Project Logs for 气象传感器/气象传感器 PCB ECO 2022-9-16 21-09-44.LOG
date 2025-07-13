@@ -1,0 +1,3 @@
+Removed Pin From Net: NetName=GND Pin=U4-29
+Added Pin To Net: NetName=AGND Pin=U4-29
+Added Room: Name=气象传感器

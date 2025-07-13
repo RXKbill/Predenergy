@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页 - 能源管理系统</title>
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/css/icons.min.css">
+    <link rel="stylesheet" href="static/css/app.min.css">
+    <link rel="stylesheet" href="static/css/home.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css">
+    <!-- 添加自定义样式 -->
+    <style>
+        /* 侧边菜单样式 */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100%;
+            background: #fff;
+            z-index: 1000;
+            transition: left 0.3s ease;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .side-menu.active {
+            left: 0;
+        }
+
+        .side-menu-header {
+            background-color: #f8f9fa;
+        }
+
+        .side-menu-content {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .side-menu-footer {
+            background-color: #f8f9fa;
+        }
+
+        .list-group-item {
+            border: none;
+            padding: 12px 20px;
+        }
+
+        .list-group-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .list-group-item i {
+            width: 24px;
+            text-align: center;
+        }
+
+        /* 遮罩层样式 */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* 通知面板样式 */
+        .notification-panel {
+            position: fixed;
+            top: 60px;
+            right: -320px;
+            width: 320px;
+            height: calc(100% - 60px);
+            background: #fff;
+            z-index: 1000;
+            transition: right 0.3s ease;
+            box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+        }
+
+        .notification-panel.active {
+            right: 0;
+        }
+
+        .notification-header {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification-list {
+            overflow-y: auto;
+            height: calc(100% - 56px);
+        }
+
+        .notification-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            background: #f8f9fa;
+        }
+
+        /* 刷新按钮动画 */
+        .refresh-spin {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 添加遮罩层 -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- 添加通知面板 -->
+    <div class="notification-panel" id="notificationPanel">
+        <div class="notification-header">
+            <h6 class="mb-0">通知消息</h6>
+            <button class="btn btn-sm btn-link" onclick="markAllRead()">全部已读</button>
+        </div>
+        <div class="notification-list">
+            <div class="notification-item unread">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1">设备告警</h6>
+                        <p class="mb-1 text-muted small">风机组#3出现异常振动</p>
+                        <small class="text-muted">10分钟前</small>
+                    </div>
+                    <span class="badge bg-danger">未读</span>
+                </div>
+            </div>
+            <div class="notification-item">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1">系统通知</h6>
+                        <p class="mb-1 text-muted small">系统将于今晚23:00进行维护</p>
+                        <small class="text-muted">1小时前</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="layout-wrapper">
+        <!-- 顶部导航栏 -->
+        <header class="mobile-header">
+            <div class="header-container">
+                <div class="header-left">
+                    <button class="btn-icon" id="menuToggle">
+                        <i class="mdi mdi-menu"></i>
+                    </button>
+                </div>
+
+                <div class="header-title">
+                    <h1>驭能管理</h1>
+                </div>
+
+                <div class="header-right">
+                    <button class="btn-icon" id="refreshBtn" onclick="refreshData()">
+                        <i class="mdi mdi-refresh"></i>
+                    </button>
+                    <button class="btn-icon" id="notificationBtn">
+                        <i class="mdi mdi-bell"></i>
+                        <span class="notification-badge">1</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- 主要内容区域 -->
+        <div class="main-content">
+            <div class="page-content">
+                <div class="container-fluid">
+                    <!-- 搜索栏 -->
+                    <div class="search-bar">
+                        <div class="search-input-group">
+                            <span class="location-text">当前位置</span>
+                            <div class="search-input-wrapper">
+                                <input type="search" class="search-input" placeholder="搜索设备、工单、资讯...">
+                            </div>
+                            <i class="mdi mdi-qrcode-scan"></i>
+                        </div>
+                    </div>
+
+                    <!-- 快捷功能区 -->
+                    <div class="quick-actions">
+                        <div class="quick-actions-group">
+                            <div class="quick-action-item" onclick="window.location.href='app-mobile_spare-parts.html'">
+                                <div class="action-icon maintenance">
+                                    <i class="mdi mdi-package-variant"></i>
+                                </div>
+                                <span>备件管理</span>
+                            </div>
+                            <div class="quick-action-item" onclick="window.location.href='app-mobile_report.html'">
+                                <div class="action-icon certification">
+                                    <i class="mdi mdi-chart-box"></i>
+                                </div>
+                                <span>运行报表</span>
+                            </div>
+                        </div>
+                        <div class="quick-action-subgroup">
+                            <div class="quick-action-subitem">
+                                <div class="subaction-icon">
+                                    <i class="mdi mdi-alert"></i>
+                                </div>
+                                <span>故障预警</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 功能导航区 -->
+                <!-- <div class="feature-grid">
+                        <a href="#" class="feature-item">
+                            <i class="mdi mdi-chart-line"></i>
+                            <span>能源监测</span>
+                        </a>
+                        <a href="#" class="feature-item">
+                            <i class="mdi mdi-chart-areaspline"></i>
+                            <span>预测概览</span>
+                        </a>
+                        <a href="#" class="feature-item">
+                            <i class="mdi mdi-alert-circle"></i>
+                            <span>告警中心</span>
+                        </a>
+                        <a href="#" class="feature-item">
+                            <i class="mdi mdi-file-document"></i>
+                            <span>工单管理</span>
+                        </a>
+                        <a href="#" class="feature-item">
+                            <i class="mdi mdi-map-marker"></i>
+                            <span>设备定位</span>
+                        </a>
+                        <a href="#" class="feature-item">
+                            <i class="mdi mdi-cog"></i>
+                            <span>系统设置</span>
+                        </a>
+                        <a href="#" class="feature-item">
+                            <i class="mdi mdi-help-circle"></i>
+                            <span>帮助中心</span>
+                        </a>
+                        <a href="#" class="feature-item">
+                            <i class="mdi mdi-account"></i>
+                            <span>个人中心</span>
+                        </a>
+                    </div> -->
+
+                    <!-- 资讯中心 -->
+                    <div class="info-section">
+                        <div class="section-header">
+                            <h2>资讯中心</h2>
+                            <span class="subtitle">了解最新能源动态</span>
+                            <a href="#" class="more-link">更多</a>
+                        </div>
+                        <div class="info-card">
+                            <img src="static/picture/information.jpg" alt="资讯图片" class="info-image">
+                            <div class="info-text">
+                                <h3>新能源发展趋势分析：2024年光伏产业展望</h3>
+                                <time>2024-01-15</time>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 服务中心 -->
+                    <div class="service-section">
+                        <div class="section-header">
+                            <h2>服务中心</h2>
+                            <span class="subtitle">专业的能源服务</span>
+                            <a href="#" class="more-link">更多</a>
+                        </div>
+                        <div class="service-grid">
+                            <img src="static/picture/facilities_maintenance.jpg" alt="设备维护">
+                            <img src="static/picture/energy_optimization.jpg" alt="能源优化">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部导航栏 -->
+        <footer class="mobile-footer">
+            <nav class="footer-nav">
+                <a href="app-home_index.html" class="nav-item active">
+                    <i class="mdi mdi-home"></i>
+                    <span>首页</span>
+                </a>
+                <a href="app-mobile_index.html" class="nav-item">
+                    <i class="mdi mdi-chart-line"></i>
+                    <span>预测</span>
+                </a>
+                <a href="app-mobile_workorder.html" class="nav-item">
+                    <i class="mdi mdi-clipboard-text"></i>
+                    <span>工单</span>
+                </a>
+                <a href="app-mobile_profile.html" class="nav-item">
+                    <i class="mdi mdi-account"></i>
+                    <span>我的</span>
+                </a>
+            </nav>
+        </footer>
+    </div>
+
+    <!-- 添加侧边菜单 -->
+    <div class="side-menu" id="sideMenu">
+        <div class="side-menu-header p-3 border-bottom">
+            <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                    <img src="static/picture/avatar.jpg" alt="用户头像" class="rounded-circle" style="width: 50px; height: 50px;">
+                </div>
+                <div class="flex-grow-1 ms-3">
+                    <h6 class="mb-0">张工</h6>
+                    <small class="text-muted">设备维护工程师</small>
+                </div>
+            </div>
+        </div>
+        <div class="side-menu-content">
+            <div class="list-group list-group-flush">
+                <a href="#" class="list-group-item list-group-item-action">
+                    <i class="mdi mdi-home me-2"></i>首页概览
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <i class="mdi mdi-chart-bar me-2"></i>数据分析
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <i class="mdi mdi-bell me-2"></i>告警中心
+                    <span class="badge bg-danger float-end">2</span>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <i class="mdi mdi-wrench me-2"></i>设备维护
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <i class="mdi mdi-file-document me-2"></i>工单管理
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <i class="mdi mdi-cog me-2"></i>系统设置
+                </a>
+            </div>
+        </div>
+        <div class="side-menu-footer p-3 border-top">
+            <button class="btn btn-outline-danger w-100" onclick="handleLogout()">
+                <i class="mdi mdi-logout me-2"></i>退出登录
+            </button>
+        </div>
+    </div>
+
+    <!-- 引入JavaScript文件 -->
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/bootstrap.bundle.min.js"></script>
+    <script src="static/js/app.js"></script>
+    <script src="static/js/home.js"></script>
+    <script>
+        // 菜单切换功能
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.querySelector('.side-menu').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+        });
+
+        // 点击遮罩层关闭菜单和通知面板
+        document.getElementById('overlay').addEventListener('click', function() {
+            document.querySelector('.side-menu').classList.remove('active');
+            document.getElementById('notificationPanel').classList.remove('active');
+            this.classList.remove('active');
+        });
+
+        // 刷新功能
+        function refreshData() {
+            const refreshBtn = document.getElementById('refreshBtn');
+            const refreshIcon = refreshBtn.querySelector('i');
+            
+            // 添加旋转动画
+            refreshIcon.classList.add('refresh-spin');
+            
+            // 模拟数据刷新
+            setTimeout(() => {
+                // 更新页面数据的代码
+                // ...
+                
+                // 移除旋转动画
+                refreshIcon.classList.remove('refresh-spin');
+                
+                // 显示提示
+                showToast('数据已更新');
+            }, 1000);
+        }
+
+        // 通知功能
+        document.getElementById('notificationBtn').addEventListener('click', function() {
+            document.getElementById('notificationPanel').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+            
+            // 更新通知角标
+            updateNotificationBadge();
+        });
+
+        // 标记所有通知为已读
+        function markAllRead() {
+            const unreadItems = document.querySelectorAll('.notification-item.unread');
+            unreadItems.forEach(item => {
+                item.classList.remove('unread');
+                item.querySelector('.badge').remove();
+            });
+            
+            // 更新通知角标
+            updateNotificationBadge();
+        }
+
+        // 更新通知角标
+        function updateNotificationBadge() {
+            const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+            const badge = document.querySelector('.notification-badge');
+            
+            if (unreadCount > 0) {
+                badge.textContent = unreadCount;
+                badge.style.display = 'block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        // Toast提示功能
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast align-items-center text-white bg-primary border-0 position-fixed';
+            toast.style.bottom = '20px';
+            toast.style.right = '20px';
+            toast.style.zIndex = '1050';
+            
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+            
+            toast.addEventListener('hidden.bs.toast', () => {
+                toast.remove();
+            });
+        }
+
+        // 添加退出登录功能
+        function handleLogout() {
+            if (confirm('确定要退出登录吗？')) {
+                // 这里可以添加退出登录的逻辑
+                showToast('退出登录成功');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1500);
+            }
+        }
+
+        // 为菜单项添加点击事件
+        document.querySelectorAll('.side-menu .list-group-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                // 如果有特定的链接，就跳转
+                const href = this.getAttribute('href');
+                if (href && href !== '#') {
+                    e.preventDefault();
+                    window.location.href = href;
+                }
+                
+                // 关闭菜单
+                document.querySelector('.side-menu').classList.remove('active');
+                document.getElementById('overlay').classList.remove('active');
+                
+                // 显示对应的功能正在开发提示
+                if (href === '#') {
+                    e.preventDefault();
+                    showToast('该功能正在开发中...');
+                }
+            });
+        });
+
+        // 初始化通知角标
+        document.addEventListener('DOMContentLoaded', function() {
+            updateNotificationBadge();
+        });
+    </script>
+</body>
+</html> 

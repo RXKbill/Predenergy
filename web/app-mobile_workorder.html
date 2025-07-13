@@ -1,0 +1,798 @@
+<!doctype html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <title>驭能能源管理系统</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta content="移动端能源管理系统" name="description">
+        <meta content="Themesbrand" name="author">
+        <meta name="theme-color" content="#2196f3">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+        <!-- 引入CSS文件 -->
+        <link href="static/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="static/css/icons.min.css" rel="stylesheet" type="text/css">
+        <link href="static/css/app.min.css" rel="stylesheet" type="text/css">
+        <link href="static/css/energy-mobile.css" rel="stylesheet" type="text/css">
+        <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css" rel="stylesheet">
+        <link href="static/css/workorder.css" rel="stylesheet" type="text/css">
+        
+        <!-- 引入字体图标 -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+        <!-- 引入第三方库 -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    </head>
+
+
+<body>
+    <div id="layout-wrapper">
+        <!-- 顶部导航栏 -->
+        <header class="mobile-header">
+            <div class="header-container">
+                <div class="header-left">
+                    <button class="btn-icon" id="menuToggle">
+                        <i class="mdi mdi-menu"></i>
+                    </button>
+                </div>
+
+                <div class="header-title">
+                    <h1>驭能管理</h1>
+                </div>
+
+                <div class="header-right">
+                    <button class="btn-icon" id="refreshBtn" onclick="refreshData()">
+                        <i class="mdi mdi-refresh"></i>
+                    </button>
+                    <button class="btn-icon" id="notificationBtn">
+                        <i class="mdi mdi-bell"></i>
+                        <!-- <span class="notification-badge">1</span> -->
+                    </button>
+                </div>
+            </div>
+        </header>
+        <!-- 主要内容区域 -->
+        <div class="main-content">
+            <div class="device-list-section mb-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center bg-light">
+                        <h6 class="mb-0">工单列表</h6>
+                    </div>
+                    <div class="card-body">
+            <!-- 工单状态切换 -->
+            <div class="status-tabs">
+                <div class="nav nav-pills" role="tablist">
+                    <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#pending" type="button">
+                        待处理 <span class="badge bg-danger">3</span>
+                    </button>
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#processing" type="button">
+                        处理中 <span class="badge bg-warning">2</span>
+                    </button>
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#completed" type="button">
+                        已完成 <span class="badge bg-success">8</span>
+                    </button>
+                </div>
+            </div>
+            <!-- 工单列表区域 -->
+            <div class="tab-content">
+                <!-- 待处理工单 -->
+                <div class="tab-pane fade show active" id="pending">
+                    <div class="workorder-list">
+                        <!-- 高优先级工单 -->
+                        <div class="workorder-item high-priority">
+                            <div class="priority-badge">
+                                <i class="mdi mdi-alert"></i>
+                                紧急
+                            </div>
+                            <div class="workorder-content">
+                                <h6 class="workorder-title">风机叶片断裂检修</h6>
+                                <p class="workorder-desc">风机#1001叶片出现裂痕，需立即处理</p>
+                                <div class="workorder-info">
+                                    <span><i class="mdi mdi-clock-outline"></i> 2小时前</span>
+                                    <span><i class="mdi mdi-map-marker"></i> A区风机组</span>
+                                    <span><i class="mdi mdi-identifier"></i> WO-20240314-001</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary btn-sm">立即处理</button>
+                        </div>
+
+                        <!-- 中优先级工单 -->
+                        <div class="workorder-item medium-priority">
+                            <div class="priority-badge">
+                                <i class="mdi mdi-alert-outline"></i>
+                                普通
+                            </div>
+                            <div class="workorder-content">
+                                <h6 class="workorder-title">光伏板清洗维护</h6>
+                                <p class="workorder-desc">B区光伏板需进行例行清洗</p>
+                                <div class="workorder-info">
+                                    <span><i class="mdi mdi-clock-outline"></i> 4小时前</span>
+                                    <span><i class="mdi mdi-map-marker"></i> B区光伏组</span>
+                                    <span><i class="mdi mdi-identifier"></i> WO-20240314-002</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm">开始处理</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 处理中工单 -->
+                <div class="tab-pane fade" id="processing">
+                    <div class="workorder-list">
+                        <div class="workorder-item">
+                            <div class="priority-badge">
+                                <i class="mdi mdi-progress-clock"></i>
+                                处理中
+                            </div>
+                            <div class="workorder-content">
+                                <h6 class="workorder-title">变压器检修</h6>
+                                <p class="workorder-desc">主变压器例行检修维护</p>
+                                <div class="workorder-info">
+                                    <span><i class="mdi mdi-clock-outline"></i> 进行中</span>
+                                    <span><i class="mdi mdi-map-marker"></i> 变电站</span>
+                                    <span><i class="mdi mdi-identifier"></i> WO-20240314-003</span>
+                                </div>
+                                <div class="progress mt-2" style="height: 6px;">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 75%"></div>
+                                </div>
+                            </div>
+                            <button class="btn btn-success btn-sm">完成工单</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 已完成工单 -->
+                <div class="tab-pane fade" id="completed">
+                    <div class="workorder-list">
+                        <div class="workorder-item completed">
+                            <div class="priority-badge">
+                                <i class="mdi mdi-check-circle"></i>
+                                已完成
+                            </div>
+                            <div class="workorder-content">
+                                <h6 class="workorder-title">逆变器维修更换</h6>
+                                <p class="workorder-desc">更换损坏的逆变器组件</p>
+                                <div class="workorder-info">
+                                    <span><i class="mdi mdi-clock-outline"></i> 完成于 2024-03-13</span>
+                                    <span><i class="mdi mdi-map-marker"></i> C区光伏组</span>
+                                    <span><i class="mdi mdi-identifier"></i> WO-20240313-005</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-outline-secondary btn-sm">查看详情</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        
+            <!-- 在工单列表区域之前添加巡检报告摘要 -->
+            <div class="inspection-summary mb-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center bg-light">
+                        <h6 class="mb-0">巡检报告</h6>
+                        <div class="alert alert-warning py-1 px-2 mb-0">
+                            <small><i class="mdi mdi-alert"></i> 发现2个潜在问题需要关注</small>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- 巡检发现 -->
+                        <div class="inspection-findings">
+                            <div class="finding-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="finding-info">
+                                        <h6 class="mb-1">光伏板温度异常</h6>
+                                        <p class="mb-0 text-muted small">A-01区域光伏板表面温度达到75°C，超过正常范围。</p>
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="createWorkOrder('光伏板温度异常', 'high')">
+                                        生成工单
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="finding-item mt-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="finding-info">
+                                        <h6 class="mb-1">逆变器效率降低</h6>
+                                        <p class="mb-0 text-muted small">B-02逆变器转换效率下降至85%，建议检查。</p>
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-warning" onclick="createWorkOrder('逆变器效率异常', 'medium')">
+                                        生成工单
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 图片记录 -->
+                        <div class="inspection-images mt-3">
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <img src="static/image/solar_panels_it_image.png" class="img-fluid rounded" alt="热成像检测">
+                                    <small class="d-block text-center text-muted mt-1">热成像检测</small>
+                                </div>
+                                <div class="col-6">
+                                    <img src="static/image/solar_panels_visual_image.jpg" class="img-fluid rounded" alt="可见光检测">
+                                    <small class="d-block text-center text-muted mt-1">可见光检测</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 待检测设备列表 -->
+            <div class="device-list-section mb-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center bg-light">
+                        <h6 class="mb-0">待检测设备</h6>
+                        <button class="btn btn-sm btn-primary" onclick="startInspection()">
+                            <i class="mdi mdi-drone"></i> 开始巡检
+                        </button>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">光伏板 A-01</h6>
+                                        <small class="text-muted">上次巡检：2天前</small>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="A-01">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">光伏板 D-21</h6>
+                                        <small class="text-muted">上次巡检：5天前</small>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="D-21">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">风机 B-02</h6>
+                                        <small class="text-muted">上次巡检：1天前</small>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="B-02">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <footer class="mobile-footer">
+        <nav class="footer-nav">
+            <a href="app-mobile_home.html" class="nav-item">
+                <i class="mdi mdi-home"></i>
+                <span>首页</span>
+            </a>
+            <a href="app-mobile_index.html" class="nav-item">
+                <i class="mdi mdi-chart-line"></i>
+                <span>预测</span>
+            </a>
+            <a href="app-mobile_workorder.html" class="nav-item active">
+                <i class="mdi mdi-clipboard-text"></i>
+                <span>工单</span>
+            </a>
+            <a href="app-mobile_profile.html" class="nav-item">
+                <i class="mdi mdi-account"></i>
+                <span>我的</span>
+            </a>
+        </nav>
+    </footer>
+
+    <!-- 工单详情模态框 -->
+    <div class="modal fade" id="workorderDetailModal" tabindex="-1">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">工单详情</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- 工单基本信息 -->
+                    <div class="detail-section">
+                        <h6>基本信息</h6>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <label>工单编号</label>
+                                <span>WO-20240314-001</span>
+                            </div>
+                            <div class="info-item">
+                                <label>设备ID</label>
+                                <span>WT-1001</span>
+                            </div>
+                            <div class="info-item">
+                                <label>优先级</label>
+                                <span class="badge bg-danger">紧急</span>
+                            </div>
+                            <div class="info-item">
+                                <label>创建时间</label>
+                                <span>2024-03-14 10:30</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 问题描述 -->
+                    <div class="detail-section">
+                        <h6>问题描述</h6>
+                        <p>风机叶片出现裂痕，需立即处理。根据振动传感器数据显示，裂痕位于第二叶片前缘位置。</p>
+                    </div>
+
+                    <!-- 历史数据 -->
+                    <div class="detail-section">
+                        <h6>历史数据</h6>
+                        <div class="chart-container">
+                            <canvas id="historyChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 预测趋势 -->
+                    <div class="detail-section">
+                        <h6>预测趋势</h6>
+                        <div class="chart-container">
+                            <canvas id="predictionChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 维修记录 -->
+                    <div class="detail-section">
+                        <h6>维修记录</h6>
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-badge bg-primary">
+                                    <i class="mdi mdi-wrench"></i>
+                                </div>
+                                <div class="timeline-content">
+                                    <h6>更换叶片</h6>
+                                    <p>2024-02-15</p>
+                                    <small>由张工完成维修</small>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-badge bg-warning">
+                                    <i class="mdi mdi-alert"></i>
+                                </div>
+                                <div class="timeline-content">
+                                    <h6>发现裂痕</h6>
+                                    <p>2024-02-14</p>
+                                    <small>日常巡检发现</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary">开始处理</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 工单处理模态框 -->
+    <div class="modal fade" id="workorderProcessModal" tabindex="-1">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">处理工单</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="workorderForm">
+                        <!-- 处理步骤 -->
+                        <div class="process-steps">
+                            <div class="step active">
+                                <span class="step-number">1</span>
+                                <span class="step-text">信息确认</span>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">2</span>
+                                <span class="step-text">现场勘查</span>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">3</span>
+                                <span class="step-text">维修处理</span>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">4</span>
+                                <span class="step-text">质检确认</span>
+                            </div>
+                        </div>
+
+                        <!-- 步骤1：信息确认 -->
+                        <div class="step-content" id="step1">
+                            <div class="mb-3">
+                                <label class="form-label">工单基本信息</label>
+                                <div class="info-grid bg-light p-3 rounded">
+                                    <div class="info-item">
+                                        <label>工单编号</label>
+                                        <span id="workOrderId">WO-20240314-001</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <label>设备ID</label>
+                                        <span id="deviceId">WT-1001</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <label>设备类型</label>
+                                        <span id="deviceType">风力发电机</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <label>故障类型</label>
+                                        <span id="faultType" class="text-danger">叶片裂痕</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">巡检记录</label>
+                                <div class="inspection-record bg-light p-3 rounded">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <small class="text-muted">巡检时间：2024-03-14 09:30</small>
+                                        <a href="#" class="text-primary" onclick="viewInspectionDetail()">查看完整记录</a>
+                                    </div>
+                                    <div class="row g-2">
+                                        <div class="col-6">
+                                            <img src="static/image/crack_in_blade.jpg" class="img-fluid rounded" alt="叶片裂痕">
+                                            <small class="d-block text-center text-muted mt-1">叶片裂痕检测</small>
+                                        </div>
+                                        <div class="col-6">
+                                            <img src="static/image/crack_blade_detail.jpg" class="img-fluid rounded" alt="叶片裂痕">
+                                            <small class="d-block text-center text-muted mt-1">叶片裂痕特写</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">设备历史记录</label>
+                                <div class="timeline-mini">
+                                    <div class="timeline-item">
+                                        <div class="timeline-badge bg-warning">
+                                            <i class="mdi mdi-alert"></i>
+                                        </div>
+                                        <div class="timeline-content">
+                                            <small class="text-muted">2024-02-15</small>
+                                            <p class="mb-0">例行维护更换叶片</p>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-badge bg-info">
+                                            <i class="mdi mdi-wrench"></i>
+                                        </div>
+                                        <div class="timeline-content">
+                                            <small class="text-muted">2024-01-20</small>
+                                            <p class="mb-0">更换轴承</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 步骤2：现场勘查 -->
+                        <div class="step-content" id="step2" style="display: none;">
+                            <div class="mb-3">
+                                <label class="form-label">现场照片记录</label>
+                                <div class="photo-upload">
+                                    <div class="d-flex gap-2 mb-2">
+                                        <button type="button" class="btn btn-outline-primary flex-grow-1" onclick="takePhoto('normal')">
+                                            <i class="mdi mdi-camera"></i>
+                                            拍摄照片
+                                        </button>
+                                        <button type="button" class="btn btn-outline-info flex-grow-1" onclick="takePhoto('thermal')">
+                                            <i class="mdi mdi-camera"></i>
+                                            热成像拍摄
+                                        </button>
+                                    </div>
+                                    <div class="photo-preview">
+                                        <!-- 照片预览区域 -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">故障确认</label>
+                                <select class="form-select mb-2" id="faultCategory" required>
+                                    <option value="">选择故障类别</option>
+                                    <option value="blade">叶片系统</option>
+                                    <option value="generator">发电机系统</option>
+                                    <option value="control">控制系统</option>
+                                    <option value="other">其他</option>
+                                </select>
+                                <select class="form-select mb-2" id="faultSubCategory" required>
+                                    <option value="">选择具体故障</option>
+                                    <!-- 动态加载子选项 -->
+                                </select>
+                                <textarea class="form-control" rows="3" placeholder="详细描述故障情况..." required></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">检测数据</label>
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <div class="input-group">
+                                            <span class="input-group-text">振动值</span>
+                                            <input type="number" class="form-control" placeholder="输入数值">
+                                            <span class="input-group-text">Hz</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="input-group">
+                                            <span class="input-group-text">温度</span>
+                                            <input type="number" class="form-control" placeholder="输入数值">
+                                            <span class="input-group-text">°C</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">维修建议</label>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="radio" name="repairSuggestion" id="needParts" required>
+                                    <label class="form-check-label" for="needParts">
+                                        需要更换配件
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="radio" name="repairSuggestion" id="needRepair" required>
+                                    <label class="form-check-label" for="needRepair">
+                                        需要维修处理
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="repairSuggestion" id="needReplace" required>
+                                    <label class="form-check-label" for="needReplace">
+                                        需要整体更换
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 步骤3：维修处理 -->
+                        <div class="step-content" id="step3" style="display: none;">
+                            <div class="mb-3">
+                                <label class="form-label">维修方案</label>
+                                <select class="form-select mb-2" id="repairPlan" required>
+                                    <option value="">选择维修方案</option>
+                                    <option value="replace">更换部件</option>
+                                    <option value="repair">修复处理</option>
+                                    <option value="adjust">调整参数</option>
+                                    <option value="other">其他方案</option>
+                                </select>
+                                <textarea class="form-control" id="repairDesc" rows="3" placeholder="详细描述维修方案..." required></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">使用配件</label>
+                                <div class="parts-management">
+                                    <div class="input-group mb-2">
+                                        <input type="text" class="form-control" placeholder="配件编号" id="partNo">
+                                        <input type="text" class="form-control" placeholder="配件名称" id="partName">
+                                        <input type="number" class="form-control" placeholder="数量" id="partQuantity">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="addPart()">添加</button>
+                                    </div>
+                                    <div class="parts-list bg-light rounded p-2">
+                                        <!-- 配件列表 -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">维修过程记录</label>
+                                <div class="repair-steps">
+                                    <div class="input-group mb-2">
+                                        <input type="text" class="form-control" placeholder="维修步骤描述" id="repairStep">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="addRepairStep()">添加</button>
+                                    </div>
+                                    <div class="repair-steps-list bg-light rounded p-2">
+                                        <!-- 维修步骤列表 -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">维修后照片</label>
+                                <div class="photo-upload">
+                                    <div class="d-flex gap-2">
+                                        <button type="button" class="btn btn-outline-primary" onclick="simulatePhotoUpload()">
+                                            <i class="mdi mdi-camera"></i>
+                                            拍摄照片
+                                        </button>
+                                        <input type="file" id="photoUpload" accept="image/*" style="display: none;" onchange="handlePhotoUpload(this)">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('photoUpload').click()">
+                                            <i class="mdi mdi-upload"></i>
+                                            上传照片
+                                        </button>
+                                    </div>
+                                    <div class="photo-preview mt-2">
+                                        <div class="photo-item">
+                                            <img src="static/image/new_blade.jpg" class="img-fluid rounded" alt="更换后的新叶片">
+                                            <button class="btn btn-sm btn-danger btn-delete" onclick="removePhoto(this)">
+                                                <i class="mdi mdi-close"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <!-- 添加一个隐藏的input用于验证 -->
+                                    <input type="hidden" id="hasPhoto" value="1">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">调试数据</label>
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <div class="input-group">
+                                            <span class="input-group-text">转速</span>
+                                            <input type="number" class="form-control" id="testSpeed" placeholder="输入数值" required>
+                                            <span class="input-group-text">rpm</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="input-group">
+                                            <span class="input-group-text">功率</span>
+                                            <input type="number" class="form-control" id="testPower" placeholder="输入数值" required>
+                                            <span class="input-group-text">kW</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 步骤4：质检确认 -->
+                        <div class="step-content" id="step4" style="display: none;">
+                            <div class="mb-3">
+                                <label class="form-label">质检项目</label>
+                                <div class="quality-checks">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" required>
+                                        <label class="form-check-label">
+                                            外观检查完好
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" required>
+                                        <label class="form-check-label">
+                                            功能测试正常
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" required>
+                                        <label class="form-check-label">
+                                            参数调试完成
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" required>
+                                        <label class="form-check-label">
+                                            安全防护到位
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">测试数据</label>
+                                <div class="test-data bg-light p-3 rounded">
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-6">
+                                            <small class="text-muted d-block">空载转速</small>
+                                            <div class="d-flex justify-content-between">
+                                                <span>1500 rpm</span>
+                                                <span class="badge bg-success">正常</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <small class="text-muted d-block">负载功率</small>
+                                            <div class="d-flex justify-content-between">
+                                                <span>2.2 MW</span>
+                                                <span class="badge bg-success">正常</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row g-2">
+                                        <div class="col-6">
+                                            <small class="text-muted d-block">振动频率</small>
+                                            <div class="d-flex justify-content-between">
+                                                <span>0.15 Hz</span>
+                                                <span class="badge bg-success">正常</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <small class="text-muted d-block">温升值</small>
+                                            <div class="d-flex justify-content-between">
+                                                <span>25 °C</span>
+                                                <span class="badge bg-success">正常</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">质检结论</label>
+                                <select class="form-select mb-2" required>
+                                    <option value="">选择质检结论</option>
+                                    <option value="pass">通过</option>
+                                    <option value="conditional">有条件通过</option>
+                                    <option value="fail">不通过</option>
+                                </select>
+                                <textarea class="form-control" rows="3" placeholder="质检意见..." required></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">后续建议</label>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="needMonitor">
+                                    <label class="form-check-label" for="needMonitor">
+                                        需要重点监控
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="needMaintenance">
+                                    <label class="form-check-label" for="needMaintenance">
+                                        需要定期保养
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="needRecheck">
+                                    <label class="form-check-label" for="needRecheck">
+                                        需要复检
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="prevStep">上一步</button>
+                    <button type="button" class="btn btn-primary" id="nextStep">下一步</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加确认完成工单的模态框 -->
+    <div class="modal fade" id="completeWorkOrderModal" tabindex="-1" aria-labelledby="completeWorkOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="completeWorkOrderModalLabel">
+                        <i class="mdi mdi-check-circle text-success me-2"></i>确认完成工单
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-0">确认将此工单标记为已完成？</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-success" id="confirmComplete">确认完成</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入JavaScript文件 -->
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="static/js/workorder.js"></script>
+</body>
+</html> 

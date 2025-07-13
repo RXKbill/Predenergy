@@ -1,0 +1,1414 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        
+        <meta charset="utf-8">
+        <title>系统管理 | 能源管理系统</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="能源管理系统" name="description">
+        <meta content="Themesbrand" name="author">
+
+        <!-- preloader css -->
+        <link rel="stylesheet" href="static/css/preloader.min.css" type="text/css">
+
+        <!-- Bootstrap Css -->
+        <link href="static/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css">
+        
+        <!-- Icons Css -->
+        <link href="static/css/icons.min.css" rel="stylesheet" type="text/css">
+        <link href="static/css/boxicons.min.css" rel="stylesheet" type="text/css">
+        <link href="static/css/materialdesignicons.min.css" rel="stylesheet" type="text/css">
+        
+        <!-- App Css-->
+        <link href="static/css/app.min.css" id="app-style" rel="stylesheet" type="text/css">
+
+
+
+        <!-- flatpickr css -->
+        <link href="static/css/flatpickr.min.css" rel="stylesheet" type="text/css">
+
+        <!-- nouisliderribute css -->
+        <link rel="stylesheet" href="static/css/nouislider.min.css">
+
+        <!-- DataTables -->
+        <link href="static/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+
+        <!-- Responsive datatable examples -->
+        <link href="static/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css"> 
+
+        <!-- Sweet Alert css -->
+        <link href="static/css/sweetalert2.min.css" rel="stylesheet" type="text/css">
+
+        <!-- 系统管理样式 -->
+        <link rel="stylesheet" href="static/css/system_management.css">
+    </head>
+
+    <body data-layout-mode="dark" data-topbar="dark" data-sidebar="dark" class="sidebar-enable">
+
+    <!-- <body data-layout="horizontal"> -->
+
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <header id="page-topbar">
+                <div class="navbar-header">
+                    <div class="d-flex">
+                        <!-- LOGO -->
+                        <div class="navbar-brand-box">
+                            <a href="" class="logo logo-dark">
+                                <span class="logo-sm">
+                                    <img src="static/picture/logo.png" alt="" height="24">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="static/picture/logo.png" alt="" height="24"> <span class="logo-txt">驭能能源管理系统</span>
+                                </span>
+                            </a>
+
+                            <a href="" class="logo logo-light">
+                                <span class="logo-sm">
+                                    <img src="static/picture/logo.png" alt="" height="24">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="static/picture/logo.png" alt="" height="24"> <span class="logo-txt">驭能能源管理系统</span>
+                                </span>
+                            </a>
+                        </div>
+
+                        <button type="button" class="btn btn-sm px-3 font-size-16 header-item" id="vertical-menu-btn">
+                            <i class="fa fa-fw fa-bars"></i>
+                        </button>
+
+                        <!-- App Search-->
+                        <form class="app-search d-none d-lg-block">
+                            <div class="position-relative">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <button class="btn btn-primary" type="button"><i class="bx bx-search-alt align-middle"></i></button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="d-flex">
+
+                        <div class="dropdown d-inline-block d-lg-none ms-2">
+                            <button type="button" class="btn header-item" id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i data-feather="search" class="icon-lg"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-search-dropdown">
+        
+                                <form class="p-3">
+                                    <div class="form-group m-0">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Search ..." aria-label="Search Result">
+
+                                            <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-none d-sm-inline-block">
+                            <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img id="header-lang-img" src="static/picture/cn.png" alt="Header Language" height="16">
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end">
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="en">
+                                    <img src="static/picture/cn.png" alt="user-image" class="me-1" height="12"> <span class="align-middle">Chinese</span>
+                                </a>
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="sp">
+                                    <img src="static/picture/spain.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Spanish</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="gr">
+                                    <img src="static/picture/germany.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">German</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="it">
+                                    <img src="static/picture/italy.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Italian</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ru">
+                                    <img src="static/picture/russia.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Russian</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-none d-sm-inline-block">
+                            <button type="button" class="btn header-item" id="mode-setting-btn">
+                                <i data-feather="moon" class="icon-lg layout-mode-dark"></i>
+                                <i data-feather="sun" class="icon-lg layout-mode-light"></i>
+                            </button>
+                        </div>
+
+                        <div class="dropdown d-none d-lg-inline-block ms-1">
+                            <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i data-feather="grid" class="icon-lg"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                                <div class="p-2">
+                                    <div class="row g-0">
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/github.png" alt="Github">
+                                                <span>GitHub</span>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/bitbucket.png" alt="bitbucket">
+                                                <span>Bitbucket</span>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/dribbble.png" alt="dribbble">
+                                                <span>Dribbble</span>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-0">
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/dropbox.png" alt="dropbox">
+                                                <span>Dropbox</span>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/mail_chimp.png" alt="mail_chimp">
+                                                <span>Mail Chimp</span>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/slack.png" alt="slack">
+                                                <span>Slack</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item noti-icon position-relative" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i data-feather="bell" class="icon-lg"></i>
+                                <span class="badge bg-danger rounded-pill">5</span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown">
+                                <div class="p-3">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <h6 class="m-0"> Notifications </h6>
+                                        </div>
+                                        <div class="col-auto">
+                                            <a href="#!" class="small text-reset text-decoration-underline"> Unread (3)</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-simplebar="" style="max-height: 230px;">
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <img src="static/picture/avatar-3.jpg" class="rounded-circle avatar-sm" alt="user-pic">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">James Lemire</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">It will seem like simplified Chinese.</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>1 hours ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 avatar-sm me-3">
+                                                <span class="avatar-title bg-primary rounded-circle font-size-16">
+                                                    <i class="bx bx-cart"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">Your order is placed</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">If several languages coalesce the grammar</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>3 min ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 avatar-sm me-3">
+                                                <span class="avatar-title bg-success rounded-circle font-size-16">
+                                                    <i class="bx bx-badge-check"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">Your item is shipped</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">If several languages coalesce the grammar</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>3 min ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <img src="static/picture/avatar-6.jpg" class="rounded-circle avatar-sm" alt="user-pic">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">Salena Layfield</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">As a skeptical Cambridge friend of mine occidental.</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>1 hours ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="p-2 border-top d-grid">
+                                    <a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">
+                                        <i class="mdi mdi-arrow-right-circle me-1"></i> <span>View More..</span> 
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item right-bar-toggle me-2">
+                                <i data-feather="settings" class="icon-lg"></i>
+                            </button>
+                        </div>
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item bg-soft-light border-start border-end" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img class="rounded-circle header-profile-user" src="static/picture/avatar-1.jpg" alt="Header Avatar">
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium">张明</span>
+                                <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <!-- item-->
+                                <a class="dropdown-item" href="apps-contacts-profile.html"><i class="mdi mdi-face-profile font-size-16 align-middle me-1"></i> Profile</a>
+                                <a class="dropdown-item" href="auth-lock-screen.html"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i> Lock screen</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="auth-logout.html"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </header>
+
+             <!-- ========== Left Sidebar Start ========== -->
+             <div class="vertical-menu">
+                <div data-simplebar="" class="h-100">
+
+                    <!--- Sidemenu -->
+                    <div id="sidebar-menu">
+                        <!-- Left Menu Start -->
+                        <ul class="metismenu list-unstyled" id="side-menu">
+                            <li class="menu-title" data-key="t-menu">View</li>
+
+                            <li>
+                                <a href="app-index.html">
+                                    <i data-feather="home"></i>
+                                    <span data-key="t-dashboard">数据总览</span>
+                                </a>
+                            </li>
+                            <li class="menu-title mt-2" data-key="t-components">Basic</li>
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow">
+                                    <i data-feather="users"></i>
+                                    <span data-key="t-authentication">个人界面</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li>
+                                        <a href="app-contacts-profile.html">
+                                            <span data-key="t-calendar">个人信息</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="app-calendar.html">
+                                            <span data-key="t-calendar">日程表</span>
+                                        </a>
+                                    </li>
+        
+                                    <li>
+                                        <a href="app-chat.html">
+                                            <span data-key="t-chat">聊天</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="app-contacts-list.html">
+                                    <i data-feather="file-text"></i>
+                                    <span data-key="t-pages">用户列表</span>
+                                </a>
+                            </li>
+
+                            <li class="menu-title mt-2" data-key="t-components">Operations</li>
+
+                            
+                            <li>
+                                <a href="app-system_management.html">
+                                    <i data-feather="grid"></i>
+                                    <span data-key="t-apps">系统设置</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="app-data_management.html">
+                                    <i data-feather="sliders"></i>
+                                    <span data-key="t-tables">数据管理</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="app-business_process.html">
+                                    <i data-feather="briefcase"></i>
+                                    <span data-key="t-components">业务处理</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="app-equipment_management.html">
+                                    <i data-feather="cpu"></i>
+                                    <span data-key="t-icons">设备管理</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Sidebar -->
+                </div>
+            </div>
+            <!-- Left Sidebar End -->
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+                
+                               <!-- Main Content Card -->
+                               <body>
+                                <div class="main-content">
+                                    <div class="page-content">
+                                        <div class="container-fluid">
+                                            <!-- 页面标题 -->
+                                            <!-- <div class="row">
+                                                <div class="col-12">
+                                                    <div class="page-title-box d-flex align-items-center justify-content-between">
+                                                        <h4 class="mb-0">系统配置管理</h4>
+                                                    </div>
+                                                </div>
+                                            </div> -->
+                            
+                                            <!-- 配置管理卡片 -->
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="card">
+                                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                                           <div>
+                                                                    <h5 class="mb-0">系统配置管理</h5>
+                                                                    <div class="mt-2">
+                                                                        <span class="badge bg-info me-2">当前版本: v2.1.3</span>
+                                                                        <span class="text-muted">更新时间: 2024-03-21 15:30</span>
+                                                                        <span class="ms-2 text-muted">|</span>
+                                                                        <span class="ms-2 text-muted">操作人: 管理员</span>
+                                                                        <span class="ms-2 text-muted">|</span>
+                                                                        <span class="ms-2 text-success"><i class="fas fa-check-circle me-1"></i>配置已同步</span>
+                                                                    </div>
+                                                                </div>
+                                                            <div class="button-group d-flex gap-2">
+                                                                <button type="button" class="btn btn-primary" id="saveConfigBtn" onclick="saveConfig()">
+                                                                    <i class="fas fa-save me-1"></i>保存配置
+                                                                </button>
+                                                                <button type="button" class="btn btn-info" id="viewHistoryBtn" onclick="viewConfigHistory()">
+                                                                    <i class="fas fa-history me-1"></i>历史版本
+                                                                </button>
+                                                                <button type="button" class="btn btn-secondary" id="compareVersionBtn">
+                                                                    <i class="fas fa-code-branch me-1"></i>版本对比
+                                                                </button>
+                                                                <button type="button" class="btn btn-success" id="syncConfigBtn">
+                                                                    <i class="fas fa-sync me-1"></i>同步配置
+                                                                </button>
+                                                                <button type="button" class="btn btn-info" id="configDetailBtn" onclick="viewConfigDetail()">
+                                                                    <i class="fas fa-info-circle me-1"></i>详情
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                                <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <div class="status-item">
+                                                                        <div class="status-icon update">
+                                                                            <i class="fas fa-clock"></i>
+                                                                        </div>
+                                                                        <div class="status-content">
+                                                                            <div class="status-title">最近更新</div>
+                                                                            <div class="status-value">12小时前</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <div class="status-item">
+                                                                        <div class="status-icon version">
+                                                                            <i class="fas fa-code-branch"></i>
+                                                                        </div>
+                                                                        <div class="status-content">
+                                                                            <div class="status-title">版本数量</div>
+                                                                            <div class="status-value">12个版本</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <div class="status-item">
+                                                                        <div class="status-icon sync">
+                                                                            <i class="fas fa-sync-alt"></i>
+                                                                        </div>
+                                                                        <div class="status-content">
+                                                                            <div class="status-title">同步状态</div>
+                                                                            <div class="status-value">已同步</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <div class="status-item">
+                                                                        <div class="status-icon history">
+                                                                            <i class="fas fa-history"></i>
+                                                                        </div>
+                                                                        <div class="status-content">
+                                                                            <div class="status-title">操作记录</div>
+                                                                            <div class="status-value">128条</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mt-4">
+                                                                <h6 class="mb-3">最近操作记录</h6>
+                                                                <div class="table-responsive">
+                                                                    <table class="table table-hover">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>操作时间</th>
+                                                                                <th>操作类型</th>
+                                                                                <th>操作人</th>
+                                                                                <th>版本变更</th>
+                                                                                <th>变更内容</th>
+                                                                                <th>操作</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td>2024-03-21 15:30</td>
+                                                                                <td><span class="badge bg-success">参数更新</span></td>
+                                                                                <td>管理员</td>
+                                                                                <td>v2.1.2 → v2.1.3</td>
+                                                                                <td>更新预警阈值配置</td>
+                                                                                <td>
+                                                                                    <button class="btn btn-sm btn-outline-primary" onclick="viewDetail(1)">
+                                                                                        <i class="fas fa-eye me-1"></i>详情
+                                                                                    </button>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>2024-03-21 14:20</td>
+                                                                                <td><span class="badge bg-warning">配置导入</span></td>
+                                                                                <td>管理员</td>
+                                                                                <td>v2.1.1 → v2.1.2</td>
+                                                                                <td>导入生产环境配置</td>
+                                                                                <td>
+                                                                                    <button class="btn btn-sm btn-outline-primary" onclick="viewDetail(2)">
+                                                                                        <i class="fas fa-eye me-1"></i>详情
+                                                                                    </button>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- 预警阈值设置 -->
+                                                    <div class="card mb-4">
+                                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                                            <div>
+                                                                <h5 class="mb-0">预警阈值设置</h5>
+                                                                <small class="text-muted">配置各类预警的触发阈值</small>
+                                                            </div>
+                                                            <div>
+                                                                <button class="btn btn-outline-primary me-2" onclick="batchUpdate()">
+                                                                    <i class="fas fa-edit me-1"></i>批量修改
+                                                                </button>
+                                                                <button class="btn btn-outline-secondary" onclick="resetAllThresholds()">
+                                                                    <i class="fas fa-undo me-1"></i>重置全部
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-body">
+                                                                    <div class="row g-4">
+                                                                <!-- 风电产能波动阈值 -->
+                                                                <div class="col-md-6 col-lg-4">
+                                                                            <div class="card card-h-100">
+                                                                                <div class="card-body">
+                                                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                                                <label class="form-label mb-0">
+                                                                                    风电产能波动阈值
+                                                                                    <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" 
+                                                                                       title="风电功率10分钟变化率超过此值将触发告警，建议值：15%"></i>
+                                                                                </label>
+                                                                                <div class="form-check form-switch">
+                                                                                    <input class="form-check-input" type="checkbox" id="windAlertSwitch" checked>
+                                                                                    <label class="form-check-label" for="windAlertSwitch">启用告警</label>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="threshold-chart mb-3" id="windChart" style="height: 120px;"></div>
+                                                                            <div id="windSlider" class="slider mb-3"></div>
+                                                                            <div class="d-flex align-items-center">
+                                                                                <div class="slider-value">当前值：</div>
+                                                                                <input type="number" id="windInput" class="form-control form-control-sm w-25" 
+                                                                                       min="0" max="30" step="0.1">
+                                                                                <span class="ms-2">%</span>
+                                                                                <div class="ms-auto">
+                                                                                    <span class="badge bg-info me-2">
+                                                                                        <i class="fas fa-bell me-1"></i>今日告警: 3次
+                                                                                    </span>
+                                                                                    <button class="btn btn-sm btn-outline-primary" onclick="viewAlertHistory('wind')">
+                                                                                        <i class="fas fa-history me-1"></i>历史记录
+                                                                                    </button>
+                                                                        </div>
+                                                                    </div>
+                                                                            <div class="alert alert-info mt-3 mb-0">
+                                                                                <div class="d-flex">
+                                                                                    <div class="flex-shrink-0">
+                                                                                        <i class="fas fa-lightbulb me-2"></i>
+                                                                                </div>
+                                                                                    <div class="flex-grow-1">
+                                                                                        <h6 class="alert-heading mb-1 text-primary">智能建议</h6>
+                                                                                        <p class="mb-0">根据近7天数据分析，建议将阈值调整到18%可减少50%的误报。</p>
+                                                                            </div>
+                                                                        </div> 
+                                                                        </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- 负荷预测偏差阈值 -->
+                                                                <div class="col-md-6 col-lg-4">
+                                                                            <div class="card card-h-100">
+                                                                                <div class="card-body">
+                                                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                                                <label class="form-label mb-0">
+                                                                                    负荷预测偏差阈值
+                                                                                    <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" 
+                                                                                       title="负荷预测值与实际值偏差超过此值将触发告警，建议值：10%"></i>
+                                                                                </label>
+                                                                                <div class="form-check form-switch">
+                                                                                    <input class="form-check-input" type="checkbox" id="loadAlertSwitch" checked>
+                                                                                    <label class="form-check-label" for="loadAlertSwitch">启用告警</label>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="threshold-chart mb-3" id="loadChart" style="height: 120px;"></div>
+                                                                            <div id="loadSlider" class="slider mb-3"></div>
+                                                                            <div class="d-flex align-items-center">
+                                                                                <div class="slider-value">当前值：</div>
+                                                                                <input type="number" id="loadInput" class="form-control form-control-sm w-25" 
+                                                                                       min="0" max="20" step="0.1">
+                                                                                <span class="ms-2">%</span>
+                                                                                <div class="ms-auto">
+                                                                                    <span class="badge bg-info me-2">
+                                                                                        <i class="fas fa-bell me-1"></i>今日告警: 1次
+                                                                                    </span>
+                                                                                    <button class="btn btn-sm btn-outline-primary" onclick="viewAlertHistory('load')">
+                                                                                        <i class="fas fa-history me-1"></i>历史记录
+                                                                                    </button>
+                                                                            </div>
+                                                                        </div>
+                                                                            <div class="alert alert-success mt-3 mb-0">
+                                                                                <div class="d-flex">
+                                                                                    <div class="flex-shrink-0">
+                                                                                        <i class="fas fa-check-circle me-2"></i>
+                                                                                    </div>
+                                                                                    <div class="flex-grow-1">
+                                                                                        <h6 class="alert-heading mb-1 text-success">阈值合理</h6>
+                                                                                        <p class="mb-0">当前阈值设置在合理范围内，告警次数处于正常水平。</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                                <!-- 时序预测置信度阈值 -->
+                                                                <div class="col-md-6 col-lg-4">
+                                                                            <div class="card card-h-100">
+                                                                                <div class="card-body">
+                                                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                                                <label class="form-label mb-0">
+                                                                                    时序预测置信度阈值
+                                                                                    <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" 
+                                                                                       title="预测结果置信度低于此值将触发告警，建议值：85%"></i>
+                                                                                </label>
+                                                                                <div class="form-check form-switch">
+                                                                                    <input class="form-check-input" type="checkbox" id="confidenceAlertSwitch" checked>
+                                                                                    <label class="form-check-label" for="confidenceAlertSwitch">启用告警</label>
+                                                                            </div>
+                                                                            </div>
+                                                                            <div class="threshold-chart mb-3" id="confidenceChart" style="height: 120px;"></div>
+                                                                            <div id="confidenceSlider" class="slider mb-3"></div>
+                                                                            <div class="d-flex align-items-center">
+                                                                                <div class="slider-value">当前值：</div>
+                                                                                <input type="number" id="confidenceInput" class="form-control form-control-sm w-25" 
+                                                                                       min="0" max="100" step="1">
+                                                                                <span class="ms-2">%</span>
+                                                                                <div class="ms-auto">
+                                                                                    <span class="badge bg-info me-2">
+                                                                                        <i class="fas fa-bell me-1"></i>今日告警: 2次
+                                                                                    </span>
+                                                                                    <button class="btn btn-sm btn-outline-primary" onclick="viewAlertHistory('confidence')">
+                                                                                        <i class="fas fa-history me-1"></i>历史记录
+                                                                                    </button>
+                                                                        </div>
+                                                                    </div>
+                                                                            <div class="alert alert-warning mt-3 mb-0">
+                                                                                <div class="d-flex">
+                                                                                    <div class="flex-shrink-0">
+                                                                                        <i class="fas fa-exclamation-triangle me-2"></i>
+                                                                                    </div>
+                                                                                    <div class="flex-grow-1">
+                                                                                        <h6 class="alert-heading mb-1 text-warning">需要注意</h6>
+                                                                                        <p class="mb-0">近期预测置信度波动较大，建议检查输入数据与训练数据质量。</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                            <!-- 高级设置 -->
+                                                            <div class="mt-4">
+                                                                <h5 class="mb-3">高级设置</h5>
+                                                                <div class="row g-3">
+                                                                    <div class="col-md-6 col-lg-4">
+                                                                        <div class="form-group">
+                                                                            <label class="form-label">告警级别</label>
+                                                                            <select class="form-select" id="alertLevelSelect">
+                                                                                <option value="info">提示</option>
+                                                                                <option value="warning" selected>警告</option>
+                                                                                <option value="danger">严重</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6 col-lg-4">
+                                                                        <div class="form-group">
+                                                                            <label class="form-label">告警方式</label>
+                                                                            <div class="d-flex gap-3">
+                                                                                <div class="form-check">
+                                                                                    <input class="form-check-input" type="checkbox" id="alertEmail" checked>
+                                                                                    <label class="form-check-label" for="alertEmail">邮件</label>
+                                                                                </div>
+                                                                                <div class="form-check">
+                                                                                    <input class="form-check-input" type="checkbox" id="alertSMS" checked>
+                                                                                    <label class="form-check-label" for="alertSMS">短信</label>
+                                                                                </div>
+                                                                                <div class="form-check">
+                                                                                    <input class="form-check-input" type="checkbox" id="alertSystem" checked>
+                                                                                    <label class="form-check-label" for="alertSystem">系统通知</label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6 col-lg-4">
+                                                                        <div class="form-group">
+                                                                            <label class="form-label">告警时间</label>
+                                                                            <select class="form-select" id="alertTimeSelect">
+                                                                                <option value="always" selected>全天</option>
+                                                                                <option value="workday">工作日</option>
+                                                                                <option value="custom">自定义</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- 模型参数管理 -->
+                                                    <div class="card mb-4">
+                                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                                            <div>
+                                                                <h5 class="mb-0">模型参数管理</h5>
+                                                                <small class="text-muted">配置深度学习模型的核心参数</small>
+                                                            </div>
+                                                            <div>
+                                                                <button class="btn btn-outline-primary me-2" onclick="exportModelParams()">
+                                                                    <i class="fas fa-download me-1"></i>导出配置
+                                                                </button>
+                                                                <button class="btn btn-outline-secondary" onclick="resetAllParams()">
+                                                                    <i class="fas fa-undo me-1"></i>重置全部
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                                    <div class="card-body">
+                                                            <!-- 参数分组标签页 -->
+                                                            <ul class="nav nav-tabs mb-3" id="modelParamTabs" role="tablist">
+                                                                <li class="nav-item">
+                                                                    <a class="nav-link active" id="basic-tab" data-bs-toggle="tab" href="#basic" role="tab">
+                                                                        <i class="fas fa-cog me-1"></i>基础参数
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a class="nav-link" id="advanced-tab" data-bs-toggle="tab" href="#advanced" role="tab">
+                                                                        <i class="fas fa-sliders-h me-1"></i>高级参数
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a class="nav-link" id="optimization-tab" data-bs-toggle="tab" href="#optimization" role="tab">
+                                                                        <i class="fas fa-chart-line me-1"></i>优化参数
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+
+                                                            <!-- 参数内容区域 -->
+                                                            <div class="tab-content" id="modelParamContent">
+                                                                <!-- 基础参数 -->
+                                                                <div class="tab-pane fade show active" id="basic" role="tabpanel">
+                                                                <div class="table-responsive">
+                                                                    <table class="table table-hover">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th style="width: 25%">参数名称</th>
+                                                                                    <th style="width: 20%">当前值</th>
+                                                                                    <th style="width: 15%">取值范围</th>
+                                                                                    <th style="width: 25%">说明</th>
+                                                                                    <th style="width: 15%">操作</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                    <td>
+                                                                                        <div class="d-flex align-items-center">
+                                                                                            <span>时序窗口大小</span>
+                                                                                            <i class="fas fa-info-circle ms-2 text-info" 
+                                                                                               data-bs-toggle="tooltip" 
+                                                                                               title="较大的窗口可以捕捉更长期的时间依赖关系，但会增加计算复杂度"></i>
+                                                                                        </div>
+                                                                                </td>
+                                                                                    <td>
+                                                                                        <input type="number" 
+                                                                                               id="windowSizeInput" 
+                                                                                               class="form-control form-control-sm" 
+                                                                                               data-param-key="windowSize"
+                                                                                               value="168" 
+                                                                                               min="24" 
+                                                                                               max="720" 
+                                                                                               step="24"
+                                                                                               data-original="168">
+                                                                                    </td>
+                                                                                    <td>24 - 720</td>
+                                                                                    <td>预测模型的历史数据窗口长度（小时）</td>
+                                                                                    <td>
+                                                                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="saveParameter(this)">
+                                                                                            <i class="fas fa-save me-1"></i>保存
+                                                                                        </button>
+                                                                                        <button class="btn btn-sm btn-outline-secondary" onclick="resetParameter(this)">
+                                                                                            <i class="fas fa-undo me-1"></i>重置
+                                                                                        </button>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                    <td>
+                                                                                        <div class="d-flex align-items-center">
+                                                                                            <span>注意力头数</span>
+                                                                                            <i class="fas fa-info-circle ms-2 text-info" 
+                                                                                               data-bs-toggle="tooltip" 
+                                                                                               title="多头注意力机制可以学习不同子空间的特征表示，增加模型的表达能力"></i>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <input type="number" 
+                                                                                               id="attentionHeadsInput" 
+                                                                                               class="form-control form-control-sm" 
+                                                                                               data-param-key="attentionHeads"
+                                                                                               value="8" 
+                                                                                               min="4" 
+                                                                                               max="16" 
+                                                                                               step="2"
+                                                                                               data-original="8">
+                                                                                    </td>
+                                                                                    <td>4 - 16</td>
+                                                                                    <td>Transformer模型的注意力机制头数</td>
+                                                                                    <td>
+                                                                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="saveParameter(this)">
+                                                                                            <i class="fas fa-save me-1"></i>保存
+                                                                                        </button>
+                                                                                        <button class="btn btn-sm btn-outline-secondary" onclick="resetParameter(this)">
+                                                                                            <i class="fas fa-undo me-1"></i>重置
+                                                                                        </button>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <div class="d-flex align-items-center">
+                                                                                            <span>学习率</span>
+                                                                                            <i class="fas fa-info-circle ms-2 text-info" 
+                                                                                               data-bs-toggle="tooltip" 
+                                                                                               title="控制模型参数更新的步长，较小的学习率会使训练更稳定但收敛更慢"></i>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <input type="number" 
+                                                                                               id="learningRateInput" 
+                                                                                               class="form-control form-control-sm" 
+                                                                                               data-param-key="learningRate"
+                                                                                               value="0.001" 
+                                                                                               min="0.0001" 
+                                                                                               max="0.01" 
+                                                                                               step="0.0001"
+                                                                                               data-original="0.001">
+                                                                                    </td>
+                                                                                    <td>0.0001 - 0.01</td>
+                                                                                    <td>模型训练的学习率参数</td>
+                                                                                    <td>
+                                                                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="saveParameter(this)">
+                                                                                            <i class="fas fa-save me-1"></i>保存
+                                                                                        </button>
+                                                                                        <button class="btn btn-sm btn-outline-secondary" onclick="resetParameter(this)">
+                                                                                            <i class="fas fa-undo me-1"></i>重置
+                                                                                        </button>
+                                                                                    </td>
+                                                                                </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+
+                                                                <!-- 高级参数 -->
+                                                                <div class="tab-pane fade" id="advanced" role="tabpanel">
+                                                                    <div class="table-responsive">
+                                                                        <table class="table table-hover">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th style="width: 25%">参数名称</th>
+                                                                                    <th style="width: 20%">当前值</th>
+                                                                                    <th style="width: 15%">取值范围</th>
+                                                                                    <th style="width: 25%">说明</th>
+                                                                                    <th style="width: 15%">操作</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <div class="d-flex align-items-center">
+                                                                                            <span>隐藏层维度</span>
+                                                                                            <i class="fas fa-info-circle ms-2 text-info" 
+                                                                                               data-bs-toggle="tooltip" 
+                                                                                               title="模型内部表示的维度，更大的维度可以学习更复杂的特征"></i>
+                                                        </div>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <input type="number" 
+                                                                                               id="hiddenDimInput" 
+                                                                                               class="form-control form-control-sm" 
+                                                                                               data-param-key="hiddenDim"
+                                                                                               value="256" 
+                                                                                               min="64" 
+                                                                                               max="512" 
+                                                                                               step="64"
+                                                                                               data-original="256">
+                                                                                    </td>
+                                                                                    <td>64 - 512</td>
+                                                                                    <td>Transformer编码器的隐藏层维度</td>
+                                                                                    <td>
+                                                                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="saveParameter(this)">
+                                                                                            <i class="fas fa-save me-1"></i>保存
+                                                                                        </button>
+                                                                                        <button class="btn btn-sm btn-outline-secondary" onclick="resetParameter(this)">
+                                                                                            <i class="fas fa-undo me-1"></i>重置
+                                                                                        </button>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <div class="d-flex align-items-center">
+                                                                                            <span>Dropout率</span>
+                                                                                            <i class="fas fa-info-circle ms-2 text-info" 
+                                                                                               data-bs-toggle="tooltip" 
+                                                                                               title="防止过拟合的正则化参数，较大的值会增强正则化效果但可能影响性能"></i>
+                                                    </div>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <input type="number" 
+                                                                                               id="dropoutRateInput" 
+                                                                                               class="form-control form-control-sm" 
+                                                                                               data-param-key="dropoutRate"
+                                                                                               value="0.1" 
+                                                                                               min="0" 
+                                                                                               max="0.5" 
+                                                                                               step="0.1"
+                                                                                               data-original="0.1">
+                                                                                    </td>
+                                                                                    <td>0 - 0.5</td>
+                                                                                    <td>神经元随机失活的概率</td>
+                                                                                    <td>
+                                                                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="saveParameter(this)">
+                                                                                            <i class="fas fa-save me-1"></i>保存
+                                                                    </button>
+                                                                                        <button class="btn btn-sm btn-outline-secondary" onclick="resetParameter(this)">
+                                                                                            <i class="fas fa-undo me-1"></i>重置
+                                                                                        </button>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                        </div>
+                                                    </div>
+                            
+                                                                <!-- 优化参数 -->
+                                                                <div class="tab-pane fade" id="optimization" role="tabpanel">
+                                                                <div class="table-responsive">
+                                                                    <table class="table table-hover">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th style="width: 25%">参数名称</th>
+                                                                                    <th style="width: 20%">当前值</th>
+                                                                                    <th style="width: 15%">取值范围</th>
+                                                                                    <th style="width: 25%">说明</th>
+                                                                                    <th style="width: 15%">操作</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                    <td>
+                                                                                        <div class="d-flex align-items-center">
+                                                                                            <span>批次大小</span>
+                                                                                            <i class="fas fa-info-circle ms-2 text-info" 
+                                                                                               data-bs-toggle="tooltip" 
+                                                                                               title="每次更新使用的样本数量，较大的批次可以加速训练但可能影响泛化性能"></i>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <input type="number" 
+                                                                                               id="batchSizeInput" 
+                                                                                               class="form-control form-control-sm" 
+                                                                                               data-param-key="batchSize"
+                                                                                               value="32" 
+                                                                                               min="16" 
+                                                                                               max="128" 
+                                                                                               step="16"
+                                                                                               data-original="32">
+                                                                                    </td>
+                                                                                    <td>16 - 128</td>
+                                                                                    <td>训练时的批次大小</td>
+                                                                                    <td>
+                                                                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="saveParameter(this)">
+                                                                                            <i class="fas fa-save me-1"></i>保存
+                                                                                        </button>
+                                                                                        <button class="btn btn-sm btn-outline-secondary" onclick="resetParameter(this)">
+                                                                                            <i class="fas fa-undo me-1"></i>重置
+                                                                                        </button>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                    <td>
+                                                                                        <div class="d-flex align-items-center">
+                                                                                            <span>预热步数</span>
+                                                                                            <i class="fas fa-info-circle ms-2 text-info" 
+                                                                                               data-bs-toggle="tooltip" 
+                                                                                               title="学习率预热的步数，有助于模型在训练初期更稳定"></i>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <input type="number" 
+                                                                                               id="warmupStepsInput" 
+                                                                                               class="form-control form-control-sm" 
+                                                                                               data-param-key="warmupSteps"
+                                                                                               value="1000" 
+                                                                                               min="500" 
+                                                                                               max="5000" 
+                                                                                               step="500"
+                                                                                               data-original="1000">
+                                                                                    </td>
+                                                                                    <td>500 - 5000</td>
+                                                                                    <td>学习率预热的训练步数</td>
+                                                                                    <td>
+                                                                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="saveParameter(this)">
+                                                                                            <i class="fas fa-save me-1"></i>保存
+                                                                                        </button>
+                                                                                        <button class="btn btn-sm btn-outline-secondary" onclick="resetParameter(this)">
+                                                                                            <i class="fas fa-undo me-1"></i>重置
+                                                                                        </button>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                            <!-- 参数说明卡片 -->
+                                                            <div class="alert alert-info mt-3">
+                                                                <div class="d-flex">
+                                                                    <div class="flex-shrink-0">
+                                                                        <i class="fas fa-lightbulb me-2"></i>
+                                                    </div>
+                                                                    <div class="flex-grow-1">
+                                                                        <h6 class="alert-heading mb-1 text-primary">参数调优建议</h6>
+                                                                        <p class="mb-0">
+                                                                            1. 时序窗口大小建议设置为预测时长的7-14倍<br>
+                                                                            2. 注意力头数通常设置为隐藏层维度的1/32到1/64<br>
+                                                                            3. 学习率可以从0.001开始，根据训练曲线适当调整<br>
+                                                                            4. Dropout率建议在0.1-0.3之间，过大可能影响模型性能
+                                                                        </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Energy Strategy Library Card -->
+                                    <div class="card">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h5 class="mb-0">能源策略库</h5>
+                                                <small class="text-muted">管理和配置各类能源应用场景的策略规则</small>
+                                            </div>
+                                            <div class="dropdown">
+                                                <button class="btn btn-primary dropdown-toggle" type="button" id="newStrategyDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fas fa-plus me-1"></i> 新建策略
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="newStrategyDropdown">
+                                                    <!-- Pass strategy type to the create function -->
+                                                    <li><a class="dropdown-item" href="#" data-type="renewable" onclick="strategyManager.createStrategy('renewable')">风光发电策略</a></li>
+                                                    <li><a class="dropdown-item" href="#" data-type="load" onclick="strategyManager.createStrategy('load')">负荷预测策略</a></li>
+                                                    <li><a class="dropdown-item" href="#" data-type="charging" onclick="strategyManager.createStrategy('charging')">充电预测策略</a></li>
+                                                    <li><a class="dropdown-item" href="#" data-type="trading" onclick="strategyManager.createStrategy('trading')">能源交易策略</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <!-- Strategy Tabs -->
+                                            <ul class="nav nav-tabs nav-tabs-custom nav-justified" id="strategyTabs" role="tablist">
+                                                <li class="nav-item" role="presentation">
+                                                    <button class="nav-link active" id="renewable-tab" data-bs-toggle="tab" data-bs-target="#renewableStrategies" type="button" role="tab" aria-controls="renewableStrategies" aria-selected="true">
+                                                        <i class="fas fa-wind me-1"></i> 风光发电
+                                                    </button>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                    <button class="nav-link" id="load-tab" data-bs-toggle="tab" data-bs-target="#loadStrategies" type="button" role="tab" aria-controls="loadStrategies" aria-selected="false">
+                                                        <i class="fas fa-bolt me-1"></i> 负荷预测
+                                                    </button>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                    <button class="nav-link" id="charging-tab" data-bs-toggle="tab" data-bs-target="#chargingStrategies" type="button" role="tab" aria-controls="chargingStrategies" aria-selected="false">
+                                                        <i class="fas fa-charging-station me-1"></i> 充电预测
+                                                    </button>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                    <button class="nav-link" id="trading-tab" data-bs-toggle="tab" data-bs-target="#tradingStrategies" type="button" role="tab" aria-controls="tradingStrategies" aria-selected="false">
+                                                        <i class="fas fa-exchange-alt me-1"></i> 能源交易
+                                                    </button>
+                                                </li>
+                                            </ul>
+
+                                            <!-- Tab Content -->
+                                            <div class="tab-content mt-3" id="strategyTabContent">
+                                                <!-- Renewable Strategies -->
+                                                <div class="tab-pane fade show active" id="renewableStrategies" role="tabpanel" aria-labelledby="renewable-tab">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-hover" id="renewableStrategyTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>策略名称/描述</th>
+                                                                    <th>类型</th>
+                                                                    <th>时间尺度</th>
+                                                                    <th>更新时间</th>
+                                                                    <th>状态/准确率</th>
+                                                                    <th>操作</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <!-- JS will populate this. Example onclick calls need type:
+                                                                     onclick="strategyManager.editStrategy('renewable', id)"
+                                                                     onclick="strategyManager.duplicateStrategy('renewable', id)"
+                                                                     onclick="strategyManager.deleteStrategy('renewable', id)"
+                                                                     onclick="strategyManager.viewStrategyDetail('renewable', id)" -->
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <!-- Load Strategies -->
+                                                <div class="tab-pane fade" id="loadStrategies" role="tabpanel" aria-labelledby="load-tab">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-hover" id="loadStrategyTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>策略名称/描述</th>
+                                                                    <th>预测周期</th>
+                                                                    <th>影响因素</th>
+                                                                    <th>更新时间</th>
+                                                                    <th>状态/准确率</th>
+                                                                    <th>操作</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <!-- JS will populate this. Example onclick calls need type:
+                                                                     onclick="strategyManager.editStrategy('load', id)"
+                                                                     onclick="strategyManager.duplicateStrategy('load', id)"
+                                                                     onclick="strategyManager.deleteStrategy('load', id)"
+                                                                     onclick="strategyManager.viewStrategyDetail('load', id)" -->
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <!-- Charging Strategies -->
+                                                <div class="tab-pane fade" id="chargingStrategies" role="tabpanel" aria-labelledby="charging-tab">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-hover" id="chargingStrategyTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>策略名称/描述</th>
+                                                                    <th>预测范围</th>
+                                                                    <th>影响因素</th>
+                                                                    <th>更新时间</th>
+                                                                    <th>状态/准确率</th>
+                                                                    <th>操作</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <!-- JS will populate this. Example onclick calls need type:
+                                                                     onclick="strategyManager.editStrategy('charging', id)"
+                                                                     onclick="strategyManager.duplicateStrategy('charging', id)"
+                                                                     onclick="strategyManager.deleteStrategy('charging', id)"
+                                                                     onclick="strategyManager.viewStrategyDetail('charging', id)" -->
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <!-- Trading Strategies -->
+                                                <div class="tab-pane fade" id="tradingStrategies" role="tabpanel" aria-labelledby="trading-tab">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-hover" id="tradingStrategyTable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>策略名称/描述</th>
+                                                                    <th>交易类型</th>
+                                                                    <th>预期收益率</th>
+                                                                    <th>风险等级</th>
+                                                                    <th>更新时间</th>
+                                                                    <th>启用状态</th>
+                                                                    <th>操作</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <!-- JS will populate this. Example onclick calls need type:
+                                                                     onclick="strategyManager.editStrategy('trading', id)"
+                                                                     onclick="strategyManager.duplicateStrategy('trading', id)"
+                                                                     onclick="strategyManager.deleteStrategy('trading', id)"
+                                                                     onclick="strategyManager.viewStrategyDetail('trading', id)"
+                                                                     onchange="strategyManager.toggleStrategy('trading', id, this)" -->
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Energy Strategy Library Card -->
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <script>document.write(new Date().getFullYear())</script> © 驭能.
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-sm-end d-none d-sm-block">
+                            <p class="mb-0">© <script>document.write(new Date().getFullYear())</script> 驭能能源管理系统   . 由 <i class="mdi mdi-heart text-danger"></i> ES小分队 </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <!-- end main content-->
+
+</div>
+<!-- END layout-wrapper -->
+
+
+<!-- Right Sidebar -->
+<div class="right-bar">
+    <div data-simplebar="" class="h-100">
+        <div class="rightbar-title d-flex align-items-center bg-dark p-3">
+
+            <h5 class="m-0 me-2 text-white">Theme Customizer</h5>
+
+            <a href="javascript:void(0);" class="right-bar-toggle ms-auto">
+                <i class="mdi mdi-close noti-icon"></i>
+            </a>
+        </div>
+
+        <!-- Settings -->
+        <hr class="m-0">
+
+        <div class="p-4">
+            <h6 class="mb-3">Layout</h6>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout" id="layout-vertical" value="vertical">
+                <label class="form-check-label" for="layout-vertical">Vertical</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout" id="layout-horizontal" value="horizontal">
+                <label class="form-check-label" for="layout-horizontal">Horizontal</label>
+            </div>
+
+            <h6 class="mt-4 mb-3 pt-2">Layout Mode</h6>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout-mode" id="layout-mode-light" value="light">
+                <label class="form-check-label" for="layout-mode-light">Light</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout-mode" id="layout-mode-dark" value="dark">
+                <label class="form-check-label" for="layout-mode-dark">Dark</label>
+            </div>
+
+            <h6 class="mt-4 mb-3 pt-2">Layout Width</h6>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout-width" id="layout-width-fuild" value="fuild" onchange="document.body.setAttribute('data-layout-size', 'fluid')">
+                <label class="form-check-label" for="layout-width-fuild">Fluid</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout-width" id="layout-width-boxed" value="boxed" onchange="document.body.setAttribute('data-layout-size', 'boxed')">
+                <label class="form-check-label" for="layout-width-boxed">Boxed</label>
+            </div>
+
+            <h6 class="mt-4 mb-3 pt-2">Layout Position</h6>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout-position" id="layout-position-fixed" value="fixed" onchange="document.body.setAttribute('data-layout-scrollable', 'false')">
+                <label class="form-check-label" for="layout-position-fixed">Fixed</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout-position" id="layout-position-scrollable" value="scrollable" onchange="document.body.setAttribute('data-layout-scrollable', 'true')">
+                <label class="form-check-label" for="layout-position-scrollable">Scrollable</label>
+            </div>
+
+            <h6 class="mt-4 mb-3 pt-2">Topbar Color</h6>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="topbar-color" id="topbar-color-light" value="light" onchange="document.body.setAttribute('data-topbar', 'light')">
+                <label class="form-check-label" for="topbar-color-light">Light</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="topbar-color" id="topbar-color-dark" value="dark" onchange="document.body.setAttribute('data-topbar', 'dark')">
+                <label class="form-check-label" for="topbar-color-dark">Dark</label>
+            </div>
+
+            <h6 class="mt-4 mb-3 pt-2 sidebar-setting">Sidebar Size</h6>
+
+            <div class="form-check sidebar-setting">
+                <input class="form-check-input" type="radio" name="sidebar-size" id="sidebar-size-default" value="default" onchange="document.body.setAttribute('data-sidebar-size', 'lg')">
+                <label class="form-check-label" for="sidebar-size-default">Default</label>
+            </div>
+            <div class="form-check sidebar-setting">
+                <input class="form-check-input" type="radio" name="sidebar-size" id="sidebar-size-compact" value="compact" onchange="document.body.setAttribute('data-sidebar-size', 'md')">
+                <label class="form-check-label" for="sidebar-size-compact">Compact</label>
+            </div>
+            <div class="form-check sidebar-setting">
+                <input class="form-check-input" type="radio" name="sidebar-size" id="sidebar-size-small" value="small" onchange="document.body.setAttribute('data-sidebar-size', 'sm')">
+                <label class="form-check-label" for="sidebar-size-small">Small (Icon View)</label>
+            </div>
+
+            <h6 class="mt-4 mb-3 pt-2 sidebar-setting">Sidebar Color</h6>
+
+            <div class="form-check sidebar-setting">
+                <input class="form-check-input" type="radio" name="sidebar-color" id="sidebar-color-light" value="light" onchange="document.body.setAttribute('data-sidebar', 'light')">
+                <label class="form-check-label" for="sidebar-color-light">Light</label>
+            </div>
+            <div class="form-check sidebar-setting">
+                <input class="form-check-input" type="radio" name="sidebar-color" id="sidebar-color-dark" value="dark" onchange="document.body.setAttribute('data-sidebar', 'dark')">
+                <label class="form-check-label" for="sidebar-color-dark">Dark</label>
+            </div>
+            <div class="form-check sidebar-setting">
+                <input class="form-check-input" type="radio" name="sidebar-color" id="sidebar-color-brand" value="brand" onchange="document.body.setAttribute('data-sidebar', 'brand')">
+                <label class="form-check-label" for="sidebar-color-brand">Brand</label>
+            </div>
+
+            <h6 class="mt-4 mb-3 pt-2">Direction</h6>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout-direction" id="layout-direction-ltr" value="ltr">
+                <label class="form-check-label" for="layout-direction-ltr">LTR</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="layout-direction" id="layout-direction-rtl" value="rtl">
+                <label class="form-check-label" for="layout-direction-rtl">RTL</label>
+            </div>
+
+        </div>
+
+    </div> <!-- end slimscroll-menu-->
+</div>
+<!-- /Right-bar -->
+
+<!-- Right bar overlay-->
+<div class="rightbar-overlay"></div>
+
+<!-- JAVASCRIPT -->
+<script src="static/js/jquery.min.js"></script>
+<script src="static/js/bootstrap.bundle.min.js"></script>
+<script src="static/js/metisMenu.min.js"></script>
+<script src="static/js/simplebar.min.js"></script>
+<script src="static/js/waves.min.js"></script>
+<script src="static/js/feather.min.js"></script>
+
+<!-- pace js -->
+<script src="static/js/pace.min.js"></script>
+
+<!-- App js -->
+<script src="static/js/app.js"></script>
+
+<!-- Additional plugins -->
+<script src="static/js/apexcharts.min.js"></script>
+<script src="static/js/moment.min.js"></script>
+<script src="static/js/nouislider.min.js"></script>
+<script src="static/js/wNumb.min.js"></script>
+<script src="static/js/echarts.min.js"></script>
+<script src="static/js/sweetalert2.min.js"></script>
+
+<!-- DataTables -->
+<script src="static/js/jquery.dataTables.min.js"></script>
+<script src="static/js/dataTables.bootstrap4.min.js"></script>
+<script src="static/js/dataTables.responsive.min.js"></script>
+<script src="static/js/responsive.bootstrap4.min.js"></script>
+
+<!-- System Management js -->
+<script src="static/js/system_management.js"></script>
+
+<!-- Strategy Manager js -->
+<script src="static/js/strategy-manager.js"></script>
+
+<!-- Header initialization -->
+<script src="static/js/header-init.js"></script>
+</body>
+</html>

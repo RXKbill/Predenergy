@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>运行报表 - 能源管理系统</title>
+        <meta name="theme-color" content="#2196f3">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
+        <link href="static/css/energy-mobile.css" rel="stylesheet" type="text/css">
+        <!-- 引入字体图标 -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        <!-- 引入第三方库 -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <!-- 引入CSS文件 -->
+        <link href="static/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="static/css/icons.min.css" rel="stylesheet" type="text/css">
+        <link href="static/css/app.min.css" rel="stylesheet" type="text/css">
+        <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css" rel="stylesheet">
+        <link href="static/css/report.css" rel="stylesheet" type="text/css">
+
+        <!-- 引入第三方库 -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+        
+    </head>
+<body>
+    <div id="layout-wrapper">
+        <!-- 顶部导航栏 -->
+        <header class="mobile-header">
+            <div class="header-container">
+                <div class="header-left">
+                    <button class="btn-icon" onclick="history.back()">
+                        <i class="mdi mdi-arrow-left"></i>
+                    </button>
+                </div>
+
+                <div class="header-title">
+                    <h1>运行报表</h1>
+                </div>
+
+                <div class="header-right">
+                    <button class="btn-icon" id="refreshBtn" onclick="refreshData()">
+                        <i class="mdi mdi-refresh"></i>
+                    </button>
+                    <button class="btn-icon" id="notificationBtn">
+                        <i class="mdi mdi-bell"></i>
+                        <!-- <span class="notification-badge">1</span> -->
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- 主要内容区域 -->
+        <div class="main-content">
+            <!-- 时间范围选择 -->
+            <div class="date-range-picker">
+                <input type="date" id="startDate" class="form-control">
+                <span class="date-separator">至</span>
+                <input type="date" id="endDate" class="form-control">
+                <button class="btn btn-primary btn-sm" id="queryBtn">查询</button>
+            </div>
+
+            <!-- 设备选择 -->
+            <div class="device-selector">
+                <div class="device-group">
+                    <button class="device-btn active" data-device="all">全部设备</button>
+                    <button class="device-btn" data-device="solar">光伏设备</button>
+                    <button class="device-btn" data-device="wind">风机设备</button>
+                    <button class="device-btn" data-device="storage">储能设备</button>
+                </div>
+            </div>
+
+            <!-- 报表数据卡片 -->
+            <div class="report-cards">
+                <!-- 运行时长卡片 -->
+                <div class="report-card">
+                    <div class="card-header">
+                        <h4>运行时长</h4>
+                        <span class="unit">小时</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="main-value" data-type="runningHours">156.8</div>
+                        <div class="sub-value up" data-type="runningHours">
+                            <i class="mdi mdi-arrow-up"></i>
+                            +5.2%
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 发电量卡片 -->
+                <div class="report-card">
+                    <div class="card-header">
+                        <h4>发电量</h4>
+                        <span class="unit">kWh</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="main-value" data-type="powerGeneration">2,458.6</div>
+                        <div class="sub-value up" data-type="powerGeneration">
+                            <i class="mdi mdi-arrow-up"></i>
+                            +12.3%
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 故障次数卡片 -->
+                <div class="report-card">
+                    <div class="card-header">
+                        <h4>故障次数</h4>
+                        <span class="unit">次</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="main-value" data-type="faultCount">3</div>
+                        <div class="sub-value down" data-type="faultCount">
+                            <i class="mdi mdi-arrow-down"></i>
+                            -25.0%
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 图表区域 -->
+            <div class="chart-section">
+                <div class="chart-header">
+                    <h3>趋势图表</h3>
+                    <div class="chart-actions">
+                        <button class="btn btn-sm btn-outline-primary active" data-chart="daily">日</button>
+                        <button class="btn btn-sm btn-outline-primary" data-chart="weekly">周</button>
+                        <button class="btn btn-sm btn-outline-primary" data-chart="monthly">月</button>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+
+            <!-- 详细数据表格 -->
+            <div class="data-table-section">
+                <div class="table-header">
+                    <h3>详细数据</h3>
+                    <button class="btn btn-link btn-sm">
+                        <i class="mdi mdi-filter-variant"></i>
+                        筛选
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>设备</th>
+                                <th>运行时长</th>
+                                <th>发电量</th>
+                                <th>故障次数</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportTableBody">
+                            <!-- 数据行将通过JavaScript动态生成 -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-footer">
+                    <button class="btn btn-link btn-sm" id="loadMoreBtn">
+                        加载更多
+                        <i class="mdi mdi-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部导航栏 -->
+        <footer class="mobile-footer">
+            <nav class="footer-nav">
+                <a href="app-home_index.html" class="nav-item">
+                    <i class="mdi mdi-home"></i>
+                    <span>首页</span>
+                </a>
+                <a href="app-mobile_index.html" class="nav-item">
+                    <i class="mdi mdi-chart-line"></i>
+                    <span>预测</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="mdi mdi-clipboard-text"></i>
+                    <span>工单</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="mdi mdi-account"></i>
+                    <span>我的</span>
+                </a>
+            </nav>
+        </footer>
+    </div>
+
+    <!-- 引入JavaScript文件 -->
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/bootstrap.bundle.min.js"></script>
+    <script src="static/js/app.js"></script>
+    <script src="static/js/report.js"></script>
+</body>
+</html> 

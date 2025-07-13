@@ -1,0 +1,1491 @@
+/* 调度监控图表样式 */
+#dispatch-monitor-chart {
+    background-color: #2a3042;
+    border-radius: 4px;
+    padding: 15px;
+}
+
+/* 状态指标样式 */
+.status-indicator {
+    background-color: #2a3042;
+    border-radius: 4px;
+    padding: 15px;
+    height: 100%;
+}
+
+.status-indicator h6 {
+    color: #8c98a5;
+    margin-bottom: 10px;
+}
+
+.status-indicator h4 {
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+/* 调度表单样式 */
+.dispatch-form {
+    background-color: #2a3042;
+    border-radius: 4px;
+    padding: 20px;
+}
+
+.dispatch-form .form-label {
+    color: #8c98a5;
+}
+
+.dispatch-form .form-control,
+.dispatch-form .form-select {
+    background-color: #2a3042;
+    border-color: #32394e;
+    color: #fff;
+}
+
+.dispatch-form .form-control:focus,
+.dispatch-form .form-select:focus {
+    background-color: #2a3042;
+    border-color: #556ee6;
+    color: #fff;
+}
+
+/* 调度历史记录表格样式 */
+.table-dark {
+    background-color: #2a3042;
+}
+
+.table-dark th {
+    background-color: #32394e;
+}
+
+/* 调度预警样式 */
+.alert-warning {
+    background-color: rgba(241, 180, 76, 0.18);
+    border-color: #f1b44c;
+    color: #f1b44c;
+}
+
+.alert-danger {
+    background-color: rgba(244, 106, 106, 0.18);
+    border-color: #f46a6a;
+    color: #f46a6a;
+}
+
+.alert-info {
+    background-color: #1a3a54 !important;  /* 深蓝色背景 */
+    border-color: #2a5580 !important;
+    color: #ffffff !important;  /* 白色文字 */
+}
+
+.alert-info .text-muted {
+    color: #a8c6df !important;  /* 浅蓝色用于次要文本 */
+}
+
+.alert-info i {
+    color: #4dabf7 !important;  /* 图标使用亮蓝色 */
+}
+
+.alert-info .alert-heading {
+    color: #ffffff !important;  /* 确保标题文字为白色 */
+    font-weight: 500;
+}
+
+/* 其他提示框样式 */
+.alert {
+    border-width: 2px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 提示框动画效果 */
+.alert {
+    transition: all 0.3s ease;
+}
+
+.alert:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 电力调度页面样式 */
+.power-dispatch {
+    background-color: #1a1f2c;
+}
+
+/* 顶部状态栏样式 */
+.status-bar {
+    background: linear-gradient(to right, #3751ff, #3f51b5);
+    border-radius: 8px;
+    padding: 20px;
+    color: white;
+}
+
+/* 系统概览卡片样式 */
+.system-overview {
+    background-color: #2a3042;
+    border-radius: 8px;
+    height: 100%;
+}
+
+.power-composition-chart {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 15px;
+}
+
+.device-status .progress {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 调度控制面板样式 */
+.monitoring-view {
+    background-color: #2a3042;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.control-panel {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.control-panel:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    transition: all 0.3s ease;
+}
+
+/* 快速调度按钮样式 */
+.quick-dispatch .btn {
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.quick-dispatch .btn:hover {
+    transform: translateY(-2px);
+}
+
+/* 最近指令样式 */
+.recent-commands {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 15px;
+}
+
+.recent-commands .badge {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+}
+
+/* 应急按钮样式 */
+.emergency-btn {
+    background: linear-gradient(to right, #ff3366, #ff5555);
+    border: none;
+    border-radius: 6px;
+    padding: 12px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.emergency-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 5px 15px rgba(255, 51, 102, 0.3);
+}
+
+/* 调度计划表格样式 */
+.dispatch-table {
+    background-color: #2a3042;
+    border-radius: 8px;
+}
+
+.dispatch-table th {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-bottom: none;
+}
+
+.dispatch-table td {
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+/* 执行历史时间轴样式 */
+.activity-timeline {
+    position: relative;
+    padding-left: 15px;
+}
+
+.activity-timeline::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    border-left: 2px dashed rgba(255, 255, 255, 0.1);
+}
+
+.activity-timeline .avatar-xs {
+    width: 32px;
+    height: 32px;
+}
+
+/* 动画效果 */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.alert-warning {
+    animation: pulse 2s infinite;
+}
+
+/* 响应式调整 */
+@media (max-width: 992px) {
+    .status-bar {
+        margin-bottom: 20px;
+    }
+    
+    .control-panel {
+        margin-bottom: 10px;
+    }
+}
+
+
+/* 交易执行界面样式 */
+.trading-execution-section {
+    padding: 1.5rem;
+    background-color: var(--vz-body-bg);
+}
+
+/* 市场卡片样式 */
+.market-card {
+    background-color: var(--vz-card-bg);
+    border: 1px solid var(--vz-card-border-color);
+    margin-bottom: 0;
+    transition: transform 0.3s ease;
+}
+
+.market-card:hover {
+    transform: translateY(-5px);
+}
+
+.market-card .card-body {
+    padding: 1.25rem;
+}
+
+/* 价格变动指示器 */
+.price-trend {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.price-trend.up {
+    background-color: rgba(10, 179, 156, 0.1);
+    color: #0ab39c;
+}
+
+.price-trend.down {
+    background-color: rgba(240, 101, 72, 0.1);
+    color: #f06548;
+}
+
+/* 迷你图表容器 */
+.mini-chart {
+    width: 100px;
+    height: 40px;
+}
+
+/* 状态图标 */
+.status-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.status-icon.success {
+    background-color: rgba(52, 195, 143, 0.2);
+    color: #34c38f;
+}
+
+.status-icon.warning {
+    background-color: rgba(255, 191, 83, 0.2);
+    color: #ffbf53;
+}
+
+.status-icon.danger {
+    background-color: rgba(239, 83, 80, 0.2);
+    color: #ef5350;
+}
+
+.status-icon i {
+    font-size: 1.25rem;
+}
+
+/* 市场行情头部样式优化 */
+.trading-header {
+    background-color: var(--vz-card-bg);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.market-info {
+    padding: 1rem 0;
+}
+
+.market-info h4 {
+    color: var(--vz-heading-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.02em;
+}
+
+.price-stats {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.current-price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--vz-heading-color);
+    font-family: "Inter", sans-serif;
+    letter-spacing: -0.02em;
+}
+
+.price-change {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.price-change.up {
+    background-color: rgba(52, 195, 143, 0.15);
+    color: #34c38f;
+}
+
+.price-change.down {
+    background-color: rgba(244, 106, 106, 0.15);
+    color: #f46a6a;
+}
+
+/* 市场统计信息样式优化 */
+.market-stats {
+    padding: 1rem 1.5rem;
+    background-color: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    margin: 0 1rem 1rem;
+}
+
+.stat-item {
+    position: relative;
+    padding: 0.75rem 1rem;
+    background-color: rgba(255, 255, 255, 0.03);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.stat-item label {
+    font-size: 0.8rem;
+    color: var(--vz-text-muted);
+    margin-bottom: 0.35rem;
+    letter-spacing: 0.02em;
+}
+
+.stat-item .value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--vz-heading-color);
+    font-family: "Inter", sans-serif;
+}
+
+/* 图表控制按钮组样式优化 */
+.chart-controls {
+    padding: 0.5rem;
+}
+
+.chart-controls .btn-group {
+    background-color: rgba(255, 255, 255, 0.03);
+    padding: 0.25rem;
+    border-radius: 8px;
+}
+
+.chart-controls .btn {
+    font-size: 0.85rem;
+    padding: 0.4rem 1rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    border: none;
+    position: relative;
+    z-index: 1;
+}
+
+.chart-controls .btn.active {
+    background-color: var(--vz-primary);
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(var(--vz-primary-rgb), 0.35);
+}
+
+.chart-controls .btn:not(.active) {
+    color: var(--vz-text-muted);
+}
+
+.chart-controls .btn:hover:not(.active) {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--vz-heading-color);
+}
+
+/* 交易图表容器样式优化 */
+.trading-chart-container {
+    background-color: var(--vz-card-bg);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+#tradingChart {
+    margin-bottom: 1rem;
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+#volumeChart {
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* 图表工具栏样式优化 */
+.apexcharts-toolbar {
+    background-color: rgba(255, 255, 255, 0.03) !important;
+    border-radius: 6px !important;
+    padding: 2px !important;
+}
+
+.apexcharts-menu {
+    background-color: var(--vz-card-bg) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.apexcharts-menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* 图表tooltip样式优化 */
+.apexcharts-tooltip {
+    background-color: var(--vz-card-bg) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    border-radius: 6px !important;
+}
+
+.apexcharts-tooltip-title {
+    background-color: rgba(255, 255, 255, 0.03) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    font-family: "Inter", sans-serif !important;
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+    .market-info {
+        padding: 0.75rem 0;
+    }
+
+    .current-price {
+        font-size: 1.75rem;
+    }
+
+    .market-stats {
+        margin: 0 0.75rem 0.75rem;
+        padding: 0.75rem;
+    }
+
+    .stat-item {
+        padding: 0.5rem 0.75rem;
+    }
+
+    .stat-item .value {
+        font-size: 1rem;
+    }
+
+    .chart-controls .btn {
+        padding: 0.35rem 0.75rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .price-stats {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .current-price {
+        font-size: 1.5rem;
+    }
+
+    .market-stats .row > div {
+        margin-bottom: 0.5rem;
+    }
+
+    .market-stats .row > div:last-child {
+        margin-bottom: 0;
+    }
+}
+
+/* 暗色主题特定优化 */
+[data-layout-mode="dark"] .trading-chart-container {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+[data-layout-mode="dark"] .apexcharts-gridline {
+    stroke: rgba(255, 255, 255, 0.05) !important;
+}
+
+[data-layout-mode="dark"] .apexcharts-text {
+    fill: rgba(255, 255, 255, 0.6) !important;
+}
+
+[data-layout-mode="dark"] .apexcharts-yaxis-label,
+[data-layout-mode="dark"] .apexcharts-xaxis-label {
+    fill: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* 交易面板样式 */
+.trading-panel {
+    max-width: 100%;
+}
+
+.trading-panel-title {
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+    color: var(--vz-text-muted);
+}
+
+/* 交易类型选择器 */
+.trading-type-selector .btn-outline-primary {
+    border-color: var(--vz-border-color);
+    color: var(--vz-body-color);
+}
+
+.trading-type-selector .btn-check:checked + .btn-outline-primary {
+    background-color: var(--vz-primary);
+    border-color: var(--vz-primary);
+    color: #fff;
+}
+
+/* 交易方向按钮 */
+.trading-direction .btn {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.trading-direction .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: currentColor;
+    opacity: 0.1;
+    transition: opacity 0.3s ease;
+}
+
+.trading-direction .btn:hover::before {
+    opacity: 0.2;
+}
+
+/* 交易金额估算 */
+.estimate-amount {
+    background-color: var(--vz-card-bg);
+    border: 1px solid var(--vz-border-color);
+    border-radius: 4px;
+    padding: 0.75rem;
+    text-align: right;
+}
+
+.estimate-amount .currency {
+    font-size: 1rem;
+    color: var(--vz-text-muted);
+    margin-right: 0.25rem;
+}
+
+.estimate-amount .amount {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+/* 交易策略模块样式 */
+.strategy-list {
+    padding: 0;
+}
+
+.strategy-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 1.25rem;
+    border-bottom: 1px solid var(--vz-border-color);
+    transition: all 0.3s ease;
+    background-color: var(--vz-card-bg);
+}
+
+.strategy-item:last-child {
+    border-bottom: none;
+}
+
+.strategy-item:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.strategy-info {
+    flex: 1;
+    padding-right: 1.5rem;
+}
+
+.strategy-info h6 {
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--vz-heading-color);
+}
+
+.strategy-info p {
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+    color: var(--vz-text-muted);
+}
+
+.strategy-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-size: 0.8rem;
+}
+
+.strategy-meta-item {
+    display: flex;
+    align-items: center;
+    color: var(--vz-text-muted);
+}
+
+.strategy-meta-item i {
+    margin-right: 0.4rem;
+    font-size: 1rem;
+}
+
+.strategy-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.strategy-status {
+    padding: 0.35rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.strategy-status.active {
+    background-color: rgba(52, 195, 143, 0.15);
+    color: #34c38f;
+}
+
+.strategy-status.inactive {
+    background-color: rgba(239, 242, 247, 0.15);
+    color: #8a99b5;
+}
+
+.strategy-status.testing {
+    background-color: rgba(85, 110, 230, 0.15);
+    color: #556ee6;
+}
+
+.strategy-config-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--vz-text-muted);
+    transition: all 0.3s ease;
+}
+
+.strategy-config-btn:hover {
+    background-color: var(--vz-primary);
+    color: #fff;
+}
+
+/* 策略配置弹窗样式 */
+.strategy-config-modal .modal-content {
+    background-color: #1a222e;
+    color: #e9ecef;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.strategy-config-modal .modal-header {
+    background-color: #2a3042;
+    border-bottom: 1px solid #3b4253;
+    padding: 1rem 1.5rem;
+}
+
+.strategy-config-modal .modal-header .modal-title {
+    color: #e9ecef;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.strategy-config-modal .modal-header .btn-close {
+    background-color: transparent;
+    border: none;
+    color: #8a99b5;
+    filter: brightness(0) invert(1);
+    opacity: 0.75;
+}
+
+.strategy-config-modal .modal-header .btn-close:hover {
+    opacity: 1;
+}
+
+.strategy-config-modal .modal-body {
+    padding: 1.5rem;
+    background-color: #1a222e;
+}
+
+.strategy-config-modal .modal-footer {
+    background-color: #2a3042;
+    border-top: 1px solid #3b4253;
+    padding: 1rem 1.5rem;
+}
+
+.strategy-config-modal .btn-light {
+    background-color: #32394e;
+    border-color: #3b4253;
+    color: #e9ecef;
+}
+
+.strategy-config-modal .btn-light:hover {
+    background-color: #3b4253;
+    border-color: #454d66;
+    color: #fff;
+}
+
+.strategy-config-modal .btn-primary {
+    background-color: #556ee6;
+    border-color: #556ee6;
+    color: #fff;
+}
+
+.strategy-config-modal .btn-primary:hover {
+    background-color: #4458c5;
+    border-color: #4458c5;
+}
+
+/* 策略性能指标 */
+.strategy-performance {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.performance-card {
+    background-color: rgba(255, 255, 255, 0.02);
+    border-radius: 6px;
+    padding: 1rem;
+}
+
+.performance-card label {
+    font-size: 0.8rem;
+    color: var(--vz-text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.performance-card .value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--vz-heading-color);
+}
+
+.performance-card .trend {
+    font-size: 0.8rem;
+    margin-left: 0.5rem;
+}
+
+.performance-card .trend.up {
+    color: #34c38f;
+}
+
+.performance-card .trend.down {
+    color: #f46a6a;
+}
+
+/* 交易记录表格样式 */
+.table-trading {
+    margin: 0;
+}
+
+.table-trading th {
+    background-color: var(--vz-card-bg);
+    font-weight: 500;
+    font-size: 0.875rem;
+    padding: 0.75rem 1.5rem;
+    border-bottom: 2px solid var(--vz-border-color);
+}
+
+.table-trading td {
+    padding: 1rem 1.5rem;
+    font-size: 0.875rem;
+    border-bottom: 1px solid var(--vz-border-color);
+    vertical-align: middle;
+}
+
+.table-trading tbody tr:hover {
+    background-color: var(--vz-card-bg);
+}
+
+/* 按钮样式优化 */
+.btn-dark-light {
+    background-color: var(--vz-card-bg);
+    border-color: var(--vz-border-color);
+    color: var(--vz-body-color);
+}
+
+.btn-dark-light:hover,
+.btn-dark-light.active {
+    background-color: var(--vz-primary);
+    border-color: var(--vz-primary);
+    color: #fff;
+}
+
+/* 表单控件暗色主题适配 */
+.form-control,
+.form-select,
+.input-group-text {
+    background-color: var(--vz-input-bg);
+    border-color: var(--vz-border-color);
+    color: var(--vz-body-color);
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: var(--vz-input-bg);
+    border-color: var(--vz-primary);
+    color: var(--vz-body-color);
+}
+
+/* 交易确认按钮 */
+.btn-trade-confirm {
+    height: 48px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* 响应式优化 */
+@media (max-width: 1199.98px) {
+    .market-stats {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .stat-item {
+        flex: 0 0 50%;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .trading-execution-section {
+        padding: 1rem;
+    }
+    
+    .market-info .current-price {
+        font-size: 1.25rem;
+    }
+    
+    .trading-panel {
+        padding: 1rem;
+    }
+    
+    .strategy-item {
+        padding: 0.75rem 1rem;
+    }
+}
+
+/* 暗色主题适配 */
+[data-layout-mode="dark"] .bg-soft-light {
+    background-color: rgba(255, 255, 255, 0.04) !important;
+}
+
+[data-layout-mode="dark"] .border-top-dashed {
+    border-top: 1px dashed rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-layout-mode="dark"] .border-bottom-dashed {
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1) !important;
+}
+
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    min-width: 250px;
+    z-index: 1050;
+    color: white;
+}
+
+.toast.bg-success {
+    background-color: #34c38f !important;
+}
+
+.toast.bg-danger {
+    background-color: #f46a6a !important;
+}
+
+.toast.bg-warning {
+    background-color: #f1b44c !important;
+}
+
+.toast .btn-close {
+    filter: brightness(0) invert(1);
+}
+
+.toast-header {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.toast-body {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+}
+
+
+/* 调试面板样式 */
+#debugToast {
+    max-width: 500px;
+    background-color: #2a3042;
+}
+
+#debugToast .toast-body {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#debugToast pre {
+    color: #98a6ad;
+    font-size: 12px;
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+/* 筛选结果提示样式优化 */
+#no-records-message {
+    background-color: rgba(52, 58, 64, 0.9);
+    border-color: #2a3042;
+}
+
+#no-records-message .small {
+    opacity: 0.8;
+}
+
+/* 交易面板新增样式 */
+.trade-confirm-details {
+    background-color: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.trade-confirm-details label {
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.trade-confirm-details .h4 {
+    color: var(--vz-primary);
+    margin-bottom: 0;
+}
+
+/* 交易按钮样式增强 */
+.trading-direction .btn {
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+}
+
+.trading-direction .btn.active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.trading-direction .btn i {
+    transition: transform 0.2s ease;
+}
+
+.trading-direction .btn:hover i {
+    transform: translateY(-2px);
+}
+
+.trading-direction .btn-success {
+    background-color: rgba(52, 195, 143, 0.2);
+    border-color: rgba(52, 195, 143, 0.5);
+    color: #34c38f;
+}
+
+.trading-direction .btn-success:hover,
+.trading-direction .btn-success.active {
+    background-color: #34c38f;
+    border-color: #34c38f;
+    color: #fff;
+}
+
+.trading-direction .btn-danger {
+    background-color: rgba(244, 106, 106, 0.2);
+    border-color: rgba(244, 106, 106, 0.5);
+    color: #f46a6a;
+}
+
+.trading-direction .btn-danger:hover,
+.trading-direction .btn-danger.active {
+    background-color: #f46a6a;
+    border-color: #f46a6a;
+    color: #fff;
+}
+
+/* 输入框样式优化 */
+.trading-panel .input-group {
+    background-color: rgba(255, 255, 255, 0.03);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.trading-panel .form-control {
+    border: none;
+    background-color: transparent;
+    height: 48px;
+    font-size: 1.1rem;
+}
+
+.trading-panel .input-group-text {
+    background-color: transparent;
+    border: none;
+    color: var(--vz-text-muted);
+}
+
+/* 快捷金额按钮样式 */
+.trading-panel .btn-group .btn-dark-light {
+    font-size: 0.85rem;
+    padding: 0.4rem 0;
+}
+
+.trading-panel .btn-group .btn-dark-light:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.trading-panel .btn-group .btn-dark-light.active {
+    background-color: var(--vz-primary);
+    color: #fff;
+}
+
+/* 确认弹窗样式优化 */
+#tradeConfirmModal .modal-content {
+    background-color: var(--vz-card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#tradeConfirmModal .modal-header {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+#tradeConfirmModal .modal-footer {
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+#tradeConfirmModal .trade-confirm-details div[id^="confirm"] {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--vz-heading-color);
+}
+
+/* 响应式优化 */
+@media (max-width: 991.98px) {
+    .trading-panel {
+        margin-top: 1.5rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .trading-direction .btn {
+        padding: 0.5rem;
+    }
+    
+    .trading-panel .form-control {
+        height: 42px;
+        font-size: 1rem;
+    }
+    
+    .trade-confirm-details {
+        padding: 1rem;
+    }
+}
+
+.modal-content {
+    background-color: #1a222e;
+    color: #e9ecef;
+}
+
+.modal-header {
+    border-bottom: 1px solid #2c3b4a;
+}
+
+.modal-footer {
+    border-top: 1px solid #2c3b4a;
+}
+
+#riskAssessmentModal .card {
+    background-color: #2a3042;
+    border: 1px solid #3b4253;
+}
+
+#riskAssessmentModal .card-header {
+    background-color: #2c3b4a;
+    border-bottom: 1px solid #3b4253;
+    color: #e9ecef;
+}
+
+#riskAssessmentModal .table {
+    color: #e9ecef;
+}
+
+#riskAssessmentModal .table > :not(caption) > * > * {
+    background-color: #2a3042;
+    border-bottom-color: #3b4253;
+}
+
+#riskAssessmentModal .text-muted {
+    color: #8a99b5 !important;
+}
+
+#riskAssessmentModal .approval-workflow {
+    background-color: #2a3042;
+    padding: 1rem;
+    border-radius: 0.25rem;
+}
+
+#riskAssessmentModal .approval-step {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background-color: #1e2433;
+    border-radius: 0.25rem;
+    border: 1px solid #3b4253;
+}
+
+#riskAssessmentModal .approval-step:last-child {
+    margin-bottom: 0;
+}
+
+#riskAssessmentModal .step-number {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #3b4253;
+    color: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-weight: bold;
+}
+
+#riskAssessmentModal .step-content {
+    flex: 1;
+}
+
+#riskAssessmentModal .step-content h6 {
+    margin: 0;
+    color: #e9ecef;
+}
+
+#riskAssessmentModal .step-status {
+    margin-left: 1rem;
+}
+
+#riskAssessmentModal .alert {
+    background-color: transparent;
+    border: 1px solid;
+}
+
+#riskAssessmentModal .alert-danger {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+#riskAssessmentModal .alert-warning {
+    border-color: #ffc107;
+    color: #ffc107;
+}
+
+#riskAssessmentModal .estimate-amount {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #e9ecef;
+}
+
+/* 新建策略模态框样式 */
+#newStrategyModal .modal-content {
+    background-color: #1a222e;
+    color: #e9ecef;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#newStrategyModal .modal-header {
+    background-color: #2a3042;
+    border-bottom: 1px solid #3b4253;
+    padding: 1rem 1.5rem;
+}
+
+#newStrategyModal .modal-header .modal-title {
+    color: #e9ecef;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+#newStrategyModal .modal-header .btn-close {
+    filter: brightness(0) invert(1);
+    opacity: 0.75;
+}
+
+#newStrategyModal .modal-header .btn-close:hover {
+    opacity: 1;
+}
+
+#newStrategyModal .modal-body {
+    padding: 1.5rem;
+    background-color: #1a222e;
+}
+
+#newStrategyModal .modal-footer {
+    background-color: #2a3042;
+    border-top: 1px solid #3b4253;
+    padding: 1rem 1.5rem;
+}
+
+#newStrategyModal .form-label {
+    color: #8a99b5;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+#newStrategyModal .form-control,
+#newStrategyModal .form-select {
+    background-color: #2a3042;
+    border-color: #3b4253;
+    color: #e9ecef;
+}
+
+#newStrategyModal .form-control:focus,
+#newStrategyModal .form-select:focus {
+    background-color: #2a3042;
+    border-color: #556ee6;
+    color: #e9ecef;
+}
+
+#newStrategyModal .input-group-text {
+    background-color: #32394e;
+    border-color: #3b4253;
+    color: #8a99b5;
+}
+
+/* 自定义对话框 */
+.custom-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.custom-dialog.show {
+    opacity: 1;
+}
+
+.custom-dialog-content {
+    background-color: #fff;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+}
+
+.custom-dialog.show .custom-dialog-content {
+    transform: translateY(0);
+}
+
+.dialog-header {
+    padding: 1rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.dialog-header h5 {
+    margin: 0;
+    color: #495057;
+}
+
+.dialog-body {
+    padding: 1rem;
+    color: #6c757d;
+}
+
+.dialog-footer {
+    padding: 1rem;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+/* 自定义通知容器 */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* 自定义通知 */
+.custom-notification {
+    background-color: #fff;
+    border-radius: 6px;
+    padding: 12px 20px;
+    min-width: 280px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transform: translateX(100%);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.custom-notification.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.custom-notification .notification-content {
+    display: flex;
+    align-items: center;
+}
+
+/* 通知类型样式 */
+.custom-notification.success {
+    border-left: 4px solid #2ab57d;
+}
+
+.custom-notification.warning {
+    border-left: 4px solid #f1b44c;
+}
+
+.custom-notification.danger {
+    border-left: 4px solid #f46a6a;
+}
+
+.custom-notification.info {
+    border-left: 4px solid #4ba6ef;
+}
+
+/* 图标样式 */
+.custom-notification i {
+    font-size: 18px;
+}
+
+.custom-notification.success i {
+    color: #2ab57d;
+}
+
+.custom-notification.warning i {
+    color: #f1b44c;
+}
+
+.custom-notification.danger i {
+    color: #f46a6a;
+}
+
+.custom-notification.info i {
+    color: #4ba6ef;
+}
+
+/* 深色主题适配 */
+[data-layout-mode="dark"] .custom-dialog-content {
+    background-color: #2a3042;
+    border: 1px solid #32394e;
+}
+
+[data-layout-mode="dark"] .dialog-header {
+    border-bottom-color: #32394e;
+}
+
+[data-layout-mode="dark"] .dialog-header h5 {
+    color: #e9ecef;
+}
+
+[data-layout-mode="dark"] .dialog-body {
+    color: #adb5bd;
+}
+
+[data-layout-mode="dark"] .dialog-footer {
+    border-top-color: #32394e;
+}
+
+[data-layout-mode="dark"] .custom-notification {
+    background-color: #2a3042;
+    color: #e9ecef;
+}

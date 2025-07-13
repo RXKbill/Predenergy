@@ -1,0 +1,2456 @@
+<!doctype html>
+<html lang="zh-CN">
+
+    <head>
+        
+        <meta charset="utf-8">
+        <title>设备管理 | 新能源管理系统</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="设备管理系统" name="description">
+
+        <!-- Bootstrap Css -->
+        <link href="static/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css">
+        <!-- Icons Css -->
+        <link href="static/css/icons.min.css" rel="stylesheet" type="text/css">
+        <!-- App Css-->
+        <link href="static/css/app.min.css" id="app-style" rel="stylesheet" type="text/css">
+        <!-- Font Awesome -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        <!-- DataTables -->
+        <link href="static/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+        <link href="static/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css">
+        <!-- Leaflet CSS -->
+        <link href="static/css/leaflet.css" rel="stylesheet" type="text/css">
+
+        <style>
+            /* 设备详情模态框样式 */
+            #deviceDetailsModal .nav-tabs {
+                border-bottom: 2px solid #dee2e6;
+                margin-bottom: 1rem;
+            }
+
+            #deviceDetailsModal .nav-tabs .nav-link {
+                margin-bottom: -2px;
+                border: none;
+                color: #6c757d;
+                padding: 0.75rem 1rem;
+                font-weight: 500;
+            }
+
+            #deviceDetailsModal .nav-tabs .nav-link:hover {
+                border: none;
+                color: #4F8CBE;
+            }
+
+            #deviceDetailsModal .nav-tabs .nav-link.active {
+                color: #4F8CBE;
+                border: none;
+                border-bottom: 2px solid #4F8CBE;
+            }
+
+            #deviceDetailsModal .tab-content {
+                padding: 1.5rem 0;
+            }
+
+            #deviceDetailsModal .table th {
+                font-weight: 500;
+                background-color: rgba(0,0,0,0.03);
+            }
+
+            #deviceDetailsModal .badge {
+                padding: 0.5em 0.75em;
+                font-weight: 500;
+            }
+
+            #deviceDetailsModal .progress {
+                height: 6px;
+                margin-top: 0.5rem;
+            }
+
+            #deviceDetailsModal .card {
+                margin-bottom: 1.5rem;
+                box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+            }
+
+            #deviceDetailsModal .card-body {
+                padding: 1.25rem;
+            }
+
+            #deviceDetailsModal .table-sm td,
+            #deviceDetailsModal .table-sm th {
+                padding: 0.5rem;
+            }
+
+            /* 告警历史表格样式 */
+            #alarmHistory .table {
+                margin-bottom: 0;
+            }
+
+            #alarmHistory .badge {
+                font-size: 0.875em;
+            }
+
+            #alarmTable td {
+                vertical-align: middle;
+            }
+
+            /* 设备位置地图样式 */
+            #locationMap {
+                height: 300px;
+                width: 100%;
+                border-radius: 4px;
+                margin-top: 1rem;
+            }
+            
+            .device-marker-icon {
+                background-color: #4F8CBE;
+                border-radius: 50%;
+                width: 12px;
+                height: 12px;
+                border: 2px solid #fff;
+                box-shadow: 0 0 4px rgba(0,0,0,0.3);
+            }
+        </style>
+
+        <!-- 添加在其他script标签之前 -->
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+       
+
+        <!-- 添加关键资源预加载 -->
+        <link rel="preload" href="static/js/chart.min.js" as="script">
+        <link rel="preload" href="static/css/bootstrap.min.css" as="style">
+        
+        <!-- 添加资源提示 -->
+        <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+        <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+        
+        <!-- 添加PWA支持 -->
+        <link rel="manifest" href="manifest.json">
+        <meta name="theme-color" content="#4F8CBE">
+
+        <!-- 在head中添加SheetJS库 -->
+        <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+        <!-- 添加文件导入的隐藏input -->
+        <input type="file" id="fileInput" accept=".xlsx,.xls" style="display: none;">
+
+    </head>
+
+    <body data-layout-mode="dark" data-topbar="dark" data-sidebar="dark" class="sidebar-enable">
+
+    <!-- <body data-layout="horizontal"> -->
+
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            
+            <header id="page-topbar">
+                <div class="navbar-header">
+                    <div class="d-flex">
+                        <!-- LOGO -->
+                        <div class="navbar-brand-box">
+                            <a href="" class="logo logo-dark">
+                                <span class="logo-sm">
+                                    <img src="static/picture/logo.png" alt="" height="24">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="static/picture/logo.png" alt="" height="24"> <span class="logo-txt">驭能能源管理系统</span>
+                                </span>
+                            </a>
+
+                            <a href="" class="logo logo-light">
+                                <span class="logo-sm">
+                                    <img src="static/picture/logo.png" alt="" height="24">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="static/picture/logo.png" alt="" height="24"> <span class="logo-txt">驭能能源管理系统</span>
+                                </span>
+                            </a>
+                        </div>
+
+                        <button type="button" class="btn btn-sm px-3 font-size-16 header-item" id="vertical-menu-btn">
+                            <i class="fa fa-fw fa-bars"></i>
+                        </button>
+
+                        <!-- App Search-->
+                        <form class="app-search d-none d-lg-block">
+                            <div class="position-relative">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <button class="btn btn-primary" type="button"><i class="bx bx-search-alt align-middle"></i></button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="d-flex">
+
+                        <div class="dropdown d-inline-block d-lg-none ms-2">
+                            <button type="button" class="btn header-item" id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i data-feather="search" class="icon-lg"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-search-dropdown">
+        
+                                <form class="p-3">
+                                    <div class="form-group m-0">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Search ..." aria-label="Search Result">
+
+                                            <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-none d-sm-inline-block">
+                            <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img id="header-lang-img" src="static/picture/cn.png" alt="Header Language" height="16">
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end">
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="en">
+                                    <img src="static/picture/cn.png" alt="user-image" class="me-1" height="12"> <span class="align-middle">Chinese</span>
+                                </a>
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="sp">
+                                    <img src="static/picture/spain.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Spanish</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="gr">
+                                    <img src="static/picture/germany.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">German</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="it">
+                                    <img src="static/picture/italy.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Italian</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ru">
+                                    <img src="static/picture/russia.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Russian</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-none d-sm-inline-block">
+                            <button type="button" class="btn header-item" id="mode-setting-btn">
+                                <i data-feather="moon" class="icon-lg layout-mode-dark"></i>
+                                <i data-feather="sun" class="icon-lg layout-mode-light"></i>
+                            </button>
+                        </div>
+
+                        <div class="dropdown d-none d-lg-inline-block ms-1">
+                            <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i data-feather="grid" class="icon-lg"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                                <div class="p-2">
+                                    <div class="row g-0">
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/github.png" alt="Github">
+                                                <span>GitHub</span>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/bitbucket.png" alt="bitbucket">
+                                                <span>Bitbucket</span>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/dribbble.png" alt="dribbble">
+                                                <span>Dribbble</span>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-0">
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/dropbox.png" alt="dropbox">
+                                                <span>Dropbox</span>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/mail_chimp.png" alt="mail_chimp">
+                                                <span>Mail Chimp</span>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/slack.png" alt="slack">
+                                                <span>Slack</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item noti-icon position-relative" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i data-feather="bell" class="icon-lg"></i>
+                                <span class="badge bg-danger rounded-pill">5</span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown">
+                                <div class="p-3">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <h6 class="m-0"> Notifications </h6>
+                                        </div>
+                                        <div class="col-auto">
+                                            <a href="#!" class="small text-reset text-decoration-underline"> Unread (3)</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-simplebar="" style="max-height: 230px;">
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <img src="static/picture/avatar-3.jpg" class="rounded-circle avatar-sm" alt="user-pic">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">James Lemire</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">It will seem like simplified Chinese.</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>1 hours ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 avatar-sm me-3">
+                                                <span class="avatar-title bg-primary rounded-circle font-size-16">
+                                                    <i class="bx bx-cart"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">Your order is placed</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">If several languages coalesce the grammar</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>3 min ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 avatar-sm me-3">
+                                                <span class="avatar-title bg-success rounded-circle font-size-16">
+                                                    <i class="bx bx-badge-check"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">Your item is shipped</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">If several languages coalesce the grammar</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>3 min ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <img src="static/picture/avatar-6.jpg" class="rounded-circle avatar-sm" alt="user-pic">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">Salena Layfield</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">As a skeptical Cambridge friend of mine occidental.</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>1 hours ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="p-2 border-top d-grid">
+                                    <a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">
+                                        <i class="mdi mdi-arrow-right-circle me-1"></i> <span>View More..</span> 
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item right-bar-toggle me-2">
+                                <i data-feather="settings" class="icon-lg"></i>
+                            </button>
+                        </div>
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item bg-soft-light border-start border-end" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img class="rounded-circle header-profile-user" src="static/picture/avatar-1.jpg" alt="Header Avatar">
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium">张明</span>
+                                <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <!-- item-->
+                                <a class="dropdown-item" href="apps-contacts-profile.html"><i class="mdi mdi-face-profile font-size-16 align-middle me-1"></i> Profile</a>
+                                <a class="dropdown-item" href="auth-lock-screen.html"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i> Lock screen</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="auth-logout.html"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </header>
+
+            <!-- ========== Left Sidebar Start ========== -->
+            <div class="vertical-menu">
+                <div data-simplebar="" class="h-100">
+
+                    <!--- Sidemenu -->
+                    <div id="sidebar-menu">
+                        <!-- Left Menu Start -->
+                        <ul class="metismenu list-unstyled" id="side-menu">
+                            <li class="menu-title" data-key="t-menu">View</li>
+
+                            <li>
+                                <a href="app-index.html">
+                                    <i data-feather="home"></i>
+                                    <span data-key="t-dashboard">数据总览</span>
+                                </a>
+                            </li>
+                            <li class="menu-title mt-2" data-key="t-components">Basic</li>
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow">
+                                    <i data-feather="users"></i>
+                                    <span data-key="t-authentication">个人界面</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li>
+                                        <a href="app-contacts-profile.html">
+                                            <span data-key="t-calendar">个人信息</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="app-calendar.html">
+                                            <span data-key="t-calendar">日程表</span>
+                                        </a>
+                                    </li>
+        
+                                    <li>
+                                        <a href="app-chat.html">
+                                            <span data-key="t-chat">聊天</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="app-contacts-list.html">
+                                    <i data-feather="file-text"></i>
+                                    <span data-key="t-pages">用户列表</span>
+                                </a>
+                            </li>
+
+                            <li class="menu-title mt-2" data-key="t-components">Operations</li>
+
+                            
+                            <li>
+                                <a href="app-system_management.html">
+                                    <i data-feather="grid"></i>
+                                    <span data-key="t-apps">系统设置</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="app-data_management.html">
+                                    <i data-feather="sliders"></i>
+                                    <span data-key="t-tables">数据管理</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="app-business_process.html">
+                                    <i data-feather="briefcase"></i>
+                                    <span data-key="t-components">业务处理</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="app-equipment_management.html">
+                                    <i data-feather="cpu"></i>
+                                    <span data-key="t-icons">设备管理</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Sidebar -->
+                </div>
+            </div>
+            <!-- Left Sidebar End -->
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <!-- 顶部统计卡片 -->
+                        <div class="row mt-4">
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card">
+                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1">
+                                                <h4 class="mb-0 font-size-20" id="totalPower">256.8 MWh</h4>
+                                                <p class="text-muted mb-0">总发电量</p>
+                                                <small class="text-success">↑比昨日增长5.2%</small>
+                    </div>
+                                            <div class="flex-shrink-0">
+                                                <div class="avatar-sm rounded-circle bg-primary">
+                                                    <span class="avatar-title">
+                                                        <i class="fas fa-bolt font-size-24"></i>
+                                                </span>
+                </div>
+            </div>
+                    </div>
+                </div>
+            </div>
+                                        </div>
+
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card">
+                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1">
+                                                <h4 class="mb-0 font-size-20">98.5%</h4>
+                                                <p class="text-muted mb-0">设备在线率</p>
+                                                <small class="text-success">运行正常</small>
+                    </div>
+                                            <div class="flex-shrink-0">
+                                                <div class="avatar-sm rounded-circle bg-success">
+                                                    <span class="avatar-title">
+                                                        <i class="fas fa-check-circle font-size-24"></i>
+                                                    </span>
+                </div>
+            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card">
+                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1">
+                                                <h4 class="mb-0 font-size-20">3</h4>
+                                                <p class="text-muted mb-0">待处理告警</p>
+                                                <small class="text-warning">需要处理</small>
+                        </div>
+                                            <div class="flex-shrink-0">
+                                                <div class="avatar-sm rounded-circle bg-warning">
+                                                    <span class="avatar-title">
+                                                        <i class="fas fa-exclamation-triangle font-size-24"></i>
+                                                    </span>
+                    </div>
+                </div>
+            </div>
+                        </div>
+                    </div>
+                </div>
+
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card">
+                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                                            <div class="flex-grow-1">
+                                                <h4 class="mb-0 font-size-20">142.5 MWh</h4>
+                                                <p class="text-muted mb-0">今日交易量</p>
+                                                <small class="text-info">完成计划的95%</small>
+                        </div>
+                                            <div class="flex-shrink-0">
+                                                <div class="avatar-sm rounded-circle bg-info">
+                                                    <span class="avatar-title">
+                                                        <i class="fas fa-chart-line font-size-24"></i>
+                                                                </span>
+                    </div>
+                </div>
+            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                        <!-- 预测分析卡片 -->
+        <div class="row">
+            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-4">预测分析</h4>
+                                        <div class="row">
+                                            <div class="col-lg-3">
+                                                <div class="card bg-dark border-dark">
+                                                    <div class="card-body">
+                                                        <h5 class="text-white">光伏发电预测</h5>
+                                                        <h3 class="text-white">89.2 MWh</h3>
+                                                        <p class="text-white-50">未来24小时</p>
+                                                        <div class="progress bg-soft-light rounded-0">
+                                                            <div class="progress-bar bg-success" role="progressbar" style="width: 60%"></div>
+                    </div>
+                </div>
+            </div>
+                    </div>
+                                            <div class="col-lg-3">
+                                                <div class="card bg-dark border-dark">
+                    <div class="card-body">
+                                                        <h5 class="text-white">风电预测</h5>
+                                                        <h3 class="text-white">156.4 MWh</h3>
+                                                        <p class="text-white-50">未来24小时</p>
+                                                        <div class="progress bg-soft-light rounded-0">
+                                                            <div class="progress-bar bg-info" role="progressbar" style="width: 75%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                                            <div class="col-lg-3">
+                                                <div class="card bg-dark border-dark">
+                                                    <div class="card-body">
+                                                        <h5 class="text-white">负荷预测</h5>
+                                                        <h3 class="text-white">234.8 MWh</h3>
+                                                        <p class="text-white-50">高峰时段</p>
+                                                        <div class="progress bg-soft-light rounded-0">
+                                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 85%"></div>
+                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                            <div class="col-lg-3">
+                                                <div class="card bg-dark border-dark">
+                    <div class="card-body">
+                                                        <h5 class="text-white">充电量预测</h5>
+                                                        <h3 class="text-white">45.6 MWh</h3>
+                                                        <p class="text-white-50">夜间时段</p>
+                                                        <div class="progress bg-soft-light rounded-0">
+                                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 45%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                        <!-- 设备管理表格 -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center mb-4">
+                                            <h4 class="card-title">设备管理</h4>
+                                            <div class="button-group">
+                                                <button type="button" class="btn btn-primary" onclick="showAddDeviceModal()">
+                                                    <i class="fas fa-plus me-2"></i>新增设备
+                                                </button>
+                                                <button type="button" class="btn btn-success ms-2" onclick="importDevices()">
+                                                    <i class="fas fa-file-import me-2"></i>批量导入
+                                                </button>
+                                                <button type="button" class="btn btn-info ms-2" onclick="exportDevices()">
+                                                    <i class="fas fa-file-export me-2"></i>导出设备
+                            </button>
+                                    </div>
+                                </div>
+
+                                        <div class="table-responsive">
+                                            <table id="deviceTable" class="table table-bordered dt-responsive nowrap w-100">
+                                                <thead>
+                                                    <tr>
+                                                        <th>设备ID</th>
+                                                        <th>设备名称</th>
+                                                        <th>设备类型</th>
+                                                        <th>状态</th>
+                                                        <th>健康度</th>
+                                                        <th>当前输出</th>
+                                                        <th>效率</th>
+                                                        <th>预计剩余寿命</th>
+                                                        <th>操作</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- 设备数据将通过JavaScript动态加载 -->
+                                                </tbody>
+                                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    <!-- 新增/编辑设备模态框 -->
+                    <div class="modal fade" id="deviceModal" tabindex="-1">
+                        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                                    <h5 class="modal-title" id="deviceModalTitle">新增设备</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                                    <form id="deviceForm">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">设备ID</label>
+                                                <input type="text" class="form-control" id="deviceId" required>
+                                        </div>
+                                            <div class="col-md-6 mb-3">
+                            <label class="form-label">设备名称</label>
+                                                <input type="text" class="form-control" id="deviceName" required>
+                        </div>
+                                </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">设备类型</label>
+                                                <select class="form-select" id="deviceType" required>
+                                                    <option value="solar">光伏设备</option>
+                                                    <option value="wind">风电设备</option>
+                                                    <option value="storage">储能设备</option>
+                                                    <option value="oil">油气设备</option>
+                            </select>
+                        </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">所属区域</label>
+                                                <select class="form-select" id="deviceArea" required>
+                                                    <option value="chengdu">成都光伏电站</option>
+                                                    <option value="panzhihua">攀枝花光伏电站</option>
+                                                    <option value="yaan">雅安风电场</option>
+                                                    <option value="guangyuan">广元储能电站</option>
+                                                    <option value="deyang">德阳油气田</option>
+                            </select>
+                        </div>
+                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">装机容量</label>
+                                                <input type="text" class="form-control" id="deviceCapacity" required>
+                        </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">安装日期</label>
+                                                <input type="date" class="form-control" id="installDate" required>
+                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">制造商</label>
+                                                <input type="text" class="form-control" id="manufacturer" required>
+                                    </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">序列号</label>
+                                                <input type="text" class="form-control" id="serialNumber" required>
+                                </div>
+                            </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">经度</label>
+                                                <input type="text" class="form-control" id="longitude" required>
+                                        </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">纬度</label>
+                                                <input type="text" class="form-control" id="latitude" required>
+                                    </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                    <button type="button" class="btn btn-primary" onclick="saveDevice()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 设备详情模态框 -->
+    <div class="modal fade" id="deviceDetailsModal" tabindex="-1">
+                        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">设备详细信息</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                                    <ul class="nav nav-tabs" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#basicInfo" role="tab">基本信息</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#realTimeData" role="tab">实时数据</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#maintenanceHistory" role="tab">维护记录</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#alarmHistory" role="tab">告警历史</a>
+                                        </li>
+                                    </ul>
+
+                                    <div class="tab-content p-3">
+                                        <!-- 基本信息 -->
+                                        <div class="tab-pane fade show active" id="basicInfo" role="tabpanel">
+                    <div class="row">
+                        <div class="col-md-6">
+                                                    <div class="card">
+                                    <div class="card-body">
+                                                            <h6 class="card-title mb-4">设备信息</h6>
+                                                            <table class="table table-sm">
+                                                                <tr>
+                                                                    <th width="35%">设备ID</th>
+                                                                    <td id="detail_deviceId"></td>
+                                </tr>
+                                <tr>
+                                                                    <th>设备名称</th>
+                                                                    <td id="detail_deviceName"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>设备类型</th>
+                                                                    <td id="detail_deviceType"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>序列号</th>
+                                                                    <td id="detail_serialNumber"></td>
+                                </tr>
+                                <tr>
+                                    <th>制造商</th>
+                                                                    <td id="detail_manufacturer"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>安装日期</th>
+                                                                    <td id="detail_installDate"></td>
+                                </tr>
+                            </table>
+                                        </div>
+                                    </div>
+                        </div>
+                        <div class="col-md-6">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h6 class="card-title mb-4">运行状态</h6>
+                                                            <table class="table table-sm">
+                                                                <tr>
+                                                                    <th width="35%">运行状态</th>
+                                                                    <td id="detail_status"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>健康度</th>
+                                                                    <td>
+                                                                        <div class="d-flex align-items-center">
+                                                                            <div class="progress flex-grow-1" style="height: 6px;">
+                                                                                <div id="detail_healthBar" class="progress-bar" role="progressbar"></div>
+                            </div>
+                                                                            <span id="detail_health" class="ms-2"></span>
+                                    </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>当前输出</th>
+                                                                    <td id="detail_currentOutput"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>运行效率</th>
+                                                                    <td id="detail_efficiency"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>预计剩余寿命</th>
+                                                                    <td id="detail_remainingLife"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>累计运行时间</th>
+                                                                    <td id="detail_runningTime"></td>
+                                                                </tr>
+                                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                                            <div class="row mt-4">
+                                                <div class="col-md-6">
+                                                    <div class="card">
+                                    <div class="card-body">
+                                                            <h6 class="card-title mb-4">位置信息</h6>
+                                                            <table class="table table-sm">
+                                                                <tr>
+                                                                    <th width="35%">所属区域</th>
+                                                                    <td id="detail_area"></td>
+                                </tr>
+                                <tr>
+                                                                    <th>安装位置</th>
+                                                                    <td id="detail_location"></td>
+                                </tr>
+                                <tr>
+                                                                    <th>地理坐标</th>
+                                                                    <td id="detail_coordinates"></td>
+                                </tr>
+                            </table>
+                                                            <div id="locationMap" style="height: 200px; background-color: #f8f9fa; border-radius: 4px;">
+                                                                <!-- 这里将来可以集成地图显示 -->
+                                                                <div class="d-flex align-items-center justify-content-center h-100 text-muted">
+                                                                    <span>地图加载中...</span>
+                        </div>
+                    </div>
+                                </div>
+                            </div>
+                                    </div>
+                                                <div class="col-md-6">
+                                                    <div class="card">
+                                    <div class="card-body">
+                                                            <h6 class="card-title mb-4">设备参数</h6>
+                                                            <div id="detail_params">
+                                                                <!-- 动态加载设备特定参数 -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                                        <!-- 实时数据 -->
+                                        <div class="tab-pane fade" id="realTimeData" role="tabpanel">
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h6 class="card-title mb-4">运行趋势</h6>
+                                                            <div id="operationChart" style="height: 300px;">
+                                                                <!-- 这里将集成图表显示 -->
+                                </div>
+                                        </div>
+                                        </div>
+                                        </div>
+                                                <div class="col-md-4">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h6 class="card-title mb-4">实时监测</h6>
+                                                            <div id="realTimeMonitor">
+                                                                <!-- 动态加载实时监测数据 -->
+                                        </div>
+                                        </div>
+                                        </div>
+                                </div>
+                                </div>
+                                            <div class="row mt-4">
+                        <div class="col-12">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h6 class="card-title mb-4">传感器数据</h6>
+                            <div class="table-responsive">
+                                                                <table class="table table-bordered table-sm">
+                                    <thead>
+                                        <tr>
+                                                                            <th>参数名称</th>
+                                                                            <th>当前值</th>
+                                                                            <th>单位</th>
+                                                                            <th>正常范围</th>
+                                            <th>状态</th>
+                                                                            <th>更新时间</th>
+                                        </tr>
+                                    </thead>
+                                                                    <tbody id="sensorDataTable">
+                                                                        <!-- 动态加载传感器数据 -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+                                        <!-- 维护记录 -->
+                                        <div class="tab-pane fade" id="maintenanceHistory" role="tabpanel">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                                                <h6 class="card-title mb-0">维护记录</h6>
+                                                                <!-- <button class="btn btn-primary btn-sm" onclick="showAddMaintenanceModal()">
+                                                                    <i class="fas fa-plus me-1"></i>添加记录
+                                                                </button> -->
+        </div>
+                                                            <div class="table-responsive">
+                                                                <table class="table table-bordered table-sm">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>维护日期</th>
+                                                                            <th>维护类型</th>
+                                                                            <th>维护内容</th>
+                                                                            <th>维护人员</th>
+                                                                            <th>更换配件</th>
+                                                                            <th>维护结果</th>
+                                                                            <th>下次维护</th>
+                                                </tr>
+                                                                    </thead>
+                                                                    <tbody id="maintenanceTable">
+                                                                        <!-- 动态加载维护记录 -->
+                                                                    </tbody>
+                                            </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                        <!-- 告警历史 -->
+                                        <div class="tab-pane fade" id="alarmHistory" role="tabpanel">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h6 class="card-title mb-4">告警历史</h6>
+                                                            <div class="table-responsive">
+                                                                <table class="table table-bordered table-sm">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>告警时间</th>
+                                                                            <th>告警类型</th>
+                                                                            <th>告警级别</th>
+                                                                            <th>告警描述</th>
+                                                                            <th>处理状态</th>
+                                                                            <th>处理人</th>
+                                                                            <th>处理时间</th>
+                                                                            <th>处理方法</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="alarmTable">
+                                                                        <!-- 动态加载告警历史 -->
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                             </div>
+                                            </div>
+                                         </div>
+                                        </div>
+                                    </div>
+                                </div>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- container-fluid -->
+            </div>
+            <!-- End Page-content -->
+
+
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <script>document.write(new Date().getFullYear())</script> © 驭能.
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-sm-end d-none d-sm-block">
+                                <p class="mb-0">© <script>document.write(new Date().getFullYear())</script> 驭能能源管理系统   . 由 <i class="mdi mdi-heart text-danger"></i> ES小分队 </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+        <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        
+        <!-- Right Sidebar -->
+        <div class="right-bar">
+            <div data-simplebar="" class="h-100">
+                <div class="rightbar-title d-flex align-items-center bg-dark p-3">
+
+                    <h5 class="m-0 me-2 text-white">Theme Customizer</h5>
+
+                    <a href="javascript:void(0);" class="right-bar-toggle ms-auto">
+                        <i class="mdi mdi-close noti-icon"></i>
+                    </a>
+                </div>
+
+                <!-- Settings -->
+                <hr class="m-0">
+
+                <div class="p-4">
+                    <h6 class="mb-3">Layout</h6>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout" id="layout-vertical" value="vertical">
+                        <label class="form-check-label" for="layout-vertical">Vertical</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout" id="layout-horizontal" value="horizontal">
+                        <label class="form-check-label" for="layout-horizontal">Horizontal</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Layout Mode</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-mode" id="layout-mode-light" value="light">
+                        <label class="form-check-label" for="layout-mode-light">Light</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-mode" id="layout-mode-dark" value="dark">
+                        <label class="form-check-label" for="layout-mode-dark">Dark</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Layout Width</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-width" id="layout-width-fuild" value="fuild" onchange="document.body.setAttribute('data-layout-size', 'fluid')">
+                        <label class="form-check-label" for="layout-width-fuild">Fluid</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-width" id="layout-width-boxed" value="boxed" onchange="document.body.setAttribute('data-layout-size', 'boxed')">
+                        <label class="form-check-label" for="layout-width-boxed">Boxed</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Layout Position</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-position" id="layout-position-fixed" value="fixed" onchange="document.body.setAttribute('data-layout-scrollable', 'false')">
+                        <label class="form-check-label" for="layout-position-fixed">Fixed</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-position" id="layout-position-scrollable" value="scrollable" onchange="document.body.setAttribute('data-layout-scrollable', 'true')">
+                        <label class="form-check-label" for="layout-position-scrollable">Scrollable</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Topbar Color</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="topbar-color" id="topbar-color-light" value="light" onchange="document.body.setAttribute('data-topbar', 'light')">
+                        <label class="form-check-label" for="topbar-color-light">Light</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="topbar-color" id="topbar-color-dark" value="dark" onchange="document.body.setAttribute('data-topbar', 'dark')">
+                        <label class="form-check-label" for="topbar-color-dark">Dark</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2 sidebar-setting">Sidebar Size</h6>
+
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-size" id="sidebar-size-default" value="default" onchange="document.body.setAttribute('data-sidebar-size', 'lg')">
+                        <label class="form-check-label" for="sidebar-size-default">Default</label>
+                    </div>
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-size" id="sidebar-size-compact" value="compact" onchange="document.body.setAttribute('data-sidebar-size', 'md')">
+                        <label class="form-check-label" for="sidebar-size-compact">Compact</label>
+                    </div>
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-size" id="sidebar-size-small" value="small" onchange="document.body.setAttribute('data-sidebar-size', 'sm')">
+                        <label class="form-check-label" for="sidebar-size-small">Small (Icon View)</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2 sidebar-setting">Sidebar Color</h6>
+
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-color" id="sidebar-color-light" value="light" onchange="document.body.setAttribute('data-sidebar', 'light')">
+                        <label class="form-check-label" for="sidebar-color-light">Light</label>
+                    </div>
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-color" id="sidebar-color-dark" value="dark" onchange="document.body.setAttribute('data-sidebar', 'dark')">
+                        <label class="form-check-label" for="sidebar-color-dark">Dark</label>
+                    </div>
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-color" id="sidebar-color-brand" value="brand" onchange="document.body.setAttribute('data-sidebar', 'brand')">
+                        <label class="form-check-label" for="sidebar-color-brand">Brand</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Direction</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-direction" id="layout-direction-ltr" value="ltr">
+                        <label class="form-check-label" for="layout-direction-ltr">LTR</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-direction" id="layout-direction-rtl" value="rtl">
+                        <label class="form-check-label" for="layout-direction-rtl">RTL</label>
+                    </div>
+
+                <!-- 添加主题切换控制 -->
+                <div class="theme-settings">
+                    <div class="theme-colors">
+                        <h6>主题颜色</h6>
+                        <div class="color-options">
+                            <button class="color-option" data-theme="default"></button>
+                            <button class="color-option" data-theme="dark"></button>
+                            <button class="color-option" data-theme="blue"></button>
+                            <button class="color-option" data-theme="green"></button>
+                        </div>
+                    </div>
+                    <div class="theme-fonts">
+                        <h6>字体设置</h6>
+                        <select class="form-select form-select-sm">
+                            <option value="default">默认字体</option>
+                            <option value="microsoft">微软雅黑</option>
+                            <option value="pingfang">苹方</option>
+                        </select>
+                    </div>
+                </div>
+                </div>
+
+            </div> <!-- end slimscroll-menu-->
+        </div>
+        <!-- /Right-bar -->
+
+        <!-- Right bar overlay-->
+        <div class="rightbar-overlay"></div>
+
+        <!-- JAVASCRIPT -->
+        <script src="static/js/jquery.min.js"></script>
+        <script src="static/js/bootstrap.bundle.min.js"></script>
+        <script src="static/js/metisMenu.min.js"></script>
+        <script src="static/js/simplebar.min.js"></script>
+        <script src="static/js/waves.min.js"></script>
+        <script src="static/js/feather.min.js"></script>
+        <!-- pace js -->
+        <script src="static/js/pace.min.js"></script>
+
+    <!-- apexcharts -->
+    <script src="static/js/apexcharts.min.js"></script>
+
+    <!-- Plugins js-->
+    <script src="static/js/jquery-jvectormap-1.2.2.min.js"></script>
+    <script src="static/js/jquery-jvectormap-world-mill-en.js"></script>
+    <!-- dashboard init -->
+    <script src="static/js/dashboard.init.js"></script>
+
+        <script src="static/js/app.js"></script>
+
+    </body>
+    <!-- Required JavaScript -->
+        <script src="static/js/jquery.min.js"></script>
+        <script src="static/js/bootstrap.bundle.min.js"></script>
+        <script src="static/js/metisMenu.min.js"></script>
+        <script src="static/js/simplebar.min.js"></script>
+        <script src="static/js/waves.min.js"></script>
+        <script src="static/js/feather.min.js"></script>
+        <script src="static/js/pace.min.js"></script>
+        <script src="static/js/apexcharts.min.js"></script>
+        <script src="static/js/jquery-jvectormap-1.2.2.min.js"></script>
+        <script src="static/js/jquery-jvectormap-world-mill-en.js"></script>
+        <script src="static/js/dashboard.init.js"></script>
+        <script src="static/js/app.js"></script>
+        <script src="static/js/jquery.dataTables.min.js"></script>
+        <script src="static/js/dataTables.bootstrap4.min.js"></script>
+        <script src="static/js/dataTables.responsive.min.js"></script>
+        <script src="static/js/responsive.bootstrap4.min.js"></script>
+        <!-- Leaflet JavaScript -->
+        <script src="static/js/leaflet.js"></script>
+
+        <!-- Custom JavaScript -->
+        <script src="static/js/device-data.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script>
+            // 全局变量
+            let operationChart = null;
+            let currentDevice = null;
+
+            // 页面加载完成后初始化
+            document.addEventListener('DOMContentLoaded', function() {
+                initializeDataTable();
+                setupEventListeners();
+            });
+
+            // 初始化DataTable
+            function initializeDataTable() {
+                const table = $('#deviceTable').DataTable({
+                    responsive: true,
+                    language: {
+                        url: "static/js/zh_CN.json"
+                    },
+                    data: Object.values(devices),
+                    columns: [
+                        { data: 'id' },
+                        { data: 'name' },
+                        { 
+                            data: 'type',
+                            render: function(data) {
+                                const type = deviceTypes[data];
+                                return `<span class="badge" style="background-color: ${type.color}">${type.name}</span>`;
+                            }
+                        },
+                        { 
+                            data: 'status',
+                            render: function(data) {
+                                const status = statusTypes[data];
+                                return `<span class="badge bg-${status.color}">${status.name}</span>`;
+                            }
+                        },
+                        { 
+                            data: 'health',
+                            render: function(data) {
+                                const colorClass = data >= 90 ? 'success' : data >= 80 ? 'warning' : 'danger';
+                                return `
+                                    <div class="progress" style="height: 6px;">
+                                        <div class="progress-bar bg-${colorClass}" role="progressbar" style="width: ${data}%"></div>
+                                    </div>
+                                    <small class="mt-1">${data}%</small>
+                                `;
+                            }
+                        },
+                        { 
+                            data: null,
+                            render: function(data) {
+                                return data.currentPower || data.currentOutput || '-';
+                            }
+                        },
+                        { data: 'efficiency' },
+                        { 
+                            data: 'remainingLife',
+                            render: function(data) {
+                                return `${data}天`;
+                            }
+                        },
+                        {
+                            data: null,
+                            render: function(data) {
+                                return `
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm btn-info" onclick="showDeviceDetails('${data.id}')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-primary" onclick="editDevice('${data.id}')">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger" onclick="deleteDevice('${data.id}')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                `;
+                            }
+                        }
+                    ]
+                });
+            }
+
+            // 设置事件监听器
+            function setupEventListeners() {
+                // 窗口大小改变时调整图表大小
+                window.addEventListener('resize', function() {
+                    if (operationChart) {
+                        operationChart.resize();
+                    }
+                });
+
+                // 监听模态框事件
+                const deviceDetailsModal = document.getElementById('deviceDetailsModal');
+                if (deviceDetailsModal) {
+                    deviceDetailsModal.addEventListener('shown.bs.modal', function () {
+                        if (currentDevice && operationChart) {
+                            operationChart.resize();
+                            updateRealTimeData(currentDevice);
+                        }
+                    });
+
+                    // 标签页切换事件
+                    const tabs = deviceDetailsModal.querySelectorAll('a[data-bs-toggle="tab"]');
+                    tabs.forEach(tab => {
+                        tab.addEventListener('shown.bs.tab', function (e) {
+                            console.log('Tab switched to:', e.target.getAttribute('href'));
+                            const targetId = e.target.getAttribute('href');
+                            
+                            if (targetId === '#realTimeData' && currentDevice) {
+                                if (!operationChart) {
+                                    initializeCharts();
+                                }
+                                operationChart.resize();
+                                updateRealTimeData(currentDevice);
+                            }
+                            
+                            if (targetId === '#alarmHistory' && currentDevice) {
+                                const alarmTable = document.getElementById('alarmTable');
+                                if (alarmTable && currentDevice.alarmRecords) {
+                                    console.log('Refreshing alarm history on tab switch');
+                                    updateAlarmHistory(alarmTable, currentDevice.alarmRecords);
+                                }
+                            }
+                        });
+                    });
+                }
+            }
+
+            // 初始化图表
+            function initializeCharts() {
+                const chartContainer = document.getElementById('operationChart');
+                if (!chartContainer) return;
+
+                operationChart = echarts.init(chartContainer);
+                updateChartData();
+            }
+
+            // 更新图表数据
+            function updateChartData() {
+                if (!currentDevice || !operationChart) return;
+
+                // 生成24小时的时间点
+                const hours = Array.from({length: 24}, (_, i) => `${i}:00`);
+                
+                // 根据设备类型生成不同的图表配置
+                let option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            label: {
+                                backgroundColor: '#6a7985'
+                            }
+                        }
+                    },
+                    legend: {
+                        data: []
+                    },
+                    toolbox: {
+                        feature: {
+                            saveAsImage: {}
+                        }
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: hours
+                        }
+                    ],
+                    yAxis: [],
+                    series: []
+                };
+
+                switch(currentDevice.type) {
+                    case 'solar':
+                        option.legend.data = ['发电功率', '光照强度', '组件温度'];
+                        option.yAxis = [
+                            {
+                                type: 'value',
+                                name: '功率(MW)',
+                                position: 'left'
+                            },
+                            {
+                                type: 'value',
+                                name: '光照(W/m²)',
+                                position: 'right',
+                                offset: 0
+                            },
+                            {
+                                type: 'value',
+                                name: '温度(°C)',
+                                position: 'right',
+                                offset: 80
+                            }
+                        ];
+                        option.series = [
+                            {
+                                name: '发电功率',
+                                type: 'line',
+                                yAxisIndex: 0,
+                                data: simulatePowerData(currentDevice.currentPower),
+                                smooth: true,
+                                lineStyle: {
+                                    width: 2
+                                },
+                                itemStyle: {
+                                    color: '#4F8CBE'
+                                }
+                            },
+                            {
+                                name: '光照强度',
+                                type: 'line',
+                                yAxisIndex: 1,
+                                data: simulateSolarIrradiance(),
+                                smooth: true,
+                                lineStyle: {
+                                    width: 2
+                                },
+                                itemStyle: {
+                                    color: '#f1c40f'
+                                }
+                            },
+                            {
+                                name: '组件温度',
+                                type: 'line',
+                                yAxisIndex: 2,
+                                data: simulateTemperature(currentDevice.params.temperature),
+                                smooth: true,
+                                lineStyle: {
+                                    width: 2
+                                },
+                                itemStyle: {
+                                    color: '#e74c3c'
+                                }
+                            }
+                        ];
+                        break;
+
+                    case 'wind':
+                        option.legend.data = ['发电功率', '风速', '转速'];
+                        option.yAxis = [
+                            {
+                                type: 'value',
+                                name: '功率(MW)',
+                                position: 'left'
+                            },
+                            {
+                                type: 'value',
+                                name: '风速(m/s)',
+                                position: 'right',
+                                offset: 0
+                            },
+                            {
+                                type: 'value',
+                                name: '转速(rpm)',
+                                position: 'right',
+                                offset: 80
+                            }
+                        ];
+                        option.series = [
+                            {
+                                name: '发电功率',
+                                type: 'line',
+                                yAxisIndex: 0,
+                                data: simulatePowerData(currentDevice.currentPower),
+                                smooth: true,
+                                lineStyle: {
+                                    width: 2
+                                },
+                                itemStyle: {
+                                    color: '#4F8CBE'
+                                }
+                            },
+                            {
+                                name: '风速',
+                                type: 'line',
+                                yAxisIndex: 1,
+                                data: simulateWindSpeed(currentDevice.params.windSpeed),
+                                smooth: true,
+                                lineStyle: {
+                                    width: 2
+                                },
+                                itemStyle: {
+                                    color: '#2ecc71'
+                                }
+                            },
+                            {
+                                name: '转速',
+                                type: 'line',
+                                yAxisIndex: 2,
+                                data: simulateRotationSpeed(currentDevice.params.rotationSpeed),
+                                smooth: true,
+                                lineStyle: {
+                                    width: 2
+                                },
+                                itemStyle: {
+                                    color: '#9b59b6'
+                                }
+                            }
+                        ];
+                        break;
+
+                    case 'storage':
+                        option.legend.data = ['充放电功率', '电池温度', '荷电状态'];
+                        option.yAxis = [
+                            {
+                                type: 'value',
+                                name: '功率(MW)',
+                                position: 'left'
+                            },
+                            {
+                                type: 'value',
+                                name: '温度(°C)',
+                                position: 'right',
+                                offset: 0
+                            },
+                            {
+                                type: 'value',
+                                name: '荷电状态(%)',
+                                position: 'right',
+                                offset: 80,
+                                max: 100,
+                                min: 0
+                            }
+                        ];
+                        option.series = [
+                            {
+                                name: '充放电功率',
+                                type: 'line',
+                                yAxisIndex: 0,
+                                data: simulateStoragePower(currentDevice.currentPower),
+                                smooth: true,
+                                lineStyle: {
+                                    width: 2
+                                },
+                                itemStyle: {
+                                    color: '#4F8CBE'
+                                }
+                            },
+                            {
+                                name: '电池温度',
+                                type: 'line',
+                                yAxisIndex: 1,
+                                data: simulateTemperature(currentDevice.params.temperature),
+                                smooth: true,
+                                lineStyle: {
+                                    width: 2
+                                },
+                                itemStyle: {
+                                    color: '#e74c3c'
+                                }
+                            },
+                            {
+                                name: '荷电状态',
+                                type: 'line',
+                                yAxisIndex: 2,
+                                data: simulateChargeStatus(currentDevice.params.chargeStatus),
+                                smooth: true,
+                                lineStyle: {
+                                    width: 2
+                                },
+                                itemStyle: {
+                                    color: '#2ecc71'
+                                }
+                            }
+                        ];
+                        break;
+
+                    case 'oil':
+                        option.legend.data = ['产量', '井口压力', '电机温度'];
+                        option.yAxis = [
+                            {
+                                type: 'value',
+                                name: '产量(t/d)',
+                                position: 'left'
+                            },
+                            {
+                                type: 'value',
+                                name: '压力(MPa)',
+                                position: 'right',
+                                offset: 0
+                            },
+                            {
+                                type: 'value',
+                                name: '温度(°C)',
+                                position: 'right',
+                                offset: 80
+                            }
+                        ];
+                        option.series = [
+                            {
+                                name: '产量',
+                                type: 'line',
+                                yAxisIndex: 0,
+                                data: simulateOilOutput(currentDevice.currentOutput),
+                                smooth: true,
+                                lineStyle: {
+                                    width: 2
+                                },
+                                itemStyle: {
+                                    color: '#4F8CBE'
+                                }
+                            },
+                            {
+                                name: '井口压力',
+                                type: 'line',
+                                yAxisIndex: 1,
+                                data: simulatePressure(currentDevice.params.wellheadPressure),
+                                smooth: true,
+                                lineStyle: {
+                                    width: 2
+                                },
+                                itemStyle: {
+                                    color: '#e67e22'
+                                }
+                            },
+                            {
+                                name: '电机温度',
+                                type: 'line',
+                                yAxisIndex: 2,
+                                data: simulateTemperature(currentDevice.params.motorTemp),
+                                smooth: true,
+                                lineStyle: {
+                                    width: 2
+                                },
+                                itemStyle: {
+                                    color: '#e74c3c'
+                                }
+                            }
+                        ];
+                        break;
+                }
+
+                operationChart.setOption(option);
+            }
+
+            // 模拟数据生成函数
+            function simulatePowerData(baseValue) {
+                const baseNum = parseFloat(baseValue) || 100;
+                return Array.from({length: 24}, () => {
+                    return +(baseNum * (0.7 + 0.6 * Math.random())).toFixed(2);
+                });
+            }
+
+            function simulateSolarIrradiance() {
+                return Array.from({length: 24}, (_, i) => {
+                    const hour = i;
+                    if (hour < 6 || hour > 18) return 0;
+                    const peak = 1000;
+                    const rad = Math.PI * (hour - 6) / 12;
+                    return +(peak * Math.sin(rad) * (0.8 + 0.4 * Math.random())).toFixed(2);
+                });
+            }
+
+            function simulateTemperature(baseTemp) {
+                const base = parseFloat(baseTemp) || 35;
+                return Array.from({length: 24}, (_, i) => {
+                    const hour = i;
+                    const variation = Math.sin(Math.PI * (hour - 4) / 24) * 10;
+                    return +(base + variation + (Math.random() - 0.5) * 2).toFixed(1);
+                });
+            }
+
+            function simulateWindSpeed(baseSpeed) {
+                const base = parseFloat(baseSpeed) || 8;
+                return Array.from({length: 24}, () => {
+                    return +(base * (0.5 + Math.random())).toFixed(1);
+                });
+            }
+
+            function simulateRotationSpeed(baseSpeed) {
+                const base = parseFloat(baseSpeed) || 15;
+                return Array.from({length: 24}, () => {
+                    return +(base * (0.8 + 0.4 * Math.random())).toFixed(1);
+                });
+            }
+
+            function simulateStoragePower(basePower) {
+                const base = parseFloat(basePower) || 50;
+                return Array.from({length: 24}, (_, i) => {
+                    const hour = i;
+                    // 白天放电，晚上充电
+                    const sign = hour >= 8 && hour <= 20 ? 1 : -1;
+                    return +(sign * base * (0.6 + 0.8 * Math.random())).toFixed(2);
+                });
+            }
+
+            function simulateChargeStatus(baseStatus) {
+                const base = parseFloat(baseStatus) || 80;
+                let current = base;
+                return Array.from({length: 24}, (_, i) => {
+                    const hour = i;
+                    // 白天放电降低，晚上充电增加
+                    const change = hour >= 8 && hour <= 20 ? -1 : 1;
+                    current += change * (Math.random() * 2);
+                    current = Math.min(100, Math.max(20, current));
+                    return +current.toFixed(1);
+                });
+            }
+
+            function simulateOilOutput(baseOutput) {
+                const base = parseFloat(baseOutput) || 150;
+                return Array.from({length: 24}, () => {
+                    return +(base * (0.9 + 0.2 * Math.random())).toFixed(1);
+                });
+            }
+
+            function simulatePressure(basePressure) {
+                const base = parseFloat(basePressure) || 2.5;
+                return Array.from({length: 24}, () => {
+                    return +(base * (0.95 + 0.1 * Math.random())).toFixed(2);
+                });
+            }
+
+            // 更新实时数据
+            function updateRealTimeData(device) {
+                const realTimeMonitor = document.getElementById('realTimeMonitor');
+                if (!realTimeMonitor) return;
+
+                // 更新实时监测数据
+                realTimeMonitor.innerHTML = `
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">当前功率</h6>
+                                    <small class="text-muted">实时数据</small>
+                                </div>
+                                <h5 class="mb-0">${device.currentPower || device.currentOutput || 'N/A'}</h5>
+                            </div>
+                        </div>
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">运行效率</h6>
+                                    <small class="text-muted">当前值</small>
+                                </div>
+                                <h5 class="mb-0">${device.efficiency || 'N/A'}</h5>
+                            </div>
+                        </div>
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">设备温度</h6>
+                                    <small class="text-muted">实时数据</small>
+                                </div>
+                                <h5 class="mb-0">${device.params?.temperature || 'N/A'}</h5>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // 更新传感器数据表格
+                const sensorDataTable = document.getElementById('sensorDataTable');
+                if (sensorDataTable && device.params) {
+                    const sensorData = [];
+                    // 根据设备类型添加不同的传感器数据
+                    switch (device.type) {
+                        case 'solar':
+                            sensorData.push(
+                                {name: '组件温度', value: device.params.temperature, unit: '°C', range: '20-60°C', status: 'normal'},
+                                {name: '发电效率', value: device.params.efficiency, unit: '%', range: '15-23%', status: 'normal'},
+                                {name: '倾角', value: device.params.tiltAngle, unit: '°', range: '25-35°', status: 'normal'}
+                            );
+                            break;
+                        case 'wind':
+                            sensorData.push(
+                                {name: '风速', value: device.params.windSpeed, unit: 'm/s', range: '3-25m/s', status: 'normal'},
+                                {name: '转速', value: device.params.rotationSpeed, unit: 'rpm', range: '0-20rpm', status: 'normal'},
+                                {name: '桨叶角度', value: device.params.pitch, unit: '°', range: '0-90°', status: 'normal'}
+                            );
+                            break;
+                        // 添加其他设备类型的传感器数据...
+                    }
+
+                    sensorDataTable.innerHTML = sensorData.map(sensor => `
+                        <tr>
+                            <td>${sensor.name}</td>
+                            <td>${sensor.value}</td>
+                            <td>${sensor.unit}</td>
+                            <td>${sensor.range}</td>
+                            <td>
+                                <span class="badge bg-success">正常</span>
+                            </td>
+                            <td>${new Date().toLocaleString()}</td>
+                        </tr>
+                    `).join('');
+                }
+
+                // 更新运行趋势图表
+                if (operationChart) {
+                    // 模拟24小时数据
+                    const hours = Array.from({length: 24}, (_, i) => i);
+                    const powerData = hours.map(() => Math.random() * 100);
+                    const efficiencyData = hours.map(() => 85 + Math.random() * 15);
+
+                    const option = {
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+                        legend: {
+                            data: ['输出功率', '运行效率']
+                        },
+                        xAxis: {
+                            type: 'category',
+                            data: hours.map(h => `${h}:00`)
+                        },
+                        yAxis: [
+                            {
+                                type: 'value',
+                                name: '功率',
+                                axisLabel: {
+                                    formatter: '{value} MW'
+                                }
+                            },
+                            {
+                                type: 'value',
+                                name: '效率',
+                                axisLabel: {
+                                    formatter: '{value} %'
+                                }
+                            }
+                        ],
+                        series: [
+                            {
+                                name: '输出功率',
+                                type: 'line',
+                                data: powerData
+                            },
+                            {
+                                name: '运行效率',
+                                type: 'line',
+                                yAxisIndex: 1,
+                                data: efficiencyData
+                            }
+                        ]
+                    };
+
+                    operationChart.setOption(option);
+                }
+        }
+
+        // 显示设备详情
+        function showDeviceDetails(deviceId) {
+                console.log('Showing device details for:', deviceId);
+            const device = devices[deviceId];
+                if (!device) {
+                    console.error('Device not found:', deviceId);
+                    return;
+                }
+
+                currentDevice = device;
+                console.log('Current device data:', device);
+
+                try {
+                    // 更新基本信息
+                    document.getElementById('detail_deviceId').textContent = device.id;
+                    document.getElementById('detail_deviceName').textContent = device.name;
+                    document.getElementById('detail_deviceType').textContent = deviceTypes[device.type].name;
+                    document.getElementById('detail_serialNumber').textContent = device.serialNumber;
+                    document.getElementById('detail_manufacturer').textContent = device.manufacturer;
+                    document.getElementById('detail_installDate').textContent = device.installDate;
+                    
+                    // 更新运行状态
+                    document.getElementById('detail_status').innerHTML = `
+                        <span class="badge bg-${statusTypes[device.status].color}">
+                            ${statusTypes[device.status].name}
+                        </span>`;
+                    
+                    // 更新健康度
+                    const healthBar = document.getElementById('detail_healthBar');
+                    const healthText = document.getElementById('detail_health');
+                    if (healthBar && healthText) {
+                        healthBar.style.width = `${device.health}%`;
+                        healthBar.className = `progress-bar ${device.health >= 90 ? 'bg-success' : device.health >= 70 ? 'bg-warning' : 'bg-danger'}`;
+                        healthText.textContent = `${device.health}%`;
+                    } else {
+                        console.warn('Health bar elements not found');
+                    }
+
+                    // 更新当前输出
+                    document.getElementById('detail_currentOutput').textContent = device.currentPower || device.currentOutput || 'N/A';
+                    document.getElementById('detail_efficiency').textContent = device.efficiency || 'N/A';
+                    document.getElementById('detail_remainingLife').textContent = `${device.remainingLife}天`;
+                    document.getElementById('detail_runningTime').textContent = `${device.operatingHours || 0}小时`;
+
+                    // 更新位置信息
+                    document.getElementById('detail_area').textContent = areas[device.area]?.name || device.area;
+                    document.getElementById('detail_location').textContent = device.location.installationSite || '未指定';
+                    document.getElementById('detail_coordinates').textContent = 
+                        `经度: ${device.location.longitude}, 纬度: ${device.location.latitude}${device.location.altitude ? `, 海拔: ${device.location.altitude}` : ''}`;
+
+                    // 更新设备参数
+                    const paramsContainer = document.getElementById('detail_params');
+                    if (paramsContainer && device.params) {
+                        let paramsHTML = '<table class="table table-sm">';
+                        for (const [key, value] of Object.entries(device.params)) {
+                            paramsHTML += `
+                                <tr>
+                                    <th width="35%">${key}</th>
+                                    <td>${value}</td>
+                                </tr>`;
+                        }
+                        paramsHTML += '</table>';
+                        paramsContainer.innerHTML = paramsHTML;
+                    } else {
+                        console.warn('Parameters container not found or no parameters available');
+                    }
+
+                    // 更新维护记录
+                    const maintenanceTable = document.getElementById('maintenanceTable');
+                    if (maintenanceTable && device.maintenanceRecords) {
+                        console.log('Updating maintenance records:', device.maintenanceRecords);
+                        maintenanceTable.innerHTML = device.maintenanceRecords.map(record => `
+                            <tr>
+                    <td>${record.date}</td>
+                    <td>${record.type}</td>
+                    <td>${record.description}</td>
+                                <td>${record.technician}</td>
+                                <td>${record.parts}</td>
+                                <td>${record.findings}</td>
+                                <td>${record.nextDate}</td>
+                            </tr>
+                        `).join('');
+                    } else {
+                        console.warn('Maintenance table not found or no maintenance records available');
+                    }
+
+                    // 更新告警历史
+                    const alarmTable = document.getElementById('alarmTable');
+                    if (alarmTable && device.alarmRecords) {
+                        console.log('Updating alarm history:', device.alarmRecords);
+                        alarmTable.innerHTML = device.alarmRecords.map(alarm => `
+                            <tr>
+                                <td>${alarm.timestamp}</td>
+                                <td>${alarm.type}</td>
+                                <td>
+                                    <span class="badge bg-${alarm.type === 'warning' ? 'warning' : 'danger'}">
+                                        ${alarm.code}
+                                    </span>
+                                </td>
+                                <td>${alarm.description}</td>
+                                <td>
+                                    <span class="badge bg-${alarm.status === 'resolved' ? 'success' : 'warning'}">
+                                        ${alarm.status}
+                                    </span>
+                                </td>
+                                <td>${alarm.resolution || '-'}</td>
+                                <td>${alarm.resolveTime || '-'}</td>
+                                <td>${alarm.value} / ${alarm.threshold}</td>
+                            </tr>
+                        `).join('');
+                    } else {
+                        console.warn('Alarm table not found or no alarm records available:', {
+                            alarmTableExists: !!alarmTable,
+                            hasAlarmRecords: !!device.alarmRecords,
+                            deviceId: device.id
+                        });
+                    }
+
+                    // 显示模态框
+                    const modalElement = document.getElementById('deviceDetailsModal');
+                    if (!modalElement) {
+                        console.error('Device details modal not found');
+                        return;
+                    }
+                    const modal = new bootstrap.Modal(modalElement);
+                    modal.show();
+
+                    // 初始化图表
+                    setTimeout(() => {
+                        if (!operationChart) {
+                            console.log('Initializing charts');
+                            initializeCharts();
+                        } else {
+                            console.log('Updating chart data');
+                            updateChartData();
+                        }
+                    }, 200);
+
+                    // 初始化地图
+                    setTimeout(() => {
+                        initializeDeviceMap(device);
+                    }, 200);
+
+                } catch (error) {
+                    console.error('Error showing device details:', error);
+                }
+            }
+
+            let deviceMap = null;
+
+            // 初始化设备地图
+            function initializeDeviceMap(device) {
+                if (!device || !device.location || !device.location.latitude || !device.location.longitude) {
+                    console.warn('Device location data not available');
+                    return;
+                }
+
+                // 如果地图已存在，清除并重新初始化
+                if (deviceMap) {
+                    deviceMap.remove();
+                }
+
+                // 初始化地图
+                deviceMap = L.map('locationMap').setView([device.location.latitude, device.location.longitude], 13);
+
+                // 添加地图图层
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(deviceMap);
+
+                // 创建自定义图标
+                const deviceIcon = L.divIcon({
+                    className: 'device-marker-icon',
+                    iconSize: [12, 12]
+                });
+
+                // 添加设备标记
+                const marker = L.marker([device.location.latitude, device.location.longitude], {
+                    icon: deviceIcon
+                }).addTo(deviceMap);
+
+                // 添加弹出信息
+                marker.bindPopup(`
+                    <b>${device.name}</b><br>
+                    类型: ${deviceTypes[device.type].name}<br>
+                    状态: ${statusTypes[device.status].name}<br>
+                    ${device.location.installationSite || ''}
+                `);
+
+                // 调整地图大小
+                setTimeout(() => {
+                    deviceMap.invalidateSize();
+                }, 200);
+            }
+
+            // 编辑设备
+            function editDevice(deviceId) {
+                const device = devices[deviceId];
+                if (!device) {
+                    console.error('Device not found:', deviceId);
+                    return;
+                }
+
+                // 填充表单数据
+                document.getElementById('deviceId').value = device.id;
+                document.getElementById('deviceName').value = device.name;
+                document.getElementById('deviceType').value = device.type;
+                document.getElementById('deviceArea').value = device.area;
+                document.getElementById('deviceCapacity').value = device.capacity;
+                document.getElementById('installDate').value = device.installDate;
+                document.getElementById('manufacturer').value = device.manufacturer;
+                document.getElementById('serialNumber').value = device.serialNumber;
+                if (device.location) {
+                    document.getElementById('longitude').value = device.location.longitude;
+                    document.getElementById('latitude').value = device.location.latitude;
+                }
+
+                // 更改模态框标题
+                document.getElementById('deviceModalTitle').textContent = '编辑设备';
+                
+                // 显示模态框
+                const modal = new bootstrap.Modal(document.getElementById('deviceModal'));
+                modal.show();
+            }
+
+            // 删除设备
+            function deleteDevice(deviceId) {
+                const confirmToast = document.getElementById('confirmationToast');
+                const confirmBtn = document.getElementById('confirmDeleteBtn');
+                
+                // 移除之前的事件监听器
+                const newConfirmBtn = confirmBtn.cloneNode(true);
+                confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+                
+                // 添加新的事件监听器
+                newConfirmBtn.addEventListener('click', async () => {
+                    const device = devices[deviceId];
+                    if (!device) {
+                        console.error('Device not found:', deviceId);
+                        return;
+                    }
+
+                    try {
+                        // 从设备列表中删除
+                        delete devices[deviceId];
+                        
+                        // 刷新数据表格
+                        const table = $('#deviceTable').DataTable();
+                        table.clear().rows.add(Object.values(devices)).draw();
+
+                        // 关闭确认Toast
+                        const bsConfirmToast = bootstrap.Toast.getInstance(confirmToast);
+                        bsConfirmToast.hide();
+
+                        // 显示成功提示
+                        showNotification('设备已成功删除', 'success');
+                    } catch (error) {
+                        console.error('Error deleting device:', error);
+                        showNotification('删除设备时发生错误', 'error');
+                    }
+                });
+
+                // 显示确认Toast
+                const bsConfirmToast = new bootstrap.Toast(confirmToast);
+                bsConfirmToast.show();
+            }
+
+            // 保存设备（新增或编辑）
+            function saveDevice() {
+                const deviceId = document.getElementById('deviceId').value;
+                const deviceData = {
+                    id: deviceId,
+                    name: document.getElementById('deviceName').value,
+                    type: document.getElementById('deviceType').value,
+                    area: document.getElementById('deviceArea').value,
+                    capacity: document.getElementById('deviceCapacity').value,
+                    installDate: document.getElementById('installDate').value,
+                    manufacturer: document.getElementById('manufacturer').value,
+                    serialNumber: document.getElementById('serialNumber').value,
+                    location: {
+                        longitude: document.getElementById('longitude').value,
+                        latitude: document.getElementById('latitude').value,
+                        installationSite: `${document.getElementById('deviceArea').options[document.getElementById('deviceArea').selectedIndex].text}`
+                    },
+                    status: 'running',
+                    health: 100,
+                    remainingLife: 365,
+                    params: {},
+                    currentPower: '0',
+                    efficiency: '100%'
+                };
+
+                // 根据设备类型设置默认参数
+                switch(deviceData.type) {
+                    case 'solar':
+                        deviceData.params = {
+                            tiltAngle: '32°',
+                            orientation: '正南',
+                            efficiency: '21.3%',
+                            temperature: '25°C',
+                            cleanStatus: '良好'
+                        };
+                        break;
+                    case 'wind':
+                        deviceData.params = {
+                            hubHeight: '90m',
+                            rotorDiameter: '140m',
+                            windSpeed: '0m/s',
+                            rotationSpeed: '0rpm',
+                            pitch: '0°'
+                        };
+                        break;
+                    // ... 其他设备类型的默认参数 ...
+                }
+
+                try {
+                    // 更新或添加设备数据
+                    devices[deviceId] = deviceData;
+                    
+                    // 刷新数据表格
+                    const table = $('#deviceTable').DataTable();
+                    table.clear().rows.add(Object.values(devices)).draw();
+
+                    // 关闭模态框
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('deviceModal'));
+                    modal.hide();
+
+                    // 显示成功提示
+                    showNotification('设备信息已保存', 'success');
+                } catch (error) {
+                    console.error('Error saving device:', error);
+                    showNotification('保存设备信息时发生错误', 'error');
+                }
+            }
+
+            // 显示添加设备模态框
+            function showAddDeviceModal() {
+                // 清空表单
+                document.getElementById('deviceForm').reset();
+                
+                // 生成新的设备ID
+                const newId = generateDeviceId();
+                document.getElementById('deviceId').value = newId;
+                
+                // 更改模态框标题
+                document.getElementById('deviceModalTitle').textContent = '新增设备';
+                
+                // 显示模态框
+                const modal = new bootstrap.Modal(document.getElementById('deviceModal'));
+                modal.show();
+            }
+
+            // 生成设备ID
+            function generateDeviceId() {
+                const prefix = 'DEV';
+                const timestamp = Date.now().toString().slice(-6);
+                const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+                return `${prefix}${timestamp}${random}`;
+            }
+
+            // 添加显示提示的函数
+            function showNotification(message, type = 'success') {
+                const toast = document.getElementById('notificationToast');
+                const toastBody = toast.querySelector('.toast-body');
+                
+                // 设置消息内容
+                toastBody.textContent = message;
+                
+                // 设置样式
+                toast.className = 'toast align-items-center text-white border-0';
+                switch(type) {
+                    case 'success':
+                        toast.classList.add('bg-success');
+                        break;
+                    case 'error':
+                        toast.classList.add('bg-danger');
+                        break;
+                    case 'warning':
+                        toast.classList.add('bg-warning');
+                        break;
+                    case 'info':
+                        toast.classList.add('bg-info');
+                        break;
+                }
+                
+                // 创建并显示Toast
+                const bsToast = new bootstrap.Toast(toast, {
+                    animation: true,
+                    autohide: true,
+                    delay: 3000
+                });
+                bsToast.show();
+            }
+
+            // 导出设备数据
+            function exportDevices() {
+                try {
+                    // 准备导出数据
+                    const exportData = Object.values(devices).map(device => ({
+                        '设备ID': device.id,
+                        '设备名称': device.name,
+                        '设备类型': deviceTypes[device.type].name,
+                        '所属区域': areas[device.area].name,
+                        '装机容量': device.capacity,
+                        '安装日期': device.installDate,
+                        '制造商': device.manufacturer,
+                        '序列号': device.serialNumber,
+                        '经度': device.location?.longitude || '',
+                        '纬度': device.location?.latitude || '',
+                        '安装位置': device.location?.installationSite || '',
+                        '运行状态': statusTypes[device.status].name,
+                        '健康度': device.health + '%',
+                        '预计剩余寿命': device.remainingLife + '天',
+                        '当前输出': device.currentPower || device.currentOutput || '',
+                        '运行效率': device.efficiency
+                    }));
+
+                    // 创建工作簿
+                    const wb = XLSX.utils.book_new();
+                    const ws = XLSX.utils.json_to_sheet(exportData);
+
+                    // 设置列宽
+                    const colWidths = Object.keys(exportData[0]).map(() => ({ wch: 15 }));
+                    ws['!cols'] = colWidths;
+
+                    // 添加工作表到工作簿
+                    XLSX.utils.book_append_sheet(wb, ws, "设备列表");
+
+                    // 生成文件并下载
+                    const fileName = `设备列表_${new Date().toLocaleDateString()}.xlsx`;
+                    XLSX.writeFile(wb, fileName);
+
+                    showNotification('设备数据导出成功', 'success');
+                } catch (error) {
+                    console.error('Error exporting devices:', error);
+                    showNotification('导出设备数据时发生错误', 'error');
+                }
+            }
+
+            // 导入设备数据
+            function importDevices() {
+                const fileInput = document.getElementById('fileInput');
+                
+                // 重置文件输入以确保change事件能够触发
+                fileInput.value = '';
+                
+                // 添加文件改变事件监听器
+                fileInput.onchange = function(e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const data = new Uint8Array(e.target.result);
+                            const workbook = XLSX.read(data, { type: 'array' });
+                            
+                            // 获取第一个工作表
+                            const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                            const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+                            // 处理导入的数据
+                            let successCount = 0;
+                            let errorCount = 0;
+
+                            jsonData.forEach(row => {
+                                try {
+                                    // 转换数据格式
+                                    const deviceData = {
+                                        id: row['设备ID'] || generateDeviceId(),
+                                        name: row['设备名称'],
+                                        type: Object.keys(deviceTypes).find(key => 
+                                            deviceTypes[key].name === row['设备类型']
+                                        ) || 'solar',
+                                        area: Object.keys(areas).find(key => 
+                                            areas[key].name === row['所属区域']
+                                        ) || 'chengdu',
+                                        capacity: row['装机容量'],
+                                        installDate: row['安装日期'],
+                                        manufacturer: row['制造商'],
+                                        serialNumber: row['序列号'],
+                                        location: {
+                                            longitude: row['经度'],
+                                            latitude: row['纬度'],
+                                            installationSite: row['安装位置']
+                                        },
+                                        status: Object.keys(statusTypes).find(key =>
+                                            statusTypes[key].name === row['运行状态']
+                                        ) || 'running',
+                                        health: parseInt(row['健康度']) || 100,
+                                        remainingLife: parseInt(row['预计剩余寿命']) || 365,
+                                        currentPower: row['当前输出'],
+                                        efficiency: row['运行效率']
+                                    };
+
+                                    // 添加到设备列表
+                                    devices[deviceData.id] = deviceData;
+                                    successCount++;
+                                } catch (error) {
+                                    console.error('Error importing row:', row, error);
+                                    errorCount++;
+                                }
+                            });
+
+                            // 刷新数据表格
+                            const table = $('#deviceTable').DataTable();
+                            table.clear().rows.add(Object.values(devices)).draw();
+
+                            // 显示导入结果
+                            showNotification(
+                                `导入完成：成功 ${successCount} 条，失败 ${errorCount} 条`,
+                                successCount > 0 ? 'success' : 'warning'
+                            );
+                        } catch (error) {
+                            console.error('Error reading file:', error);
+                            showNotification('读取文件时发生错误', 'error');
+                        }
+                    };
+                    reader.readAsArrayBuffer(file);
+                };
+
+                // 触发文件选择
+                fileInput.click();
+            }
+    </script>
+
+    <!-- 在body标签末尾添加Toast容器 -->
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1070">
+        <!-- 普通提示Toast -->
+        <div id="notificationToast" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <!-- 提示消息内容 -->
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+
+        <!-- 确认操作Toast -->
+        <div id="confirmationToast" class="toast text-dark" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+            <div class="toast-header bg-warning text-dark">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <strong class="me-auto">确认操作</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <p class="mb-3">确定要删除此设备吗？此操作不可恢复。</p>
+                <div class="d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="toast">取消</button>
+                    <button type="button" class="btn btn-danger btn-sm" id="confirmDeleteBtn">删除</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

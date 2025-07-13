@@ -1,0 +1,1118 @@
+/* 设备检修管理样式 */
+
+/* 检修看板样式 */
+.maintenance-dashboard {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.dashboard-card {
+    background-color: #2a3042;
+    border-radius: 8px;
+    padding: 1.25rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+}
+
+.dashboard-card.pending::before { background-color: #f1b44c; }
+.dashboard-card.in-progress::before { background-color: #556ee6; }
+.dashboard-card.completed::before { background-color: #34c38f; }
+.dashboard-card.emergency::before { background-color: #f46a6a; }
+
+.dashboard-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.dashboard-card-title {
+    font-size: 0.875rem;
+    color: #8c98a5;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-card-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.25rem;
+}
+
+.dashboard-card-trend {
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.trend-up { color: #34c38f; }
+.trend-down { color: #f46a6a; }
+
+/* 设备状态概览 */
+.equipment-overview {
+    display: grid;
+    gap: 1rem;
+}
+
+.equipment-status-card {
+    background-color: #2a3042;
+    border-radius: 8px;
+    padding: 1.25rem;
+    text-align: center;
+}
+
+.status-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 1.5rem;
+}
+
+.status-icon.normal { 
+    background-color: rgba(52, 195, 143, 0.2);
+    color: #34c38f;
+}
+
+.status-icon.warning {
+    background-color: rgba(241, 180, 76, 0.2);
+    color: #f1b44c;
+}
+
+.status-icon.danger {
+    background-color: rgba(244, 106, 106, 0.2);
+    color: #f46a6a;
+}
+
+/* 检修计划日历 */
+.maintenance-calendar {
+    background-color: #2a3042;
+    border-radius: 8px;
+    padding: 1.25rem;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.calendar-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #fff;
+}
+
+.calendar-nav {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.calendar-nav button {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.calendar-nav button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.calendar-day:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.calendar-day.has-task {
+    background-color: rgba(85, 110, 230, 0.2);
+}
+
+.calendar-day.today {
+    border: 2px solid #556ee6;
+}
+
+.day-number {
+    font-size: 0.875rem;
+    color: #fff;
+    margin-bottom: 0.25rem;
+}
+
+.task-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #556ee6;
+}
+
+/* 检修工单样式 */
+.maintenance-order {
+    background: var(--bs-dark);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.maintenance-order:hover {
+    transform: translateX(5px);
+}
+
+.maintenance-order.urgent { border-left-color: #dc3545; }
+.maintenance-order.normal { border-left-color: #0dcaf0; }
+.maintenance-order.routine { border-left-color: #198754; }
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.order-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.order-meta {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1rem;
+    color: #adb5bd;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* 检修步骤时间轴 */
+.maintenance-timeline {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 1.5rem;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2rem;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.timeline-item::after {
+    content: '';
+    position: absolute;
+    left: -2.25rem;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--bs-dark);
+    border: 2px solid #0dcaf0;
+}
+
+.timeline-item.completed::after {
+    background: #198754;
+    border-color: #198754;
+}
+
+/* 检修表单样式 */
+.maintenance-form {
+    background: var(--bs-dark);
+    border-radius: 12px;
+    padding: 2rem;
+}
+
+.form-section {
+    margin-bottom: 2rem;
+}
+
+.form-section-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.checklist-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* 设备详情卡片 */
+.equipment-detail-card {
+    background: var(--bs-dark);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.equipment-specs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.spec-item {
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+.spec-label {
+    color: #adb5bd;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+}
+
+/* 检修历史记录 */
+.history-filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.filter-chip {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-chip:hover,
+.filter-chip.active {
+    background: #0dcaf0;
+    color: #000;
+}
+
+/* 响应式调整 */
+@media (max-width: 1200px) {
+    .maintenance-dashboard {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .equipment-overview {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .maintenance-dashboard,
+    .equipment-overview {
+        grid-template-columns: 1fr;
+    }
+    
+    .equipment-specs {
+        grid-template-columns: 1fr;
+    }
+    
+    .order-meta {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+/* 无人机巡检样式 */
+.drone-status {
+    background-color: #2a3042;
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.drone-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-label {
+    font-size: 0.875rem;
+    color: #8c98a5;
+    margin-bottom: 0.25rem;
+}
+
+.info-value {
+    font-size: 1rem;
+    color: #fff;
+}
+
+.drone-battery {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.battery-icon {
+    color: #34c38f;
+}
+
+.battery-value {
+    font-size: 0.875rem;
+    color: #fff;
+}
+
+/* 巡检任务列表 */
+.inspection-tasks {
+    margin-top: 1rem;
+}
+
+.task-card {
+    background-color: #2a3042;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.task-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #fff;
+}
+
+.task-status {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+.task-details {
+    font-size: 0.875rem;
+    color: #8c98a5;
+}
+
+.task-progress {
+    margin-top: 0.75rem;
+}
+
+.progress-bar {
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-value {
+    height: 100%;
+    background-color: #556ee6;
+    transition: width 0.3s ease;
+}
+
+/* 实时监控 */
+.live-monitor .monitor-container {
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 1rem 0;
+}
+
+.video-feed {
+    aspect-ratio: 16/9;
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.monitor-controls {
+    padding: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* 飞行数据 */
+.flight-data .data-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.flight-data .data-item label {
+    color: #adb5bd;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+.flight-data .data-item .value {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+/* 巡检表单 */
+.inspection-points {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+/* 问题列表 */
+.issues-found .table {
+    margin: 0;
+}
+
+.issues-found .table th,
+.issues-found .table td {
+    padding: 0.75rem;
+    vertical-align: middle;
+}
+
+/* 响应式调整 */
+@media (max-width: 1400px) {
+    .inspection-points {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .drone-info {
+        grid-template-columns: 1fr;
+    }
+    
+    .flight-data .row {
+        gap: 1rem;
+    }
+}
+
+/* 无人机集群样式 */
+.drone-fleet-status {
+    background: var(--bs-dark);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.fleet-overview {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.fleet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.fleet-stats {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.drone-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.drone-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 1rem;
+    border-left: 4px solid transparent;
+}
+
+.drone-item.standby { border-left-color: #198754; }
+.drone-item.flying { border-left-color: #0dcaf0; }
+.drone-item.charging { border-left-color: #ffc107; }
+.drone-item.maintenance { border-left-color: #dc3545; }
+
+.drone-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.drone-role {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.drone-role.leader {
+    background: rgba(13, 202, 240, 0.2);
+    color: #0dcaf0;
+}
+
+.drone-model {
+    font-size: 0.875rem;
+    color: #adb5bd;
+    margin-bottom: 0.5rem;
+}
+
+.drone-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.battery-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #198754;
+}
+
+.drone-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.fleet-capabilities {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.capability-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.capability-tag {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    background: rgba(13, 202, 240, 0.1);
+    color: #0dcaf0;
+    font-size: 0.875rem;
+}
+
+/* 集群监控样式 */
+.fleet-monitoring {
+    background: var(--bs-dark);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.monitoring-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.weather-info {
+    display: flex;
+    gap: 1rem;
+    color: #adb5bd;
+}
+
+.monitoring-map {
+    height: 300px;
+    background: #1a1a1a;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.flight-restrictions {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.restriction-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.restriction-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.restriction-item .label {
+    color: #adb5bd;
+    font-size: 0.875rem;
+}
+
+.restriction-item .value {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+/* 集群任务样式 */
+.fleet-task-item {
+    background: var(--bs-dark);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid #0dcaf0;
+}
+
+.fleet-task-item .task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.fleet-task-item .task-info h6 {
+    margin-bottom: 0.5rem;
+}
+
+.fleet-task-item .task-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #adb5bd;
+}
+
+.task-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* 响应式调整 */
+@media (max-width: 1200px) {
+    .drone-list {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .fleet-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .monitoring-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .weather-info {
+        flex-wrap: wrap;
+    }
+
+    .fleet-task-item .task-details {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 状态卡片 */
+.status-card {
+    background-color: #2a3042;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.status-card .status-title {
+    color: #ccc;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+.status-card .status-value {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.status-card .status-progress {
+    height: 6px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    margin-top: 0.5rem;
+}
+
+.status-card .progress-bar {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.normal-progress { --progress: 84.4%; }
+.warning-progress { --progress: 11.7%; }
+.fault-progress { --progress: 3.9%; }
+
+.status-card .progress-bar {
+    width: var(--progress);
+}
+
+/* 工单表格 */
+.work-order-table {
+    background-color: #2a3042;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.work-order-table th {
+    background-color: #343747;
+    color: #ccc;
+    font-weight: 500;
+    border-bottom: none;
+}
+
+.work-order-table td {
+    color: #ccc;
+    border-color: #404040;
+    vertical-align: middle;
+}
+
+.work-order-table .progress {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 无人机巡检 */
+.drone-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.drone-item {
+    background-color: #2a3042;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.drone-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.drone-header h6 {
+    color: #fff;
+    margin: 0;
+}
+
+.drone-info {
+    margin-bottom: 1rem;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    color: #ccc;
+}
+
+.info-item .progress {
+    flex: 1;
+    margin: 0 0.5rem;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.drone-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* 模态框样式 */
+.modal-content {
+    background-color: #2a3042;
+    color: #ccc;
+}
+
+.modal-header {
+    border-bottom-color: #404040;
+}
+
+.modal-footer {
+    border-top-color: #404040;
+}
+
+.form-section {
+    margin-bottom: 2rem;
+}
+
+.form-section-title {
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #404040;
+}
+
+.form-control, .form-select {
+    background-color: #343747;
+    border-color: #404040;
+    color: #ccc;
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: #343747;
+    border-color: #556ee6;
+    color: #ccc;
+}
+
+.form-label {
+    color: #ccc;
+}
+
+.checklist-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.5rem;
+}
+
+.checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* 时间线样式 */
+.maintenance-timeline {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 1.5rem;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2rem;
+    top: 0;
+    width: 1px;
+    height: 100%;
+    background-color: #404040;
+}
+
+.timeline-item::after {
+    content: '';
+    position: absolute;
+    left: -2.25rem;
+    top: 0.25rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: #556ee6;
+}
+
+.timeline-item.completed::after {
+    background-color: #34c38f;
+}
+
+.timeline-item h6 {
+    color: #fff;
+    margin-bottom: 0.25rem;
+}
+
+.timeline-item p {
+    margin-bottom: 0.25rem;
+}
+
+/* 设备详情卡片 */
+.equipment-detail-card {
+    background-color: #343747;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.equipment-specs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.spec-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.spec-label {
+    color: #8f9cc0;
+    font-size: 0.875rem;
+}
+
+.spec-value {
+    color: #fff;
+    font-size: 1rem;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .drone-list {
+        grid-template-columns: 1fr;
+    }
+
+    .equipment-specs {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .checklist-items {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 筛选器样式 */
+.filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.filter-chip {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #8c98a5;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-chip:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.filter-chip.active {
+    background-color: #556ee6;
+    color: #fff;
+}
+
+/* 响应式布局 */
+@media (max-width: 1200px) {
+    .maintenance-dashboard {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .maintenance-dashboard {
+        grid-template-columns: 1fr;
+    }
+    
+    .equipment-overview {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .work-order-header {
+        flex-direction: column;
+    }
+    
+    .work-order-status {
+        margin-top: 0.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .equipment-overview {
+        grid-template-columns: 1fr;
+    }
+    
+    .work-order-footer {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .action-buttons {
+        width: 100%;
+        justify-content: space-between;
+    }
+} 

@@ -1,0 +1,3 @@
+Change Component Footprint: Designator=C11 Old Footprint=0805C New Footprint=0603C
+Change Component Footprint: Designator=C12 Old Footprint=0805C New Footprint=0603C
+Added Room: Name=气象传感器

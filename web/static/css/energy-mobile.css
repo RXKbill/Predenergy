@@ -1,0 +1,1349 @@
+/* 移动端能源系统样式 */
+
+/* 卡片基础样式 */
+.card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 16px;
+    border: none;
+}
+
+.card-header {
+    background: transparent;
+    padding: 16px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.card-header h5 {
+    color: #333;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.card-body {
+    padding: 16px;
+}
+
+/* 预测图表样式 */
+.chart-wrapper {
+    position: relative;
+    width: 100%;
+    height: 350px;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+.chart-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+    background: #fff;
+}
+
+.chart-container.active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 1;
+}
+
+/* 图表工具栏样式 */
+.chart-toolbar {
+    padding-top: 16px;
+    border-top: 1px solid #f0f0f0;
+}
+
+/* 按钮组样式 */
+.btn-group {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.btn-group .btn {
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+    background: transparent;
+}
+
+.btn-group .btn.active {
+    background: #2196f3;
+    color: #fff;
+    border-radius: 6px;
+}
+
+.btn-group .btn i {
+    font-size: 16px;
+    margin-right: 4px;
+}
+
+/* 时间范围选择样式 */
+.sub-header {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 8px;
+    margin: 16px 0;
+}
+
+.tab-nav {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.tab-btn {
+    padding: 6px 16px;
+    border: none;
+    background: transparent;
+    color: #666;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.tab-btn.active {
+    background: #2196f3;
+    color: #fff;
+}
+
+/* 指标数据样式 */
+.metrics-container {
+    position: relative;
+    margin-top: 16px;
+}
+
+.metrics-group {
+    display: none;
+}
+
+.metrics-group.active {
+    display: block;
+}
+
+.metrics-group h6 {
+    font-size: 12px;
+    color: #999;
+}
+
+.metrics-group h4 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* 实时告警样式 */
+.alert-timeline {
+    margin: 0;
+    padding: 0;
+}
+
+.alert-item {
+    background: #fff;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border-left: 4px solid;
+}
+
+.alert-item.urgent {
+    border-left-color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.05);
+}
+
+.alert-item.warning {
+    border-left-color: #ffc107;
+    background-color: rgba(255, 193, 7, 0.05);
+}
+
+.alert-item h6 {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.alert-item p {
+    font-size: 14px;
+    color: #666;
+    margin: 8px 0;
+}
+
+/* 设备状态样式 */
+.device-status-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-indicator i {
+    font-size: 20px;
+}
+
+/* 移动端导航栏样式 */
+.mobile-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    padding: 0 16px;
+}
+
+.header-title h1 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.btn-icon {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666666;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: #ff4444;
+    color: #fff;
+    font-size: 10px;
+    padding: 2px 4px;
+    border-radius: 10px;
+    min-width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 底部导航栏样式 */
+.mobile-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.footer-nav {
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 4px;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #666666;
+    text-decoration: none;
+    font-size: 12px;
+    padding: 4px 0;
+    flex: 1;
+}
+
+.nav-item i {
+    font-size: 20px;
+    margin-bottom: 4px;
+}
+
+.nav-item.active {
+    color: #2196f3;
+}
+
+/* 主内容区域调整 */
+.main-content {
+    padding-top: 72px;
+    padding-bottom: 80px; /* 为底部导航栏留出空间 */
+    background: #f8f9fa;
+    min-height: 100vh;
+}
+
+.container-fluid {
+    padding: 16px;
+    padding-bottom: 80px;
+}
+
+/* 适配刘海屏 */
+@supports (padding-top: env(safe-area-inset-top)) {
+    .mobile-header {
+        padding-top: env(safe-area-inset-top);
+    }
+    
+    .mobile-footer {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+
+/* 通知样式 */
+.notification-container {
+    position: fixed;
+    top: 72px;
+    right: 16px;
+    z-index: 1050;
+}
+
+.notification {
+    background: #fff;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-width: 300px;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .card-header {
+        padding: 12px;
+    }
+    
+    .card-body {
+        padding: 12px;
+    }
+    
+    .btn-group .btn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    .metrics-group h4 {
+        font-size: 16px;
+    }
+}
+
+/* 预测图表卡片样式 */
+.prediction-card {
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
+}
+
+.prediction-card .card-header {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.prediction-card .chart-container {
+    height: 300px;
+    position: relative;
+}
+
+.prediction-card .stats-container {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* 实时告警样式优化 */
+.alert-timeline {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.alert-item {
+    padding: 1.25rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-left: 4px solid;
+    transition: all 0.3s ease;
+}
+
+.alert-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.alert-item.urgent {
+    border-left-color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.05);
+}
+
+.alert-item.warning {
+    border-left-color: #ffc107;
+    background-color: rgba(255, 193, 7, 0.05);
+}
+
+/* 告警标题样式 */
+.alert-item h6 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.alert-item.urgent h6::before {
+    content: '⚠️';
+    margin-right: 0.5rem;
+}
+
+.alert-item.warning h6::before {
+    content: '⚡';
+    margin-right: 0.5rem;
+}
+
+/* 告警内容样式 */
+.alert-item p {
+    color: #495057;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* 告警按钮样式 */
+.alert-item .btn {
+    padding: 0.375rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0.3px;
+}
+
+.alert-item .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.alert-item .btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #000;
+}
+
+/* 设备状态卡片样式 */
+.device-status-card {
+    padding: 1rem;
+    border-radius: 8px;
+    background: rgba(0,0,0,0.02);
+    margin-bottom: 1rem;
+}
+
+.device-status-card .status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* 预测详情表格样式 */
+.prediction-table {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.prediction-table th,
+.prediction-table td {
+    padding: 0.75rem;
+    vertical-align: middle;
+}
+
+/* 图表加载和错误状态样式 */
+.chart-loading-overlay,
+.chart-error-message {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.9);
+}
+
+/* 响应式布局调整 */
+@media (max-width: 768px) {
+    .prediction-card .chart-container {
+        height: 250px;
+    }
+    
+    .stats-container {
+        flex-direction: column;
+    }
+    
+    .stats-container > div {
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* 决策建议样式 */
+.suggestion-card {
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+.suggestion-item {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+/* 天气信息卡片样式 */
+.weather-card {
+    background: linear-gradient(45deg, #4F8CBE, #76A8CA);
+    color: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.weather-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.weather-icon {
+    font-size: 2rem;
+    margin-right: 1rem;
+}
+
+/* 系统状态指标样式 */
+.system-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.metric-card {
+    padding: 1rem;
+    border-radius: 8px;
+    background: rgba(0,0,0,0.02);
+}
+
+/* 通用动画效果 */
+.fade-enter {
+    opacity: 0;
+}
+
+.fade-enter-active {
+    opacity: 1;
+    transition: opacity 300ms ease-in;
+}
+
+.fade-exit {
+    opacity: 1;
+}
+
+.fade-exit-active {
+    opacity: 0;
+    transition: opacity 300ms ease-in;
+}
+
+/* 图表网格样式 */
+.chart-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(
+        rgba(0, 0, 0, 0.02) 1px,
+        transparent 1px
+    ),
+    linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.02) 1px,
+        transparent 1px
+    );
+    background-size: 20px 20px;
+    background-position: -1px -1px;
+}
+
+/* 修复指标组样式 */
+.metrics-container {
+    position: relative;
+    width: 100%;
+    min-height: 100px; /* 确保有足够的高度 */
+    overflow: hidden;
+}
+
+.metrics-group {
+    position: absolute;
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+    transform: translateX(100%);
+    padding: 1rem 0;
+}
+
+.metrics-group.active {
+    opacity: 1;
+    visibility: visible;
+    position: relative;
+    transform: translateX(0);
+}
+
+/* 图表工具栏优化 */
+.chart-toolbar {
+    padding-top: 16px;
+    border-top: 1px solid #e9ecef;
+}
+
+/* 时间范围和图表类型切换按钮组样式优化 */
+.btn-group {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+#timeRangeToggle .btn,
+#chartTypeToggle .btn {
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+#timeRangeToggle .btn.active,
+#chartTypeToggle .btn.active {
+    background-color: var(--bs-primary);
+    color: white;
+    transform: scale(1.05);
+}
+
+#timeRangeToggle .btn:not(.active),
+#chartTypeToggle .btn:not(.active) {
+    background-color: #f8f9fa;
+    color: #495057;
+}
+
+/* 响应式布局优化 */
+@media (max-width: 768px) {
+    .chart-wrapper {
+        height: 300px;
+    }
+
+    .chart-container {
+        padding: 0.5rem; /* 减小移动端内边距 */
+    }
+
+    .metrics-group {
+        padding: 0.5rem 0;
+    }
+
+    .btn-group {
+        width: 100%;
+    }
+
+    #timeRangeToggle .btn,
+    #chartTypeToggle .btn {
+        padding: 0.35rem 0.5rem;
+        font-size: 0.75rem;
+    }
+
+    .metrics-group .row {
+        margin: 0 -0.5rem;
+    }
+
+    .metrics-group .col-4 {
+        padding: 0 0.5rem;
+    }
+}
+
+/* 分析弹窗样式 */
+.analysis-summary {
+    background-color: rgba(0, 0, 0, 0.03);
+    padding: 1rem;
+    border-radius: 0.25rem;
+}
+
+.analysis-summary h6 {
+    color: var(--bs-primary);
+    margin-bottom: 0.5rem;
+}
+
+.analysis-summary p {
+    margin-bottom: 0;
+    line-height: 1.5;
+}
+
+/* 图表置信区间样式 */
+.confidence-interval {
+    opacity: 0.2;
+    pointer-events: none;
+}
+
+/* 图表趋势线样式 */
+.trend-line {
+    stroke-dasharray: 5, 5;
+}
+
+/* 图表交互增强 */
+.chart-container {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.chart-container:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+.chart-tooltip {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    border-radius: 0.25rem !important;
+    padding: 0.5rem !important;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.chart-container.active {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* 加载状态样式优化 */
+.chart-loading-overlay {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(2px);
+}
+
+.chart-loading-overlay .spinner-border {
+    width: 2rem;
+    height: 2rem;
+}
+
+/* 图表切换动画优化 */
+.chart-container {
+    transition: all 0.3s ease-in-out;
+}
+
+.chart-container:not(.active) {
+    transform: translateX(-100%); /* 非激活状态向左移出 */
+    position: absolute;
+}
+
+/* 确保图表正确渲染 */
+.chart-container canvas {
+    position: relative !important;
+    z-index: 1;
+}
+
+/* 修复图表容器层叠问题 */
+.card-body {
+    position: relative;
+    overflow: hidden;
+}
+
+/* 优化图表切换性能 */
+.chart-container {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Toast 提示框样式优化 */
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    min-width: 280px;
+    max-width: 350px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    padding: 1rem;
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    border-left: 4px solid;
+    animation: slideInRight 0.3s ease-out, fadeOut 0.3s ease-in 2.7s;
+}
+
+.toast-success {
+    border-left-color: #28a745;
+    background-color: rgba(40, 167, 69, 0.05);
+}
+
+.toast-error {
+    border-left-color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.05);
+}
+
+.toast-warning {
+    border-left-color: #ffc107;
+    background-color: rgba(255, 193, 7, 0.05);
+}
+
+.toast::before {
+    margin-right: 0.75rem;
+    font-size: 1.25rem;
+}
+
+.toast-success::before {
+    content: '✅';
+}
+
+.toast-error::before {
+    content: '❌';
+}
+
+.toast-warning::before {
+    content: '⚠️';
+}
+
+/* Toast 动画 */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .toast {
+        top: auto;
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+        min-width: auto;
+        max-width: none;
+        width: calc(100% - 40px);
+    }
+}
+
+/* 新的通知容器样式 */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 350px;
+    max-width: calc(100vw - 40px);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.notification {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateX(120%);
+    transition: transform 0.3s ease;
+    pointer-events: auto;
+    display: flex;
+    align-items: flex-start;
+    border-left: 4px solid;
+    position: relative;
+    overflow: hidden;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification-content {
+    flex-grow: 1;
+    margin: 0 10px;
+}
+
+.notification-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 0;
+    font-size: 18px;
+    line-height: 1;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+
+.notification-close:hover {
+    opacity: 1;
+}
+
+.notification-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.notification-progress-bar {
+    height: 100%;
+    width: 100%;
+    background: currentColor;
+    transition: width linear;
+}
+
+/* 通知类型样式 */
+.notification.success {
+    border-left-color: #28a745;
+    color: #28a745;
+}
+
+.notification.error {
+    border-left-color: #dc3545;
+    color: #dc3545;
+}
+
+.notification.warning {
+    border-left-color: #ffc107;
+    color: #ffc107;
+}
+
+.notification.info {
+    border-left-color: #17a2b8;
+    color: #17a2b8;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .notification-container {
+        top: auto;
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+        width: auto;
+    }
+
+    .notification {
+        margin-bottom: 0;
+        padding: 12px;
+    }
+}
+
+/* 移动端鼠标指针处理 */
+@media (hover: none) and (pointer: coarse) {
+    * {
+        cursor: none !important;
+    }
+}
+
+/* 针对移动设备的触摸优化 */
+@media (max-width: 768px) {
+    input,
+    select,
+    textarea,
+    button,
+    .btn,
+    .form-control,
+    .form-select {
+        cursor: none !important;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        touch-action: manipulation;
+    }
+    
+    /* 确保表单元素在触摸时有反馈效果 */
+    .btn:active,
+    .form-control:active,
+    .form-select:active {
+        opacity: 0.7;
+    }
+}
+
+/* 针对特定的移动设备模拟器 */
+@media (max-width: 844px) and (max-height: 390px),  /* iPhone 12 Pro 尺寸 */
+       (max-width: 390px) and (max-height: 844px) {
+    * {
+        cursor: none !important;
+    }
+    
+    /* 优化触摸反馈 */
+    .btn,
+    .form-control,
+    .form-select,
+    input[type="datetime-local"],
+    .form-check-input {
+        cursor: none !important;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+}
+
+/* 移动端顶部导航栏 */
+.mobile-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    padding: 0 16px;
+}
+
+.header-left, .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-title {
+    flex: 1;
+    text-align: center;
+}
+
+.header-title h1 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.btn-icon {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666666;
+    position: relative;
+}
+
+.btn-icon:active {
+    background-color: rgba(0,0,0,0.05);
+}
+
+.notification-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: #ff4444;
+    color: white;
+    font-size: 10px;
+    padding: 2px 4px;
+    border-radius: 10px;
+    min-width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 时间范围选择样式 */
+.sub-header {
+    border-radius: 8px;
+    padding: 8px;
+    margin-bottom: 16px;
+}
+
+.tab-nav {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.tab-btn {
+    padding: 6px 16px;
+    border: 1px solid #dee2e6;
+    background: #ffffff;
+    color: #6c757d;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tab-btn:hover {
+    background: #f8f9fa;
+}
+
+.tab-btn.active {
+    background: #3b82f6;
+    color: #ffffff;
+    border-color: #3b82f6;
+}
+
+/* 移动端底部导航栏 */
+.mobile-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.footer-nav {
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 4px;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #666666;
+    text-decoration: none;
+    font-size: 12px;
+    padding: 4px 0;
+    flex: 1;
+}
+
+.nav-item i {
+    font-size: 20px;
+    margin-bottom: 4px;
+}
+
+.nav-item.active {
+    color: #2196f3;
+}
+
+/* 侧边菜单 */
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 280px;
+    height: 100%;
+    background: #fff;
+    z-index: 1100;
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.side-menu.active {
+    transform: translateX(280px);
+}
+
+.side-menu-header {
+    padding: 24px 16px;
+    background: #2196f3;
+    color: white;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.user-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #fff;
+}
+
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-details h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.user-details p {
+    margin: 4px 0 0;
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.side-menu-nav {
+    padding: 16px 0;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.menu-item i {
+    width: 24px;
+    margin-right: 16px;
+    font-size: 16px;
+}
+
+.menu-item:active {
+    background-color: rgba(0,0,0,0.05);
+}
+
+/* 遮罩层 */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1050;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* 主内容区域调整 */
+.main-content {
+    padding-top: 104px; /* header高度 + sub-header高度 */
+    padding-bottom: 80px; /* 为底部导航栏留出空间 */
+}
+
+.page-content {
+    min-height: calc(100vh - 60px); /* 确保内容区域至少占满整个视口高度减去头部导航的高度 */
+    padding-bottom: 80px; /* 为底部导航栏留出空间 */
+}
+
+/* 适配刘海屏 */
+@supports (padding-top: env(safe-area-inset-top)) {
+    .mobile-header {
+        padding-top: env(safe-area-inset-top);
+    }
+    
+    .mobile-footer {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+    
+    .side-menu {
+        padding-top: env(safe-area-inset-top);
+    }
+}
+
+/* 适配深色模式 */
+@media (prefers-color-scheme: dark) {
+    .mobile-header,
+    .mobile-footer,
+    .side-menu {
+        background: #ffffff;
+    }
+    
+    .header-title h1 {
+        color: #333333;
+    }
+    
+    .btn-icon {
+        color: #666666;
+    }
+    
+    .sub-header {
+        background: #2d2d2d;
+        border-bottom-color: #333;
+    }
+    
+    .tab-btn {
+        color: #bbb;
+    }
+    
+    .nav-item {
+        color: #666666;
+    }
+    
+    .menu-item {
+        color: #333333;
+    }
+}
+
+/* 最后一个卡片的额外底部间距 */
+.card:last-child {
+    margin-bottom: 80px;
+}
+
+/* 设备状态卡片的响应式布局 */
+@media (max-width: 768px) {
+    .device-status-card {
+        margin-bottom: 15px;
+    }
+    
+    .col-md-6.col-lg-3:last-child .device-status-card {
+        margin-bottom: 0;
+    }
+}
+
+/* 确保所有内容都可见 */
+.container-fluid {
+    padding-bottom: 80px;
+} 

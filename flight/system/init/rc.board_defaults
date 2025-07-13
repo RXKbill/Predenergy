@@ -1,0 +1,7 @@
+#!/bin/sh
+#
+# board specific defaults
+## 这里的 init 文件夹中的内容好像是以终端命令的形式书写的。下面的内容实现的效果与在终端中输入他们的效果是一致的
+#------------------------------------------------------------------------------
+param set-default SYS_HAS_MAG 0
+param set-default IMU_GYRO_RATEMAX 2000

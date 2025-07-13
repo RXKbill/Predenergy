@@ -1,0 +1,10 @@
+Removed Pin From Net: NetName=LED Pin=LED-2
+Removed Member From Class: ClassName=气象传感器 Member=LED
+Added Component: Designator=LED4(0603-LED)
+Add component. Clean all parameters for all variants
+Added Pin To Net: NetName=LED Pin=LED4-2
+Added Pin To Net: NetName=NetLED4_1 Pin=LED4-1
+Added Pin To Net: NetName=NetLED4_1 Pin=R11-1
+Added Net: Name=NetLED4_1
+Added Member To Class: ClassName=气象传感器 Member=Component LED4 LED
+Added Room: Name=气象传感器

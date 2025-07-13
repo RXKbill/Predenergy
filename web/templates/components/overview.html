@@ -1,0 +1,285 @@
+<!-- 总览页面 -->
+<div class="tab-pane active" id="overview" role="tabpanel">
+    <div class="row">
+        <!-- 业务指标卡片 -->
+        <div class="col-xl-12">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card mini-stats-wid">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <div class="flex-grow-1">
+                                    <p class="text-muted fw-medium">今日调度任务</p>
+                                    <h4 class="mb-0">15</h4>
+                                </div>
+                                <div class="mini-stat-icon avatar-sm rounded-circle bg-primary align-self-center">
+                                    <span class="avatar-title rounded-circle bg-primary">
+                                        <i class="bx bx-trending-up font-size-24"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card mini-stats-wid">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <div class="flex-grow-1">
+                                    <p class="text-muted fw-medium">交易执行量</p>
+                                    <h4 class="mb-0">￥24,500</h4>
+                                </div>
+                                <div class="avatar-sm rounded-circle bg-primary align-self-center mini-stat-icon">
+                                    <span class="avatar-title rounded-circle bg-primary">
+                                        <i class="bx bx-dollar-circle font-size-24"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card mini-stats-wid">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <div class="flex-grow-1">
+                                    <p class="text-muted fw-medium">检修任务</p>
+                                    <h4 class="mb-0">8</h4>
+                                </div>
+                                <div class="avatar-sm rounded-circle bg-primary align-self-center mini-stat-icon">
+                                    <span class="avatar-title rounded-circle bg-primary">
+                                        <i class="bx bx-wrench font-size-24"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card mini-stats-wid">
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <div class="flex-grow-1">
+                                    <p class="text-muted fw-medium">充电桩状态</p>
+                                    <h4 class="mb-0">12/15</h4>
+                                    <small class="text-muted">在线/总数</small>
+                                </div>
+                                <div class="avatar-sm rounded-circle bg-primary align-self-center mini-stat-icon">
+                                    <span class="avatar-title rounded-circle bg-primary">
+                                        <i class="bx bx-charging-station font-size-24"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- 业务处理趋势图 -->
+        <div class="col-xl-8">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">业务处理趋势</h4>
+                    <div id="business-trend-chart" class="apex-charts" dir="ltr"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 任务分布图 -->
+        <div class="col-xl-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">任务分布</h4>
+                    <div id="task-distribution-chart" class="apex-charts" dir="ltr"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 业务执行记录表格 -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4 class="card-title mb-0">业务执行记录</h4>
+                        <div>
+                            <button class="btn btn-light me-2" id="export-records">导出记录</button>
+                            <button class="btn btn-light" id="filter-records" data-bs-toggle="modal" data-bs-target="#filterModal">筛选</button>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-centered table-nowrap mb-0" id="business-records-table">
+                            <thead>
+                                <tr>
+                                    <th>记录ID</th>
+                                    <th>业务类型</th>
+                                    <th>执行内容</th>
+                                    <th>目标对象</th>
+                                    <th>执行时间</th>
+                                    <th>完成时间</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>BIZ20240326001</td>
+                                    <td>调度指令</td>
+                                    <td>功率调整 (80kW → 120kW)</td>
+                                    <td>成都高新区A3站快充桩#5</td>
+                                    <td>2024-03-26 09:15:23</td>
+                                    <td>2024-03-26 09:16:45</td>
+                                    <td><span class="badge bg-success">已完成</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#recordDetailModal">查看</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>BIZ20240326002</td>
+                                    <td>交易执行</td>
+                                    <td>现货交易 (售电500MWh)</td>
+                                    <td>四川省电力交易中心</td>
+                                    <td>2024-03-26 10:30:00</td>
+                                    <td>2024-03-26 10:30:15</td>
+                                    <td><span class="badge bg-success">已完成</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#recordDetailModal">查看</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>BIZ20240326003</td>
+                                    <td>设备维护</td>
+                                    <td>定期检修 (光伏组件清洗)</td>
+                                    <td>绵阳光伏基地B区组件</td>
+                                    <td>2024-03-26 11:00:00</td>
+                                    <td>-</td>
+                                    <td><span class="badge bg-warning">执行中</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#recordDetailModal">查看</button>
+                                        <button class="btn btn-sm btn-danger ms-1">取消</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>BIZ20240326004</td>
+                                    <td>充电业务</td>
+                                    <td>快充服务 (120kW)</td>
+                                    <td>成都高新区A3站快充桩#3</td>
+                                    <td>2024-03-26 13:20:00</td>
+                                    <td>-</td>
+                                    <td><span class="badge bg-info">待执行</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#recordDetailModal">查看</button>
+                                        <button class="btn btn-sm btn-danger ms-1">取消</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>BIZ20240326005</td>
+                                    <td>调度指令</td>
+                                    <td>削峰填谷调节 (储能放电)</td>
+                                    <td>德阳储能电站#2</td>
+                                    <td>2024-03-26 14:00:00</td>
+                                    <td>2024-03-26 14:01:30</td>
+                                    <td><span class="badge bg-success">已完成</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#recordDetailModal">查看</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 初始化图表 -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 业务处理趋势图
+    const businessTrendChart = new ApexCharts(document.querySelector("#business-trend-chart"), {
+        series: [{
+            name: '调度任务',
+            data: [44, 55, 57, 56, 61, 58, 63]
+        }, {
+            name: '交易执行',
+            data: [76, 85, 101, 98, 87, 105, 91]
+        }, {
+            name: '设备维护',
+            data: [35, 41, 36, 26, 45, 48, 52]
+        }],
+        chart: {
+            type: 'bar',
+            height: 350,
+            stacked: true,
+            toolbar: {
+                show: true
+            },
+            zoom: {
+                enabled: true
+            }
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '55%',
+                endingShape: 'rounded'
+            },
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            show: true,
+            width: 2,
+            colors: ['transparent']
+        },
+        xaxis: {
+            categories: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+        },
+        yaxis: {
+            title: {
+                text: '任务数量'
+            }
+        },
+        fill: {
+            opacity: 1
+        },
+        tooltip: {
+            y: {
+                formatter: function (val) {
+                    return val + " 个任务"
+                }
+            }
+        }
+    });
+    businessTrendChart.render();
+
+    // 任务分布图
+    const taskDistributionChart = new ApexCharts(document.querySelector("#task-distribution-chart"), {
+        series: [44, 55, 13, 43],
+        chart: {
+            type: 'donut',
+            height: 350
+        },
+        labels: ['调度任务', '交易执行', '设备维护', '充电业务'],
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }]
+    });
+    taskDistributionChart.render();
+});
+</script> 

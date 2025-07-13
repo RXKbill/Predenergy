@@ -1,0 +1,210 @@
+/* 备件管理页面样式 */
+
+/* 页面容器样式 */
+.page-content {
+    padding: 0;
+}
+
+.container-fluid {
+    padding: 0;
+}
+
+/* 搜索栏样式 */
+.search-bar {
+    padding: 16px;
+    background: #fff;
+    margin: 0;
+    border-radius: 0;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 0 12px;
+}
+
+.search-input-wrapper i {
+    color: #6c757d;
+    font-size: 20px;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 12px;
+    font-size: 14px;
+}
+
+.search-input:focus {
+    outline: none;
+}
+
+/* 类别选择标签样式 */
+.category-tabs {
+    padding: 0 16px 16px;
+    background: #fff;
+    margin-bottom: 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.tab-btn {
+    padding: 8px 16px;
+    border: 1px solid #dee2e6;
+    background: #fff;
+    border-radius: 20px;
+    font-size: 14px;
+    color: #495057;
+    white-space: nowrap;
+}
+
+.tab-btn.active {
+    background: #2196f3;
+    color: #fff;
+    border-color: #2196f3;
+}
+
+/* 备件列表样式 */
+.spare-parts-list {
+    padding: 0 16px;
+    margin-bottom: 80px;
+}
+
+.spare-part-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.part-info {
+    flex: 1;
+}
+
+.part-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.part-number {
+    font-size: 12px;
+    color: #6c757d;
+    margin-bottom: 8px;
+}
+
+.part-stock {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+}
+
+.stock-label {
+    color: #6c757d;
+}
+
+.stock-value {
+    font-weight: 600;
+    color: #28a745;
+}
+
+.part-stock.warning .stock-value {
+    color: #ffc107;
+}
+
+.part-stock.danger .stock-value {
+    color: #dc3545;
+}
+
+.stock-unit {
+    color: #6c757d;
+}
+
+.part-actions {
+    margin-left: 16px;
+}
+
+/* 悬浮按钮样式 */
+.fab-button {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: #2196f3;
+    color: white;
+    border: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.fab-button i {
+    font-size: 24px;
+}
+
+.fab-button:hover {
+    background-color: #1976d2;
+}
+
+/* 弹窗样式优化 */
+.modal-content {
+    border-radius: 12px;
+}
+
+.modal-header {
+    border-bottom: 1px solid #f8f9fa;
+    padding: 16px;
+}
+
+.modal-body {
+    padding: 16px;
+}
+
+.modal-footer {
+    border-top: 1px solid #f8f9fa;
+    padding: 16px;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .spare-part-card {
+        padding: 12px;
+    }
+
+    .part-name {
+        font-size: 14px;
+    }
+
+    .part-number {
+        font-size: 11px;
+    }
+
+    .part-stock {
+        font-size: 12px;
+    }
+}
+
+/* 调整移动端底部导航栏样式 */
+.mobile-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    z-index: 1001;
+}

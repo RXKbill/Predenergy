@@ -1,0 +1,1504 @@
+<!doctype html>
+<html lang="zh-CN">
+
+    <head>
+        
+        <meta charset="utf-8">
+        <title>用户列表 | 驭能能源管理系统</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="驭能能源管理系统管理后台" name="description">
+        <meta content="驭能科技" name="author">
+
+        <!-- DataTables -->
+        <link href="static/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+
+        <!-- Responsive datatable examples -->
+        <link href="static/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css">
+
+        <!-- preloader css -->
+        <link rel="stylesheet" href="static/css/preloader.min.css" type="text/css">
+
+        <!-- Bootstrap Css -->
+        <link href="static/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css">
+        <!-- Icons Css -->
+        <link href="static/css/icons.min.css" rel="stylesheet" type="text/css">
+        <!-- App Css-->
+        <link href="static/css/app.min.css" id="app-style" rel="stylesheet" type="text/css">
+
+        <!-- Sweet Alert 2 CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css" rel="stylesheet">
+        
+        <!-- Custom CSS for notifications -->
+        <style>
+            .toast {
+                opacity: 1 !important;
+            }
+            .modal-header, .modal-footer {
+                background-color: #f8f9fa;
+            }
+            .dropdown-item.text-danger:hover {
+                background-color: #fff5f5;
+            }
+            .dropdown-item i {
+                font-size: 1.1em;
+            }
+        </style>
+
+    </head>
+
+    <body data-layout-mode="dark" data-topbar="dark" data-sidebar="dark" class="sidebar-enable">
+
+    <!-- <body data-layout="horizontal"> -->
+
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            
+            <header id="page-topbar">
+                <div class="navbar-header">
+                    <div class="d-flex">
+                        <!-- LOGO -->
+                        <div class="navbar-brand-box">
+                            <a href="index.html" class="logo logo-dark">
+                                <span class="logo-sm">
+                                    <img src="static/picture/logo.png" alt="" height="24">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="static/picture/logo.png" alt="" height="24"> <span class="logo-txt">驭能能源管理系统</span>
+                                </span>
+                            </a>
+
+                            <a href="index.html" class="logo logo-light">
+                                <span class="logo-sm">
+                                    <img src="static/picture/logo.png" alt="" height="24">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="static/picture/logo.png" alt="" height="24"> <span class="logo-txt">驭能能源管理系统</span>
+                                </span>
+                            </a>
+                        </div>
+
+                        <button type="button" class="btn btn-sm px-3 font-size-16 header-item" id="vertical-menu-btn">
+                            <i class="fa fa-fw fa-bars"></i>
+                        </button>
+
+                        <!-- App Search-->
+                        <form class="app-search d-none d-lg-block">
+                            <div class="position-relative">
+                                <input type="text" class="form-control" placeholder="搜索...">
+                                <button class="btn btn-primary" type="button"><i class="bx bx-search-alt align-middle"></i></button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="d-flex">
+
+                        <div class="dropdown d-inline-block d-lg-none ms-2">
+                            <button type="button" class="btn header-item" id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i data-feather="search" class="icon-lg"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-search-dropdown">
+        
+                                <form class="p-3">
+                                    <div class="form-group m-0">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Search ..." aria-label="Search Result">
+
+                                            <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-none d-sm-inline-block">
+                            <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img id="header-lang-img" src="static/picture/cn.png" alt="Header Language" height="16">
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end">
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="en">
+                                    <img src="static/picture/cn.png" alt="user-image" class="me-1" height="12"> <span class="align-middle">Chinese</span>
+                                </a>
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="sp">
+                                    <img src="static/picture/spain.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Spanish</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="gr">
+                                    <img src="static/picture/germany.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">German</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="it">
+                                    <img src="static/picture/italy.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Italian</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ru">
+                                    <img src="static/picture/russia.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Russian</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-none d-sm-inline-block">
+                            <button type="button" class="btn header-item" id="mode-setting-btn">
+                                <i data-feather="moon" class="icon-lg layout-mode-dark"></i>
+                                <i data-feather="sun" class="icon-lg layout-mode-light"></i>
+                            </button>
+                        </div>
+
+                        <div class="dropdown d-none d-lg-inline-block ms-1">
+                            <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i data-feather="grid" class="icon-lg"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                                <div class="p-2">
+                                    <div class="row g-0">
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/github.png" alt="Github">
+                                                <span>GitHub</span>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/bitbucket.png" alt="bitbucket">
+                                                <span>Bitbucket</span>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/dribbble.png" alt="dribbble">
+                                                <span>Dribbble</span>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-0">
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/dropbox.png" alt="dropbox">
+                                                <span>Dropbox</span>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/mail_chimp.png" alt="mail_chimp">
+                                                <span>Mail Chimp</span>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/slack.png" alt="slack">
+                                                <span>Slack</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item noti-icon position-relative" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i data-feather="bell" class="icon-lg"></i>
+                                <span class="badge bg-danger rounded-pill">5</span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown">
+                                <div class="p-3">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <h6 class="m-0"> Notifications </h6>
+                                        </div>
+                                        <div class="col-auto">
+                                            <a href="#!" class="small text-reset text-decoration-underline"> Unread (3)</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-simplebar="" style="max-height: 230px;">
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <img src="static/picture/avatar-3.jpg" class="rounded-circle avatar-sm" alt="user-pic">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">James Lemire</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">It will seem like simplified Chinese.</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>1 hours ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 avatar-sm me-3">
+                                                <span class="avatar-title bg-primary rounded-circle font-size-16">
+                                                    <i class="bx bx-cart"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">Your order is placed</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">If several languages coalesce the grammar</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>3 min ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 avatar-sm me-3">
+                                                <span class="avatar-title bg-success rounded-circle font-size-16">
+                                                    <i class="bx bx-badge-check"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">Your item is shipped</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">If several languages coalesce the grammar</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>3 min ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <img src="static/picture/avatar-6.jpg" class="rounded-circle avatar-sm" alt="user-pic">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">Salena Layfield</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">As a skeptical Cambridge friend of mine occidental.</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>1 hours ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="p-2 border-top d-grid">
+                                    <a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">
+                                        <i class="mdi mdi-arrow-right-circle me-1"></i> <span>View More..</span> 
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item right-bar-toggle me-2">
+                                <i data-feather="settings" class="icon-lg"></i>
+                            </button>
+                        </div>
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item bg-soft-light border-start border-end" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img class="rounded-circle header-profile-user" src="static/picture/avatar-1.jpg" alt="Header Avatar">
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium">张明</span>
+                                <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <!-- item-->
+                                <a class="dropdown-item" href="apps-contacts-profile.html"><i class="mdi mdi-face-profile font-size-16 align-middle me-1"></i> Profile</a>
+                                <a class="dropdown-item" href="auth-lock-screen.html"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i> Lock screen</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="auth-logout.html"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </header>
+
+            <!-- ========== Left Sidebar Start ========== -->
+
+            <!-- ========== Left Sidebar Start ========== -->
+            <div class="vertical-menu">
+                <div data-simplebar="" class="h-100">
+
+                    <!--- Sidemenu -->
+                    <div id="sidebar-menu">
+                        <!-- Left Menu Start -->
+                        <ul class="metismenu list-unstyled" id="side-menu">
+                            <li class="menu-title" data-key="t-menu">View</li>
+
+                            <li>
+                                <a href="app-index.html">
+                                    <i data-feather="home"></i>
+                                    <span data-key="t-dashboard">数据总览</span>
+                                </a>
+                            </li>
+                            <li class="menu-title mt-2" data-key="t-components">Basic</li>
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow">
+                                    <i data-feather="users"></i>
+                                    <span data-key="t-authentication">个人界面</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li>
+                                        <a href="app-contacts-profile.html">
+                                            <span data-key="t-calendar">个人信息</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="app-calendar.html">
+                                            <span data-key="t-calendar">日程表</span>
+                                        </a>
+                                    </li>
+        
+                                    <li>
+                                        <a href="app-chat.html">
+                                            <span data-key="t-chat">聊天</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="app-contacts-list.html">
+                                    <i data-feather="file-text"></i>
+                                    <span data-key="t-pages">用户列表</span>
+                                </a>
+                            </li>
+
+                            <li class="menu-title mt-2" data-key="t-components">Operations</li>
+
+                            
+                            <li>
+                                <a href="app-system_management.html">
+                                    <i data-feather="grid"></i>
+                                    <span data-key="t-apps">系统设置</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="app-data_management.html">
+                                    <i data-feather="sliders"></i>
+                                    <span data-key="t-tables">数据管理</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="app-business_process.html">
+                                    <i data-feather="briefcase"></i>
+                                    <span data-key="t-components">业务处理</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="app-equipment_management.html">
+                                    <i data-feather="cpu"></i>
+                                    <span data-key="t-icons">设备管理</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Sidebar -->
+                </div>
+            </div>
+            <!-- Left Sidebar End -->
+            
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                                    <h4 class="mb-sm-0 font-size-18">用户列表</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">用户管理</a></li>
+                                            <li class="breadcrumb-item active">用户列表</li>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <h5 class="card-title">用户列表 <span class="text-muted fw-normal ms-2">(12)</span></h5>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 mb-3">
+                                    <!-- <div>
+                                        <ul class="nav nav-pills">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" href="" data-bs-toggle="tooltip" data-bs-placement="top" title="列表视图"><i class="bx bx-list-ul"></i></a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="apps-contacts-grid.html" data-bs-toggle="tooltip" data-bs-placement="top" title="网格视图"><i class="bx bx-grid-alt"></i></a>
+                                            </li>
+                                        </ul>
+                                    </div> -->
+                                    <div>
+                                        <a href="javascript:void(0);" class="btn btn-light" onclick="showAddUserModal()"><i class="bx bx-plus me-1"></i> 添加用户</a>
+                                    </div>
+                                    
+                                    <!-- <div class="dropdown">
+                                        <a class="btn btn-link text-muted py-1 font-size-16 shadow-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bx bx-dots-horizontal-rounded"></i>
+                                        </a>
+                                      
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><a class="dropdown-item" href="#">Action</a></li>
+                                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                        </ul>
+                                    </div> -->
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- end row -->
+
+                        <div class="table-responsive mb-4">
+                            <table class="table align-middle datatable dt-responsive table-check nowrap" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
+                                <thead>
+                                  <tr>
+                                    <th scope="col" style="width: 50px;">
+                                        <div class="form-check font-size-16">
+                                            <input type="checkbox" class="form-check-input" id="checkAll">
+                                            <label class="form-check-label" for="checkAll"></label>
+                                        </div>
+                                    </th>
+                                    <th scope="col">姓名</th>
+                                    <th scope="col">职位</th>
+                                    <th scope="col">邮箱</th>
+                                    <th scope="col">专业技能</th>
+                                    <th style="width: 80px; min-width: 80px;">操作</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                    <tr data-user-id="1">
+                                        <th scope="row">
+                                            <div class="form-check font-size-16">
+                                                <input type="checkbox" class="form-check-input" id="contacusercheck1">
+                                                <label class="form-check-label" for="contacusercheck1"></label>
+                                            </div>
+                                        </th>
+                                        <td>
+                                            <img src="static/picture/avatar-1.jpg" alt="" class="avatar-sm rounded-circle me-2">
+                                            <a href="#" class="text-body user-name">张明</a>
+                                        </td>
+                                        <td class="user-position">高级能源分析师</td>
+                                        <td class="user-email">zhangming@yunenergy.com</td>
+                                        <td>
+                                            <div class="d-flex gap-2 user-skills">
+                                                <a href="#" class="badge badge-soft-primary user-skill">数据分析</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">预测建模</a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bx bx-dots-horizontal-rounded"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item" href="app-contacts-profile.html" onclick="viewUser('1', '张明')"><i class="bx bx-show-alt me-1"></i>查看</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="editUser('1', '张明')"><i class="bx bx-edit me-1"></i>编辑</a></li>
+                                                    <li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="deleteUser('1', '张明')"><i class="bx bx-trash me-1"></i>删除</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-user-id="2">
+                                        <th scope="row">
+                                            <div class="form-check font-size-16">
+                                                <input type="checkbox" class="form-check-input" id="contacusercheck2">
+                                                <label class="form-check-label" for="contacusercheck2"></label>
+                                            </div>
+                                        </th>
+                                        <td>
+                                            <img src="static/picture/avatar-1.jpg" alt="" class="avatar-sm rounded-circle me-2">
+                                            <a href="#" class="text-body user-name">李华</a>
+                                        </td>
+                                        <td class="user-position">系统管理员</td>
+                                        <td class="user-email">lihua@yunenergy.com</td>
+                                        <td>
+                                            <div class="d-flex gap-2 user-skills">
+                                                <a href="#" class="badge badge-soft-primary user-skill">系统维护</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">权限管理</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">安全审计</a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bx bx-dots-horizontal-rounded"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="viewUser('2', '李华')"><i class="bx bx-show-alt me-1"></i>查看</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="editUser('2', '李华')"><i class="bx bx-edit me-1"></i>编辑</a></li>
+                                                    <li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="deleteUser('2', '李华')"><i class="bx bx-trash me-1"></i>删除</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-user-id="3">
+                                        <th scope="row">
+                                            <div class="form-check font-size-16">
+                                                <input type="checkbox" class="form-check-input" id="contacusercheck3">
+                                                <label class="form-check-label" for="contacusercheck3"></label>
+                                            </div>
+                                        </th>
+                                        <td>
+                                            <img src="static/picture/avatar-3.jpg" alt="" class="avatar-sm rounded-circle me-2">
+                                            <a href="#" class="text-body user-name">王芳</a>
+                                        </td>
+                                        <td class="user-position">能源分析师</td>
+                                        <td class="user-email">wangfang@yunenergy.com</td>
+                                        <td>
+                                            <div class="d-flex gap-2 user-skills">
+                                                <a href="#" class="badge badge-soft-primary user-skill">数据分析</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">能源优化</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">报告编制</a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bx bx-dots-horizontal-rounded"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="viewUser('3', '王芳')"><i class="bx bx-show-alt me-1"></i>查看</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="editUser('3', '王芳')"><i class="bx bx-edit me-1"></i>编辑</a></li>
+                                                    <li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="deleteUser('3', '王芳')"><i class="bx bx-trash me-1"></i>删除</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr data-user-id="4">
+                                        <th scope="row">
+                                            <div class="form-check font-size-16">
+                                                <input type="checkbox" class="form-check-input" id="contacusercheck4">
+                                                <label class="form-check-label" for="contacusercheck4"></label>
+                                            </div>
+                                        </th>
+                                        <td>
+                                            <div class="avatar-sm d-inline-block align-middle me-2">
+                                                <div class="avatar-title bg-soft-light text-light font-size-24 m-0 rounded-circle">
+                                                    <i class="bx bxs-user-circle"></i>
+                                                </div>
+                                            </div>
+                                            <a href="#" class="text-body user-name">赵强</a>
+                                        </td>
+                                        <td class="user-position">设备维修工程师</td>
+                                        <td class="user-email">zhaoqiang@yunenergy.com</td>
+                                        <td>
+                                            <div class="d-flex gap-2 user-skills">
+                                                <a href="#" class="badge badge-soft-primary user-skill">设备维护</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">故障诊断</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">预防性维护</a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bx bx-dots-horizontal-rounded"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="viewUser('4', '赵强')"><i class="bx bx-show-alt me-1"></i>查看</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="editUser('4', '赵强')"><i class="bx bx-edit me-1"></i>编辑</a></li>
+                                                    <li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="deleteUser('4', '赵强')"><i class="bx bx-trash me-1"></i>删除</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                      </tr>
+                                    <tr data-user-id="5">
+                                        <th scope="row">
+                                            <div class="form-check font-size-16">
+                                                <input type="checkbox" class="form-check-input" id="contacusercheck5">
+                                                <label class="form-check-label" for="contacusercheck5"></label>
+                                            </div>
+                                        </th>
+                                        <td>
+                                            <img src="static/picture/avatar-5.jpg" alt="" class="avatar-sm rounded-circle me-2">
+                                            <a href="#" class="text-body user-name">刘晓东</a>
+                                        </td>
+                                        <td class="user-position">高级能源分析师</td>
+                                        <td class="user-email">liuxiaodong@yunenergy.com</td>
+                                        <td>
+                                            <div class="d-flex gap-2 user-skills">
+                                                <a href="#" class="badge badge-soft-primary user-skill">数据分析</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">预测建模</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">能源优化</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">报告编制</a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bx bx-dots-horizontal-rounded"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="viewUser('5', '刘晓东')"><i class="bx bx-show-alt me-1"></i>查看</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="editUser('5', '刘晓东')"><i class="bx bx-edit me-1"></i>编辑</a></li>
+                                                    <li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="deleteUser('5', '刘晓东')"><i class="bx bx-trash me-1"></i>删除</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-user-id="6">
+                                        <th scope="row">
+                                            <div class="form-check font-size-16">
+                                                <input type="checkbox" class="form-check-input" id="contacusercheck6">
+                                                <label class="form-check-label" for="contacusercheck6"></label>
+                                            </div>
+                                        </th>
+                                        <td>
+                                            <img src="static/picture/avatar-7.jpg" alt="" class="avatar-sm rounded-circle me-2">
+                                            <a href="#" class="text-body user-name">陈静</a>
+                                        </td>
+                                        <td class="user-position">能源分析师</td>
+                                        <td class="user-email">chenjing@yunenergy.com</td>
+                                        <td>
+                                            <div class="d-flex gap-2 user-skills">
+                                                <a href="#" class="badge badge-soft-primary user-skill">数据分析</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">能源优化</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">报告编制</a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bx bx-dots-horizontal-rounded"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="viewUser('6', '陈静')"><i class="bx bx-show-alt me-1"></i>查看</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="editUser('6', '陈静')"><i class="bx bx-edit me-1"></i>编辑</a></li>
+                                                    <li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="deleteUser('6', '陈静')"><i class="bx bx-trash me-1"></i>删除</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-user-id="7">
+                                        <th scope="row">
+                                            <div class="form-check font-size-16">
+                                                <input type="checkbox" class="form-check-input" id="contacusercheck7">
+                                                <label class="form-check-label" for="contacusercheck7"></label>
+                                            </div>
+                                        </th>
+                                        <td>
+                                            <img src="static/picture/avatar-8.jpg" alt="" class="avatar-sm rounded-circle me-2">
+                                            <a href="#" class="text-body user-name">周明阳</a>
+                                        </td>
+                                        <td class="user-position">设备维修工程师</td>
+                                        <td class="user-email">zhoumingyang@yunenergy.com</td>
+                                        <td>
+                                            <div class="d-flex gap-2 user-skills">
+                                                <a href="#" class="badge badge-soft-primary user-skill">设备维护</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">故障诊断</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">预防性维护</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">系统维护</a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bx bx-dots-horizontal-rounded"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="viewUser('7', '周明阳')"><i class="bx bx-show-alt me-1"></i>查看</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="editUser('7', '周明阳')"><i class="bx bx-edit me-1"></i>编辑</a></li>
+                                                    <li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="deleteUser('7', '周明阳')"><i class="bx bx-trash me-1"></i>删除</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-user-id="8">
+                                        <th scope="row">
+                                            <div class="form-check font-size-16">
+                                                <input type="checkbox" class="form-check-input" id="contacusercheck8">
+                                                <label class="form-check-label" for="contacusercheck8"></label>
+                                            </div>
+                                        </th>
+                                        <td>
+                                            <img src="static/picture/avatar-4.jpg" alt="" class="avatar-sm rounded-circle me-2">
+                                            <a href="#" class="text-body user-name">杨婷</a>
+                                        </td>
+                                        <td class="user-position">系统管理员</td>
+                                        <td class="user-email">yangting@yunenergy.com</td>
+                                        <td>
+                                            <div class="d-flex gap-2 user-skills">
+                                                <a href="#" class="badge badge-soft-primary user-skill">系统维护</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">权限管理</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">安全审计</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">数据备份</a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bx bx-dots-horizontal-rounded"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="viewUser('8', '杨婷')"><i class="bx bx-show-alt me-1"></i>查看</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="editUser('8', '杨婷')"><i class="bx bx-edit me-1"></i>编辑</a></li>
+                                                    <li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="deleteUser('8', '杨婷')"><i class="bx bx-trash me-1"></i>删除</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-user-id="9">
+                                        <th scope="row">
+                                            <div class="form-check font-size-16">
+                                                <input type="checkbox" class="form-check-input" id="contacusercheck9">
+                                                <label class="form-check-label" for="contacusercheck9"></label>
+                                            </div>
+                                        </th>
+                                        <td>
+                                            <img src="static/picture/avatar-6.jpg" alt="" class="avatar-sm rounded-circle me-2">
+                                            <a href="#" class="text-body user-name">郭子豪</a>
+                                        </td>
+                                        <td class="user-position">高级能源分析师</td>
+                                        <td class="user-email">guozihao@yunenergy.com</td>
+                                        <td>
+                                            <div class="d-flex gap-2 user-skills">
+                                                <a href="#" class="badge badge-soft-primary user-skill">深度学习</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">机器学习</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">预测建模</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">算法优化</a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bx bx-dots-horizontal-rounded"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="viewUser('9', '郭子豪')"><i class="bx bx-show-alt me-1"></i>查看</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="editUser('9', '郭子豪')"><i class="bx bx-edit me-1"></i>编辑</a></li>
+                                                    <li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="deleteUser('9', '郭子豪')"><i class="bx bx-trash me-1"></i>删除</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-user-id="10">
+                                        <th scope="row">
+                                            <div class="form-check font-size-16">
+                                                <input type="checkbox" class="form-check-input" id="contacusercheck10">
+                                                <label class="form-check-label" for="contacusercheck10"></label>
+                                            </div>
+                                        </th>
+                                        <td>
+                                            <img src="static/picture/avatar-9.jpg" alt="" class="avatar-sm rounded-circle me-2">
+                                            <a href="#" class="text-body user-name">林雨欣</a>
+                                        </td>
+                                        <td class="user-position">能源分析师</td>
+                                        <td class="user-email">linyuxin@yunenergy.com</td>
+                                        <td>
+                                            <div class="d-flex gap-2 user-skills">
+                                                <a href="#" class="badge badge-soft-primary user-skill">可再生能源分析</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">能源优化</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">数据可视化</a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bx bx-dots-horizontal-rounded"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="viewUser('10', '林雨欣')"><i class="bx bx-show-alt me-1"></i>查看</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="editUser('10', '林雨欣')"><i class="bx bx-edit me-1"></i>编辑</a></li>
+                                                    <li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="deleteUser('10', '林雨欣')"><i class="bx bx-trash me-1"></i>删除</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-user-id="11">
+                                        <th scope="row">
+                                            <div class="form-check font-size-16">
+                                                <input type="checkbox" class="form-check-input" id="contacusercheck11">
+                                                <label class="form-check-label" for="contacusercheck11"></label>
+                                            </div>
+                                        </th>
+                                        <td>
+                                            <div class="avatar-sm d-inline-block align-middle me-2">
+                                                <div class="avatar-title bg-soft-light text-light font-size-24 m-0 rounded-circle">
+                                                    <i class="bx bxs-user-circle"></i>
+                                                </div>
+                                            </div>
+                                            <a href="#" class="text-body user-name">张伟峰</a>
+                                        </td>
+                                        <td class="user-position">设备维修工程师</td>
+                                        <td class="user-email">zhangweifeng@yunenergy.com</td>
+                                        <td>
+                                            <div class="d-flex gap-2 user-skills">
+                                                <a href="#" class="badge badge-soft-primary user-skill">电气设备维护</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">自动化控制</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">设备调试</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">故障诊断</a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bx bx-dots-horizontal-rounded"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="viewUser('11', '张伟峰')"><i class="bx bx-show-alt me-1"></i>查看</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="editUser('11', '张伟峰')"><i class="bx bx-edit me-1"></i>编辑</a></li>
+                                                    <li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="deleteUser('11', '张伟峰')"><i class="bx bx-trash me-1"></i>删除</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr data-user-id="12">
+                                        <th scope="row">
+                                            <div class="form-check font-size-16">
+                                                <input type="checkbox" class="form-check-input" id="contacusercheck12">
+                                                <label class="form-check-label" for="contacusercheck12"></label>
+                                            </div>
+                                        </th>
+                                        <td>
+                                            <img src="static/picture/avatar-10.jpg" alt="" class="avatar-sm rounded-circle me-2">
+                                            <a href="#" class="text-body user-name">孙丽华</a>
+                                        </td>
+                                        <td class="user-position">系统管理员</td>
+                                        <td class="user-email">sunlihua@yunenergy.com</td>
+                                        <td>
+                                            <div class="d-flex gap-2 user-skills">
+                                                <a href="#" class="badge badge-soft-primary user-skill">网络安全</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">系统优化</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">数据库管理</a>
+                                                <a href="#" class="badge badge-soft-primary user-skill">系统监控</a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bx bx-dots-horizontal-rounded"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="viewUser('12', '孙丽华')"><i class="bx bx-show-alt me-1"></i>查看</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="editUser('12', '孙丽华')"><i class="bx bx-edit me-1"></i>编辑</a></li>
+                                                    <li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="deleteUser('12', '孙丽华')"><i class="bx bx-trash me-1"></i>删除</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- end table -->
+                        </div>
+                        <!-- end table responsive -->
+                        
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <script>document.write(new Date().getFullYear())</script> © 驭能能源管理系统.
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-sm-end d-none d-sm-block">
+                                    <p class="mb-0">由 <i class="mdi mdi-heart text-danger"></i> ES小分队倾情打造 </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        
+        <!-- Right Sidebar -->
+        <div class="right-bar">
+            <div data-simplebar="" class="h-100">
+                <div class="rightbar-title d-flex align-items-center bg-dark p-3">
+
+                    <h5 class="m-0 me-2 text-white">Theme Customizer</h5>
+
+                    <a href="javascript:void(0);" class="right-bar-toggle ms-auto">
+                        <i class="mdi mdi-close noti-icon"></i>
+                    </a>
+                </div>
+
+                <!-- Settings -->
+                <hr class="m-0">
+
+                <div class="p-4">
+                    <h6 class="mb-3">Layout</h6>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout" id="layout-vertical" value="vertical">
+                        <label class="form-check-label" for="layout-vertical">Vertical</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout" id="layout-horizontal" value="horizontal">
+                        <label class="form-check-label" for="layout-horizontal">Horizontal</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Layout Mode</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-mode" id="layout-mode-light" value="light">
+                        <label class="form-check-label" for="layout-mode-light">Light</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-mode" id="layout-mode-dark" value="dark">
+                        <label class="form-check-label" for="layout-mode-dark">Dark</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Layout Width</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-width" id="layout-width-fuild" value="fuild" onchange="document.body.setAttribute('data-layout-size', 'fluid')">
+                        <label class="form-check-label" for="layout-width-fuild">Fluid</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-width" id="layout-width-boxed" value="boxed" onchange="document.body.setAttribute('data-layout-size', 'boxed')">
+                        <label class="form-check-label" for="layout-width-boxed">Boxed</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Layout Position</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-position" id="layout-position-fixed" value="fixed" onchange="document.body.setAttribute('data-layout-scrollable', 'false')">
+                        <label class="form-check-label" for="layout-position-fixed">Fixed</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-position" id="layout-position-scrollable" value="scrollable" onchange="document.body.setAttribute('data-layout-scrollable', 'true')">
+                        <label class="form-check-label" for="layout-position-scrollable">Scrollable</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Topbar Color</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="topbar-color" id="topbar-color-light" value="light" onchange="document.body.setAttribute('data-topbar', 'light')">
+                        <label class="form-check-label" for="topbar-color-light">Light</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="topbar-color" id="topbar-color-dark" value="dark" onchange="document.body.setAttribute('data-topbar', 'dark')">
+                        <label class="form-check-label" for="topbar-color-dark">Dark</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2 sidebar-setting">Sidebar Size</h6>
+
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-size" id="sidebar-size-default" value="default" onchange="document.body.setAttribute('data-sidebar-size', 'lg')">
+                        <label class="form-check-label" for="sidebar-size-default">Default</label>
+                    </div>
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-size" id="sidebar-size-compact" value="compact" onchange="document.body.setAttribute('data-sidebar-size', 'md')">
+                        <label class="form-check-label" for="sidebar-size-compact">Compact</label>
+                    </div>
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-size" id="sidebar-size-small" value="small" onchange="document.body.setAttribute('data-sidebar-size', 'sm')">
+                        <label class="form-check-label" for="sidebar-size-small">Small (Icon View)</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2 sidebar-setting">Sidebar Color</h6>
+
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-color" id="sidebar-color-light" value="light" onchange="document.body.setAttribute('data-sidebar', 'light')">
+                        <label class="form-check-label" for="sidebar-color-light">Light</label>
+                    </div>
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-color" id="sidebar-color-dark" value="dark" onchange="document.body.setAttribute('data-sidebar', 'dark')">
+                        <label class="form-check-label" for="sidebar-color-dark">Dark</label>
+                    </div>
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-color" id="sidebar-color-brand" value="brand" onchange="document.body.setAttribute('data-sidebar', 'brand')">
+                        <label class="form-check-label" for="sidebar-color-brand">Brand</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Direction</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-direction" id="layout-direction-ltr" value="ltr">
+                        <label class="form-check-label" for="layout-direction-ltr">LTR</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-direction" id="layout-direction-rtl" value="rtl">
+                        <label class="form-check-label" for="layout-direction-rtl">RTL</label>
+                    </div>
+
+                </div>
+
+            </div> <!-- end slimscroll-menu-->
+        </div>
+        <!-- /Right-bar -->
+
+        <!-- Right bar overlay-->
+        <div class="rightbar-overlay"></div>
+
+        <!-- 添加用户模态框 -->
+        <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-dark text-white">
+                        <h5 class="modal-title" id="addUserModalLabel">添加新用户</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addUserForm">
+                            <div class="mb-3">
+                                <label for="newUserName" class="form-label">姓名 <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="newUserName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="newUserPosition" class="form-label">职位 <span class="text-danger">*</span></label>
+                                <select class="form-select" id="newUserPosition" required>
+                                    <option value="">请选择职位</option>
+                                    <option value="高级能源分析师">高级能源分析师</option>
+                                    <option value="能源分析师">能源分析师</option>
+                                    <option value="系统管理员">系统管理员</option>
+                                    <option value="设备维修工程师">设备维修工程师</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="newUserEmail" class="form-label">邮箱 <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="newUserEmail" required>
+                                <div class="form-text">请使用公司邮箱地址 (@yunenergy.com)</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="newUserSkills" class="form-label">专业技能 <span class="text-danger">*</span></label>
+                                <select class="form-select" id="newUserSkills" multiple required>
+                                    <option value="数据分析">数据分析</option>
+                                    <option value="预测建模">预测建模</option>
+                                    <option value="能源优化">能源优化</option>
+                                    <option value="系统维护">系统维护</option>
+                                    <option value="权限管理">权限管理</option>
+                                    <option value="设备维护">设备维护</option>
+                                    <option value="故障诊断">故障诊断</option>
+                                    <option value="报告编制">报告编制</option>
+                                </select>
+                                <div class="form-text">按住Ctrl键可多选</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="newUserAvatar" class="form-label">头像</label>
+                                <input type="file" class="form-control" id="newUserAvatar" accept="image/*">
+                                <div class="form-text">支持jpg、png格式，建议尺寸200x200像素</div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer bg-dark text-white">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" onclick="addNewUser()">添加</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JAVASCRIPT -->
+        <script src="static/js/jquery.min.js"></script>
+        <script src="static/js/bootstrap.bundle.min.js"></script>
+        <script src="static/js/metisMenu.min.js"></script>
+        <script src="static/js/simplebar.min.js"></script>
+        <script src="static/js/waves.min.js"></script>
+        <script src="static/js/feather.min.js"></script>
+        <!-- pace js -->
+        <script src="static/js/pace.min.js"></script>
+
+        <!-- Required datatable js -->
+        <script src="static/js/jquery.dataTables.min.js"></script>
+        <script src="static/js/dataTables.bootstrap4.min.js"></script>
+        
+        <!-- Responsive examples -->
+        <script src="static/js/dataTables.responsive.min.js"></script>
+        <script src="static/js/responsive.bootstrap4.min.js"></script>
+
+        <!-- init js -->
+        <script src="static/js/datatable-pages.init.js"></script>
+
+        <!-- Sweet Alert 2 JS -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+
+        <script src="static/js/app.js"></script>
+
+        <!-- 添加用户操作相关的JavaScript代码 -->
+        <script>
+            // 查看用户详情
+            function viewUser(userId, userName) {
+                // 跳转到用户详情页面
+                window.location.href = `apps-contacts-profile.html?id=${userId}`;
+            }
+
+            // 编辑用户信息
+            function editUser(userId, userName) {
+                // 获取当前用户的行元素
+                const userRow = document.querySelector(`[data-user-id="${userId}"]`);
+                const position = userRow.querySelector('.user-position').textContent;
+                const email = userRow.querySelector('.user-email').textContent;
+                const skills = Array.from(userRow.querySelectorAll('.user-skill')).map(skill => skill.textContent);
+
+                // 使用Bootstrap模态框显示编辑表单
+                const editModal = `
+                    <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-dark text-white">
+                                    <h5 class="modal-title" id="editUserModalLabel">编辑用户信息</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="editUserForm">
+                                        <input type="hidden" id="userId" value="${userId}">
+                                        <div class="mb-3">
+                                            <label for="userName" class="form-label">姓名</label>
+                                            <input type="text" class="form-control" id="userName" value="${userName}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="userPosition" class="form-label">职位</label>
+                                            <select class="form-select" id="userPosition">
+                                                <option value="高级能源分析师" ${position === '高级能源分析师' ? 'selected' : ''}>高级能源分析师</option>
+                                                <option value="能源分析师" ${position === '能源分析师' ? 'selected' : ''}>能源分析师</option>
+                                                <option value="系统管理员" ${position === '系统管理员' ? 'selected' : ''}>系统管理员</option>
+                                                <option value="设备维修工程师" ${position === '设备维修工程师' ? 'selected' : ''}>设备维修工程师</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="userEmail" class="form-label">邮箱</label>
+                                            <input type="email" class="form-control" id="userEmail" value="${email}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="userSkills" class="form-label">专业技能</label>
+                                            <select class="form-select" id="userSkills" multiple>
+                                                <option value="数据分析" ${skills.includes('数据分析') ? 'selected' : ''}>数据分析</option>
+                                                <option value="预测建模" ${skills.includes('预测建模') ? 'selected' : ''}>预测建模</option>
+                                                <option value="能源优化" ${skills.includes('能源优化') ? 'selected' : ''}>能源优化</option>
+                                                <option value="系统维护" ${skills.includes('系统维护') ? 'selected' : ''}>系统维护</option>
+                                                <option value="权限管理" ${skills.includes('权限管理') ? 'selected' : ''}>权限管理</option>
+                                                <option value="设备维护" ${skills.includes('设备维护') ? 'selected' : ''}>设备维护</option>
+                                                <option value="故障诊断" ${skills.includes('故障诊断') ? 'selected' : ''}>故障诊断</option>
+                                                <option value="报告编制" ${skills.includes('报告编制') ? 'selected' : ''}>报告编制</option>
+                                            </select>
+                                            <small class="form-text text-muted">按住Ctrl键可多选</small>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer bg-dark text-white">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                    <button type="button" class="btn btn-primary" onclick="saveUserChanges('${userId}')">保存</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // 如果模态框不存在则添加到页面
+                if (!document.getElementById('editUserModal')) {
+                    document.body.insertAdjacentHTML('beforeend', editModal);
+                }
+
+                // 显示模态框
+                const modal = new bootstrap.Modal(document.getElementById('editUserModal'));
+                modal.show();
+            }
+
+            // 保存用户修改
+            function saveUserChanges(userId) {
+                const userName = document.getElementById('userName').value;
+                const userPosition = document.getElementById('userPosition').value;
+                const userEmail = document.getElementById('userEmail').value;
+                const userSkills = Array.from(document.getElementById('userSkills').selectedOptions).map(option => option.value);
+
+                // 更新表格中的数据
+                const userRow = document.querySelector(`[data-user-id="${userId}"]`);
+                if (userRow) {
+                    // 更新用户名
+                    userRow.querySelector('.user-name').textContent = userName;
+                    
+                    // 更新职位
+                    userRow.querySelector('.user-position').textContent = userPosition;
+                    
+                    // 更新邮箱
+                    userRow.querySelector('.user-email').textContent = userEmail;
+                    
+                    // 更新技能标签
+                    const skillsContainer = userRow.querySelector('.user-skills');
+                    skillsContainer.innerHTML = userSkills.map(skill => 
+                        `<a href="#" class="badge badge-soft-primary user-skill">${skill}</a>`
+                    ).join('\n');
+                    
+                    // 更新操作按钮中的用户名
+                    const dropdownItems = userRow.querySelectorAll('.dropdown-menu a');
+                    dropdownItems.forEach(item => {
+                        if (item.getAttribute('onclick').includes('viewUser')) {
+                            item.setAttribute('onclick', `viewUser('${userId}', '${userName}')`);
+                        } else if (item.getAttribute('onclick').includes('editUser')) {
+                            item.setAttribute('onclick', `editUser('${userId}', '${userName}')`);
+                        } else if (item.getAttribute('onclick').includes('deleteUser')) {
+                            item.setAttribute('onclick', `deleteUser('${userId}', '${userName}')`);
+                        }
+                    });
+                }
+
+                // 显示成功消息
+                showNotification('success', '用户信息更新成功！');
+
+                // 关闭模态框
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editUserModal'));
+                modal.hide();
+            }
+
+            // 删除用户
+            function deleteUser(userId, userName) {
+                // 使用SweetAlert2显示确认对话框
+                Swal.fire({
+                    title: '确认删除？',
+                    text: `您确定要删除用户 "${userName}" 吗？此操作不可恢复！`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: '确认删除',
+                    cancelButtonText: '取消',
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // 获取要删除的行元素
+                        const userRow = document.querySelector(`[data-user-id="${userId}"]`);
+                        if (userRow) {
+                            // 从表格中移除该行
+                            userRow.remove();
+
+                            // 更新用户数量显示
+                            updateUserCount();
+
+                            // 显示删除成功消息
+                            showNotification('success', '用户删除成功！');
+                        }
+                    }
+                });
+            }
+
+            // 更新用户数量显示
+            function updateUserCount() {
+                const totalUsers = document.querySelectorAll('tbody tr').length;
+                const userCountSpan = document.querySelector('.card-title .text-muted');
+                if (userCountSpan) {
+                    userCountSpan.textContent = `(${totalUsers})`;
+                }
+            }
+
+            // 显示通知消息
+            function showNotification(type, message) {
+                const toastHTML = `
+                    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1070">
+                        <div class="toast align-items-center text-white bg-${type === 'success' ? 'success' : 'danger'} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="d-flex">
+                                <div class="toast-body">
+                                    ${message}
+                                </div>
+                                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.insertAdjacentHTML('beforeend', toastHTML);
+                const toastElement = document.querySelector('.toast');
+                const toast = new bootstrap.Toast(toastElement, {
+                    delay: 3000 // 3秒后自动关闭
+                });
+                toast.show();
+                
+                // 自动移除toast元素
+                toastElement.addEventListener('hidden.bs.toast', () => {
+                    toastElement.parentElement.remove();
+                });
+
+                // 如果表格为空，显示空状态提示
+                const tbody = document.querySelector('tbody');
+                if (tbody && tbody.children.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="text-center py-4">
+                                <div class="text-muted">
+                                    <i class="bx bx-user-x display-4 d-block mb-2"></i>
+                                    <p class="mb-0">暂无用户数据</p>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }
+            }
+
+            // 显示添加用户模态框
+            function showAddUserModal() {
+                // 重置表单
+                document.getElementById('addUserForm').reset();
+                
+                // 显示模态框
+                const modal = new bootstrap.Modal(document.getElementById('addUserModal'));
+                modal.show();
+            }
+
+            // 添加新用户
+            function addNewUser() {
+                // 获取表单数据
+                const userName = document.getElementById('newUserName').value.trim();
+                const userPosition = document.getElementById('newUserPosition').value;
+                const userEmail = document.getElementById('newUserEmail').value.trim();
+                const userSkills = Array.from(document.getElementById('newUserSkills').selectedOptions).map(option => option.value);
+                const userAvatar = document.getElementById('newUserAvatar').files[0];
+
+                // 表单验证
+                if (!userName || !userPosition || !userEmail || userSkills.length === 0) {
+                    Swal.fire({
+                        title: '提示',
+                        text: '请填写所有必填项',
+                        icon: 'warning',
+                        confirmButtonText: '确定'
+                    });
+                    return;
+                }
+
+                // 验证邮箱格式
+                if (!userEmail.endsWith('@yunenergy.com')) {
+                    Swal.fire({
+                        title: '提示',
+                        text: '请使用公司邮箱地址（@yunenergy.com）',
+                        icon: 'warning',
+                        confirmButtonText: '确定'
+                    });
+                    return;
+                }
+
+                // 生成新用户ID
+                const newUserId = Date.now().toString();
+
+                // 创建新用户行
+                const tbody = document.querySelector('tbody');
+                const emptyRow = document.querySelector('tbody tr td[colspan="6"]');
+                if (emptyRow) {
+                    tbody.innerHTML = ''; // 清除空状态提示
+                }
+
+                const newRow = document.createElement('tr');
+                newRow.setAttribute('data-user-id', newUserId);
+                
+                // 设置新行的HTML内容
+                newRow.innerHTML = `
+                    <th scope="row">
+                        <div class="form-check font-size-16">
+                            <input type="checkbox" class="form-check-input" id="contacusercheck${newUserId}">
+                            <label class="form-check-label" for="contacusercheck${newUserId}"></label>
+                        </div>
+                    </th>
+                    <td>
+                        ${userAvatar ? `<img src="${URL.createObjectURL(userAvatar)}" alt="" class="avatar-sm rounded-circle me-2">` :
+                        `<div class="avatar-sm d-inline-block align-middle me-2">
+                            <div class="avatar-title bg-soft-light text-light font-size-24 m-0 rounded-circle">
+                                <i class="bx bxs-user-circle"></i>
+                            </div>
+                        </div>`}
+                        <a href="#" class="text-body user-name">${userName}</a>
+                    </td>
+                    <td class="user-position">${userPosition}</td>
+                    <td class="user-email">${userEmail}</td>
+                    <td>
+                        <div class="d-flex gap-2 user-skills">
+                            ${userSkills.map(skill => `<a href="#" class="badge badge-soft-primary user-skill">${skill}</a>`).join('')}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bx bx-dots-horizontal-rounded"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="javascript:void(0);" onclick="viewUser('${newUserId}', '${userName}')"><i class="bx bx-show-alt me-1"></i>查看</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0);" onclick="editUser('${newUserId}', '${userName}')"><i class="bx bx-edit me-1"></i>编辑</a></li>
+                                <li><a class="dropdown-item text-danger" href="javascript:void(0);" onclick="deleteUser('${newUserId}', '${userName}')"><i class="bx bx-trash me-1"></i>删除</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                `;
+
+                // 将新行添加到表格中
+                tbody.insertBefore(newRow, tbody.firstChild);
+
+                // 更新用户数量显示
+                updateUserCount();
+
+                // 关闭模态框
+                const modal = bootstrap.Modal.getInstance(document.getElementById('addUserModal'));
+                modal.hide();
+
+                // 显示成功消息
+                showNotification('success', '用户添加成功！');
+            }
+
+            // 页面加载完成后初始化
+            document.addEventListener('DOMContentLoaded', function() {
+                // 初始化用户数量显示
+                updateUserCount();
+
+                // 初始化全选功能
+                const checkAll = document.getElementById('checkAll');
+                if (checkAll) {
+                    checkAll.addEventListener('change', function() {
+                        const checkboxes = document.querySelectorAll('tbody .form-check-input');
+                        checkboxes.forEach(checkbox => {
+                            checkbox.checked = this.checked;
+                        });
+                    });
+                }
+
+                // 添加表单验证
+                const addUserForm = document.getElementById('addUserForm');
+                if (addUserForm) {
+                    addUserForm.addEventListener('submit', function(event) {
+                        event.preventDefault();
+                        addNewUser();
+                    });
+                }
+
+                // 添加文件预览功能
+                const avatarInput = document.getElementById('newUserAvatar');
+                if (avatarInput) {
+                    avatarInput.addEventListener('change', function(event) {
+                        const file = event.target.files[0];
+                        if (file) {
+                            if (!file.type.startsWith('image/')) {
+                                Swal.fire({
+                                    title: '提示',
+                                    text: '请选择图片文件',
+                                    icon: 'warning',
+                                    confirmButtonText: '确定'
+                                });
+                                this.value = '';
+                                return;
+                            }
+
+                            const maxSize = 2 * 1024 * 1024; // 2MB
+                            if (file.size > maxSize) {
+                                Swal.fire({
+                                    title: '提示',
+                                    text: '图片大小不能超过2MB',
+                                    icon: 'warning',
+                                    confirmButtonText: '确定'
+                                });
+                                this.value = '';
+                                return;
+                            }
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+</html>

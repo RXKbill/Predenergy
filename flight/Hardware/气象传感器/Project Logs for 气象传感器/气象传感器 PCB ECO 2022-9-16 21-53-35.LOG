@@ -1,0 +1,3 @@
+Removed Pin From Net: NetName=+3.3V Pin=R25-1
+Added Pin To Net: NetName=VCCA_3.3V Pin=R25-1
+Added Room: Name=气象传感器

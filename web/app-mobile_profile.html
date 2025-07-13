@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页 - 能源管理系统</title>
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/css/icons.min.css">
+    <link rel="stylesheet" href="static/css/app.min.css">
+    <link rel="stylesheet" href="static/css/home.css">
+    <link rel="stylesheet" href="static/css/profile.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css">
+</head>
+<body>
+    <div id="layout-wrapper">
+        <!-- 顶部导航栏 -->
+        <header class="mobile-header">
+            <div class="header-container">
+                <div class="header-left">
+                    <button class="btn-icon" id="menuToggle">
+                        <i class="mdi mdi-menu"></i>
+                    </button>
+                </div>
+
+                <div class="header-title">
+                    <h1>驭能管理</h1>
+                </div>
+
+                <div class="header-right">
+                    <button class="btn-icon" id="refreshBtn" onclick="refreshData()">
+                        <i class="mdi mdi-refresh"></i>
+                    </button>
+                    <button class="btn-icon" id="notificationBtn">
+                        <i class="mdi mdi-bell"></i>
+                        <!-- <span class="notification-badge">1</span> -->
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- 主要内容区域 -->
+        <div class="main-content">
+            <div class="page-content">
+                <div class="container-fluid">
+                    <!-- 个人信息卡片 -->
+                    <div class="profile-card">
+                        <div class="profile-header">
+                            <div class="profile-avatar">
+                                <img src="static/picture/avatar-1.jpg" alt="用户头像">
+                                <div class="avatar-edit">
+                                    <i class="mdi mdi-camera"></i>
+                                </div>
+                            </div>
+                            <div class="profile-info">
+                                <h2 class="profile-name">张明</h2>
+                                <p class="profile-title">职称：高级维修师</p>
+                                <div class="profile-stats">
+                                    <div class="stat-item">
+                                        <span class="stat-value">98%</span>
+                                        <span class="stat-label">维修成功率</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-value">142</span>
+                                        <span class="stat-label">完成工单</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 功能列表 -->
+                    <div class="profile-menu">
+                        <div class="menu-section">
+                            <div class="section-title">账号信息</div>
+                            <!-- 实名认证 -->
+                            <div class="menu-item">
+                                <div class="item-left">
+                                    <i class="mdi mdi-account-check text-primary"></i>
+                                    <span>实名认证</span>
+                                </div>
+                                <div class="item-right">
+                                    <span class="status-text">已认证</span>
+                                    <i class="mdi mdi-chevron-right"></i>
+                                </div>
+                            </div>
+
+                            <!-- 我的证件 -->
+                            <div class="menu-item">
+                                <div class="item-left">
+                                    <i class="mdi mdi-certificate text-success"></i>
+                                    <span>我的证件</span>
+                                </div>
+                                <div class="item-right">
+                                    <span class="text-muted">高级维修师</span>
+                                    <i class="mdi mdi-chevron-right"></i>
+                                </div>
+                            </div>
+
+                            <!-- 证件号码 -->
+                            <div class="menu-item">
+                                <div class="item-left">
+                                    <i class="mdi mdi-card-account-details text-info"></i>
+                                    <span>证件号码</span>
+                                </div>
+                                <div class="item-right">
+                                    <span class="text-muted">5002********6873</span>
+                                    <i class="mdi mdi-chevron-right"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="menu-section">
+                            <div class="section-title">联系方式</div>
+                            <!-- 手机号码 -->
+                            <div class="menu-item">
+                                <div class="item-left">
+                                    <i class="mdi mdi-phone text-warning"></i>
+                                    <span>手机号码</span>
+                                </div>
+                                <div class="item-right">
+                                    <span class="text-muted">182****95333</span>
+                                    <i class="mdi mdi-chevron-right"></i>
+                                </div>
+                            </div>
+
+                            <!-- 电子邮箱 -->
+                            <div class="menu-item">
+                                <div class="item-left">
+                                    <i class="mdi mdi-email text-danger"></i>
+                                    <span>电子邮箱</span>
+                                </div>
+                                <div class="item-right">
+                                    <span class="text-muted">未绑定</span>
+                                    <i class="mdi mdi-chevron-right"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="menu-section">
+                            <div class="section-title">工作信息</div>
+                            <!-- 维修历史 -->
+                            <div class="menu-item">
+                                <div class="item-left">
+                                    <i class="mdi mdi-history text-purple"></i>
+                                    <span>维修历史</span>
+                                </div>
+                                <div class="item-right">
+                                    <span class="badge bg-success">142单</span>
+                                    <i class="mdi mdi-chevron-right"></i>
+                                </div>
+                            </div>
+
+                            <!-- 工作评价 -->
+                            <div class="menu-item">
+                                <div class="item-left">
+                                    <i class="mdi mdi-star text-warning"></i>
+                                    <span>工作评价</span>
+                                </div>
+                                <div class="item-right">
+                                    <span class="badge bg-primary">4.9分</span>
+                                    <i class="mdi mdi-chevron-right"></i>
+                                </div>
+                            </div>
+
+                            <!-- 专业技能 -->
+                            <div class="menu-item">
+                                <div class="item-left">
+                                    <i class="mdi mdi-tools text-info"></i>
+                                    <span>专业技能</span>
+                                </div>
+                                <div class="item-right">
+                                    <span class="badge bg-info">8项</span>
+                                    <i class="mdi mdi-chevron-right"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="menu-section">
+                            <div class="section-title">其他</div>
+                            <!-- 客服服务 -->
+                            <div class="menu-item">
+                                <div class="item-left">
+                                    <i class="mdi mdi-headphones text-info"></i>
+                                    <span>客服服务</span>
+                                </div>
+                                <div class="item-right">
+                                    <i class="mdi mdi-chevron-right"></i>
+                                </div>
+                            </div>
+
+                            <!-- 设置 -->
+                            <div class="menu-item">
+                                <div class="item-left">
+                                    <i class="mdi mdi-cog text-secondary"></i>
+                                    <span>设置</span>
+                                </div>
+                                <div class="item-right">
+                                    <i class="mdi mdi-chevron-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 退出登录按钮 -->
+                    <div class="logout-section">
+                        <button class="btn btn-outline-danger btn-block" id="logoutBtn">
+                            退出登录
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部导航栏 -->
+        <footer class="mobile-footer">
+            <nav class="footer-nav">
+                <a href="app-mobile_home.html" class="nav-item">
+                    <i class="mdi mdi-home"></i>
+                    <span>首页</span>
+                </a>
+                <a href="app-mobile_index.html" class="nav-item">
+                    <i class="mdi mdi-chart-line"></i>
+                    <span>预测</span>
+                </a>
+                <a href="app-mobile_workorder.html" class="nav-item">
+                    <i class="mdi mdi-clipboard-text"></i>
+                    <span>工单</span>
+                </a>
+                <a href="app-mobile_profile.html" class="nav-item active">
+                    <i class="mdi mdi-account"></i>
+                    <span>我的</span>
+                </a>
+            </nav>
+        </footer>
+    </div>
+
+    <!-- 引入JavaScript文件 -->
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/bootstrap.bundle.min.js"></script>
+    <script src="static/js/app.js"></script>
+    <script src="static/js/profile.js"></script>
+</body>
+</html> 

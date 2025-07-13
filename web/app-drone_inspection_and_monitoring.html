@@ -1,0 +1,1939 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <title>驭能能源管理系统</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="Premium Multipurpose Admin & Dashboard Template" name="description">
+        <meta content="Themesbrand" name="author">
+
+        <!-- plugin css -->
+        <link href="static/css/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css">
+
+        <!-- preloader css -->
+        <link rel="stylesheet" href="static/css/preloader.min.css" type="text/css">
+
+        <!-- Bootstrap Css -->
+        <link href="static/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css">
+        <!-- Icons Css -->
+        <link href="static/css/icons.min.css" rel="stylesheet" type="text/css">
+        <!-- Bootstrap Icons -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+        <!-- App Css-->
+        <link href="static/css/app.min.css" id="app-style" rel="stylesheet" type="text/css">
+    <!-- Leaflet CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" rel="stylesheet">
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+            border-radius: 4px;
+        }
+        .device-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .device-item {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        /* .device-item:hover {
+            background-color: #f8f9fa;
+        } */
+        .weather-card {
+            border-left: 4px solid;
+        }
+        .drone-marker {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 64, 129, 0.2);
+            border: 2px solid #FF4081;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        .drone-marker i {
+            color: #FF4081;
+            font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+        .facility-marker {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(33, 150, 243, 0.2);
+            border: 2px solid #2196F3;
+            border-radius: 50%;
+            width: 30px !important;
+            height: 30px !important;
+            margin-left: -15px !important;
+            margin-top: -15px !important;
+        }
+        .facility-marker i {
+            color: #2196F3;
+            font-size: 16px;
+        }
+        .leaflet-popup-content {
+            margin: 8px 12px;
+            font-size: 14px;
+            color: #333;
+        }
+        .leaflet-popup-content-wrapper {
+            border-radius: 4px;
+        }
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -20;
+            }
+        }
+        .animated-path {
+            animation: dash 1s linear infinite;
+        }
+        .route-step {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            background-color: rgba(var(--bs-light-rgb), 0.1);
+            border: 1px solid rgba(var(--bs-light-rgb), 0.2);
+        }
+        .sensor-value {
+            font-size: 1.25rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .video-container {
+            background: #000;
+            position: relative;
+            overflow: hidden;
+        }
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .thermal-view {
+            position: relative;
+        }
+        .thermal-view canvas {
+            width: 100%;
+            height: 100%;
+        }
+        .annotation-marker {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(255, 0, 0, 0.5);
+            border: 2px solid #fff;
+            cursor: pointer;
+        }
+        .progress-wrapper {
+            position: relative;
+        }
+        .progress-label {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            line-height: 20px;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        /* 保留过渡效果用于状态变化 */
+        .badge {
+            transition: background-color 0.3s ease;
+        }
+    </style>
+    </head>
+
+    <body data-layout-mode="dark" data-topbar="dark" data-sidebar="dark" class="sidebar-enable">
+
+    <!-- <body data-layout="horizontal"> -->
+
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+            <header id="page-topbar">
+                <div class="navbar-header">
+                    <div class="d-flex">
+                        <!-- LOGO -->
+                        <div class="navbar-brand-box">
+                            <a href="" class="logo logo-dark">
+                                <span class="logo-sm">
+                                    <img src="static/picture/logo.png" alt="" height="24">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="static/picture/logo.png" alt="" height="24"> <span class="logo-txt">驭能能源管理系统</span>
+                                </span>
+                            </a>
+
+                            <a href="" class="logo logo-light">
+                                <span class="logo-sm">
+                                    <img src="static/picture/logo.png" alt="" height="24">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="static/picture/logo.png" alt="" height="24"> <span class="logo-txt">驭能能源管理系统</span>
+                                </span>
+                            </a>
+                        </div>
+
+                        <button type="button" class="btn btn-sm px-3 font-size-16 header-item" id="vertical-menu-btn">
+                            <i class="fa fa-fw fa-bars"></i>
+                        </button>
+
+                        <!-- App Search-->
+                        <form class="app-search d-none d-lg-block">
+                            <div class="position-relative">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <button class="btn btn-primary" type="button"><i class="bx bx-search-alt align-middle"></i></button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="d-flex">
+
+                        <div class="dropdown d-inline-block d-lg-none ms-2">
+                            <button type="button" class="btn header-item" id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i data-feather="search" class="icon-lg"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-search-dropdown">
+        
+                                <form class="p-3">
+                                    <div class="form-group m-0">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Search ..." aria-label="Search Result">
+
+                                            <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-none d-sm-inline-block">
+                            <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img id="header-lang-img" src="static/picture/cn.png" alt="Header Language" height="16">
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end">
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="en">
+                                    <img src="static/picture/cn.png" alt="user-image" class="me-1" height="12"> <span class="align-middle">Chinese</span>
+                                </a>
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="sp">
+                                    <img src="static/picture/spain.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Spanish</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="gr">
+                                    <img src="static/picture/germany.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">German</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="it">
+                                    <img src="static/picture/italy.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Italian</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ru">
+                                    <img src="static/picture/russia.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Russian</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-none d-sm-inline-block">
+                            <button type="button" class="btn header-item" id="mode-setting-btn">
+                                <i data-feather="moon" class="icon-lg layout-mode-dark"></i>
+                                <i data-feather="sun" class="icon-lg layout-mode-light"></i>
+                            </button>
+                        </div>
+
+                        <div class="dropdown d-none d-lg-inline-block ms-1">
+                            <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i data-feather="grid" class="icon-lg"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                                <div class="p-2">
+                                    <div class="row g-0">
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/github.png" alt="Github">
+                                                <span>GitHub</span>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/bitbucket.png" alt="bitbucket">
+                                                <span>Bitbucket</span>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/dribbble.png" alt="dribbble">
+                                                <span>Dribbble</span>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-0">
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/dropbox.png" alt="dropbox">
+                                                <span>Dropbox</span>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/mail_chimp.png" alt="mail_chimp">
+                                                <span>Mail Chimp</span>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/slack.png" alt="slack">
+                                                <span>Slack</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item noti-icon position-relative" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i data-feather="bell" class="icon-lg"></i>
+                                <span class="badge bg-danger rounded-pill">5</span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown">
+                                <div class="p-3">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <h6 class="m-0"> Notifications </h6>
+                                        </div>
+                                        <div class="col-auto">
+                                            <a href="#!" class="small text-reset text-decoration-underline"> Unread (3)</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-simplebar="" style="max-height: 230px;">
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <img src="static/picture/avatar-3.jpg" class="rounded-circle avatar-sm" alt="user-pic">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">James Lemire</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">It will seem like simplified Chinese.</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>1 hours ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 avatar-sm me-3">
+                                                <span class="avatar-title bg-primary rounded-circle font-size-16">
+                                                    <i class="bx bx-cart"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">Your order is placed</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">If several languages coalesce the grammar</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>3 min ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 avatar-sm me-3">
+                                                <span class="avatar-title bg-success rounded-circle font-size-16">
+                                                    <i class="bx bx-badge-check"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">Your item is shipped</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">If several languages coalesce the grammar</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>3 min ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <img src="static/picture/avatar-6.jpg" class="rounded-circle avatar-sm" alt="user-pic">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">Salena Layfield</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">As a skeptical Cambridge friend of mine occidental.</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>1 hours ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="p-2 border-top d-grid">
+                                    <a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">
+                                        <i class="mdi mdi-arrow-right-circle me-1"></i> <span>View More..</span> 
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item right-bar-toggle me-2">
+                                <i data-feather="settings" class="icon-lg"></i>
+                            </button>
+                        </div>
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item bg-soft-light border-start border-end" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img class="rounded-circle header-profile-user" src="static/picture/avatar-1.jpg" alt="Header Avatar">
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium">张明</span>
+                                <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <!-- item-->
+                                <a class="dropdown-item" href="apps-contacts-profile.html"><i class="mdi mdi-face-profile font-size-16 align-middle me-1"></i> Profile</a>
+                                <a class="dropdown-item" href="auth-lock-screen.html"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i> Lock screen</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="auth-logout.html"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </header>
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <div class="container-fluid py-4">
+    <!-- 主要内容区 -->
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <!-- 左侧设备列表和天气信息 -->
+            <div class="col-lg-3">
+                <!-- 天气信息 -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="card-title mb-0">天气状况</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="weather-card border-primary p-2 mb-2">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-0">当前</h6>
+                                    <small class="text-muted">晴天</small>
+                                </div>
+                                <div class="text-end">
+                                    <h5 class="mb-0">25°C</h5>
+                                    <small class="text-muted">适合飞行</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <div class="border rounded p-2">
+                                    <small class="text-muted">风速</small>
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-wind me-2"></i>
+                                        <span>3.2m/s</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="border rounded p-2">
+                                    <small class="text-muted">能见度</small>
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-eye me-2"></i>
+                                        <span>良好</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="card-title mb-0">待检测设备列表</h6>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="device-list">
+                                <div class="device-item p-3 border-bottom">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">光伏板 A-01</h6>
+                                            <small class="text-muted">上次巡检：2天前</small>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="device-item p-3 border-bottom">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">光伏板 D-21</h6>
+                                            <small class="text-muted">上次巡检：5天前</small>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="device-item p-3 border-bottom">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">风机 B-02</h6>
+                                            <small class="text-muted">上次巡检：1天前</small>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="device-item p-3 border-bottom">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">风机 B-04</h6>
+                                            <small class="text-muted">上次巡检：1天前</small>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="device-item p-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">输电塔 C-03</h6>
+                                            <small class="text-muted">上次巡检：3天前</small>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <!-- 无人机操作界面 -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="card-title mb-0">无人机操作控制</h6>
+                    </div>
+                    <!-- 添加提示容器 -->
+                    <div id="drone-notifications" class="position-fixed" style="bottom: 20px; right: 20px; z-index: 1050; min-width: 300px; max-width: 400px;"></div>
+                    <div class="card-body">
+                        <!-- 飞行控制 -->
+                        <div class="mb-4">
+                            <h6 class="mb-3">飞行控制</h6>
+                            <div class="row g-2">
+                                <div class="col-4">
+                                    <button class="btn btn-outline-primary w-100" id="takeoff">
+                                        <i class="bi bi-arrow-up-circle me-1"></i>起飞
+                                    </button>
+                                </div>
+                                <div class="col-4">
+                                    <button class="btn btn-outline-danger w-100" id="land">
+                                        <i class="bi bi-arrow-down-circle me-1"></i>降落
+                                    </button>
+                                </div>
+                                <div class="col-4">
+                                    <button class="btn btn-outline-warning w-100" id="returnHome">
+                                        <i class="bi bi-house me-1"></i>返航
+                                    </button>
+                        </div>
+                    </div>
+                </div>
+
+                        <!-- 飞行模式选择 -->
+                        <div class="mb-4">
+                            <h6 class="mb-3">飞行模式</h6>
+                            <div class="row g-2">
+                                <div class="col-4">
+                                    <button class="btn btn-outline-secondary w-100" id="manualMode">
+                                        <i class="bi bi-joystick me-1"></i>手动模式
+                                    </button>
+                                </div>
+                                <div class="col-4">
+                                    <button class="btn btn-outline-secondary w-100" id="autoMode">
+                                        <i class="bi bi-gear me-1"></i>自动巡检
+                                    </button>
+                                </div>
+                                <div class="col-4">
+                                    <button class="btn btn-outline-secondary w-100" id="followMode">
+                                        <i class="bi bi-arrow-repeat me-1"></i>跟随模式
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 相机控制 -->
+                        <div class="mb-4">
+                            <h6 class="mb-3">相机控制</h6>
+                            <div class="row g-2">
+                                <div class="col-3">
+                                    <button class="btn btn-outline-info w-100" id="switchCamera">
+                                        <i class="bi bi-camera me-1"></i>切换相机
+                                    </button>
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-outline-info w-100" id="takePhoto">
+                                        <i class="bi bi-camera-fill me-1"></i>拍照
+                                    </button>
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-outline-info w-100" id="startRecord">
+                                        <i class="bi bi-record-circle me-1"></i>开始录像
+                                    </button>
+                                </div>
+                                <div class="col-3">
+                                    <button class="btn btn-outline-info w-100" id="stopRecord">
+                                        <i class="bi bi-stop-circle me-1"></i>停止录像
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 飞行参数设置 -->
+                        <div class="mb-4">
+                            <h6 class="mb-3">飞行参数</h6>
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <div class="input-group">
+                                        <span class="input-group-text">飞行高度</span>
+                                        <input type="number" class="form-control" id="flightHeight" value="50">
+                                        <span class="input-group-text">m</span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="input-group">
+                                        <span class="input-group-text">飞行速度</span>
+                                        <input type="number" class="form-control" id="flightSpeed" value="5">
+                                        <span class="input-group-text">m/s</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 紧急控制 -->
+                        <div class="mb-4">
+                            <h6 class="mb-3">紧急控制</h6>
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <button class="btn btn-danger w-100" id="emergencyStop">
+                                        <i class="bi bi-exclamation-triangle me-1"></i>紧急停止
+                                    </button>
+                                </div>
+                                <div class="col-6">
+                                    <button class="btn btn-warning w-100" id="emergencyLand">
+                                        <i class="bi bi-exclamation-circle me-1"></i>紧急降落
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 飞行状态显示 -->
+                        <div class="alert alert-info mb-0">
+                            <div class="row">
+                                <div class="col-6">
+                                    <small class="text-muted">GPS状态：</small>
+                                    <span id="gpsStatus" class="badge bg-success">已定位</span>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted">飞行状态：</small>
+                                    <span id="flightStatus" class="badge bg-secondary">待机</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 设备列表 -->
+                <!-- <div class="card">
+                    <div class="card-header">
+                        <h6 class="card-title mb-0">待检测设备列表</h6>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="device-list">
+                            <div class="device-item p-3 border-bottom">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">光伏板 A-01</h6>
+                                        <small class="text-muted">上次巡检：2天前</small>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="device-item p-3 border-bottom">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">风机 B-02</h6>
+                                        <small class="text-muted">上次巡检：1天前</small>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="device-item p-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">输电塔 C-03</h6>
+                                        <small class="text-muted">上次巡检：3天前</small>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                <!-- 任务调度 -->
+                <!-- <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="card-title mb-0">任务调度</h6>
+            </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">任务类型</label>
+                            <select class="form-select" id="taskType">
+                                <option value="regular">定期巡检</option>
+                                <option value="temporary">临时巡检</option>
+                                <option value="emergency">应急巡检</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">优先级</label>
+                            <select class="form-select" id="priority">
+                                <option value="low">低</option>
+                                <option value="medium">中</option>
+                                <option value="high">高</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">计划开始时间</label>
+                            <input type="datetime-local" class="form-control" id="startTime">
+                        </div>
+                        <button class="btn btn-primary w-100" id="scheduleTask">
+                            <i class="bi bi-calendar-check"></i> 安排任务
+                        </button>
+                    </div>
+                </div> -->
+            </div>
+            <!-- 中间地图区域 -->
+            <div class="col-lg-6">
+                <!-- 任务状态卡片 -->
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="card-title mb-0">当前任务状态</h5>
+                            <div class="btn-group">
+                                <button class="btn btn-warning" id="pauseTask">
+                                    <i class="bi bi-pause-fill"></i> 暂停
+                                </button>
+                                <button class="btn btn-success" id="resumeTask">
+                                    <i class="bi bi-play-fill"></i> 继续
+                                </button>
+                                <button class="btn btn-danger" id="cancelTask">
+                                    <i class="bi bi-x-circle"></i> 取消
+                                </button>
+                            </div>
+                        </div>
+                        <div class="progress mb-3" style="height: 20px;">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 45%" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">45%</div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <small class="text-muted">剩余时间</small>
+                                <p class="mb-0" id="remainingTime">25分钟</p>
+                            </div>
+                            <div class="col-md-4">
+                                <small class="text-muted">已巡检设备</small>
+                                <p class="mb-0">3/8</p>
+                            </div>
+                            <div class="col-md-4">
+                                <small class="text-muted">电池状态</small>
+                                <p class="mb-0">75%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 地图和实时监控 -->
+                <div class="card">
+                    <div class="card-header">
+                        <ul class="nav nav-tabs card-header-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#mapView">地图视图</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#videoView">实时视频</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#thermalView">热成像</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="mapView">
+                                <div class="position-relative">
+                                    <div id="map"></div>
+                                    <button class="fullscreen-btn" data-view="map">
+                                        <i class="bi bi-fullscreen"></i> 全屏显示
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="videoView">
+                                <div class="position-relative">
+                                    <div class="ratio ratio-16x9">
+                                        <div id="videoStream" class="bg-dark">
+                                            <video id="video-player" class="w-100 h-100" autoplay loop muted>
+                                                <source src="static/video/drone_inspection.mp4" type="video/mp4">
+                                                您的浏览器不支持视频播放
+                                            </video>
+                                        </div>
+                                    </div>
+                                    <button class="fullscreen-btn" data-view="video">
+                                        <i class="bi bi-fullscreen"></i> 全屏显示
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="thermalView">
+                                <div class="position-relative">
+                                    <div class="ratio ratio-16x9">
+                                        <div id="thermalStream" class="bg-dark d-flex align-items-center justify-content-center">
+                                            <img src="static/image/solar_panels_it_image.png" alt="热成像视图" class="img-fluid">
+                                        </div>
+                                    </div>
+                                    <button class="fullscreen-btn" data-view="thermal">
+                                        <i class="bi bi-fullscreen"></i> 全屏显示
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 巡检报告部分 -->
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="card-title mb-0">巡检报告</h6>
+                            <div>
+                                <button class="btn btn-outline-primary btn-sm me-2" id="previewReport">
+                                    <i class="bi bi-eye me-1"></i>预览报告
+                                </button>
+                                <button class="btn btn-primary btn-sm" id="generateReport">
+                                    <i class="bi bi-file-earmark-text me-1"></i>生成报告
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- 左侧：巡检发现和维护建议 -->
+                            <div class="col-md-6">
+                                <div class="alert alert-warning mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                        <span>发现2个潜在问题需要关注</span>
+                                    </div>
+                                </div>
+
+                                <!-- 巡检发现 -->
+                                <div class="mb-3">
+                                    <h6 class="text-muted mb-2">巡检发现</h6>
+                                    <div class="list-group">
+                                        <div class="list-group-item list-group-item-action">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h6 class="mb-1">光伏板温度异常</h6>
+                                                <small class="text-warning">警告</small>
+                                            </div>
+                                            <p class="mb-1 small">A-01区域光伏板表面温度达到75°C，超过正常范围。</p>
+                                        </div>
+                                        <div class="list-group-item list-group-item-action">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h6 class="mb-1">逆变器效率降低</h6>
+                                                <small class="text-danger">异常</small>
+                                            </div>
+                                            <p class="mb-1 small">B-02逆变器转换效率下降至85%，建议检查。</p>
+                    </div>
+                </div>
+            </div>
+
+                                <!-- 维护建议 -->
+                                <div class="mb-3">
+                                    <h6 class="text-muted mb-2">维护建议</h6>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="recommendationUrgent">
+                                        <label class="form-check-label text-danger" for="recommendationUrgent">
+                                            建议紧急维修
+                                        </label>
+                                    </div>
+                                    <textarea class="form-control" id="reportRecommendations" rows="3" placeholder="输入维修建议..."></textarea>
+                                </div>
+                            </div>
+
+                            <!-- 右侧：图片记录和巡检数据 -->
+                            <div class="col-md-6">
+                                <!-- 图片记录 -->
+                                <div class="mb-3">
+                                    <h6 class="text-muted mb-2">图片记录</h6>
+                                    <div class="row g-2" id="reportImageThumbnails">
+                                        <div class="col-6">
+                                            <div class="card">
+                                                <img src="static/image/solar_panels_it_image.png" class="card-img-top" alt="热成像图">
+                                                <div class="card-body p-2">
+                                                    <p class="card-text small">热成像检测</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="card">
+                                                <img src="static\image\solar_panels_visual_image.jpg" class="card-img-top" alt="可见光图">
+                                                <div class="card-body p-2">
+                                                    <p class="card-text small">可见光检测</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 巡检数据 -->
+                                <div class="mb-3">
+                                    <h6 class="text-muted mb-2">巡检数据</h6>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm">
+                                            <tbody>
+                                                <tr>
+                                                    <td>巡检时间</td>
+                                                    <td class="text-end">2024-03-14 15:30</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>巡检区域</td>
+                                                    <td class="text-end">四川会理县光伏电站</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>巡检设备</td>
+                                                    <td class="text-end">46台</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>异常数量</td>
+                                                    <td class="text-end text-warning">2台</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- 补充说明 -->
+                                <div class="mb-3">
+                                    <h6 class="text-muted mb-2">补充说明</h6>
+                                    <textarea class="form-control" id="reportNotes" rows="3" placeholder="输入补充说明..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧实时数据 -->
+            <div class="col-lg-3">
+            <!-- 实时数据部分保持不变 -->
+                <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="card-title mb-0">实时数据</h6>
+                    <span class="badge bg-success" id="dataStatus">数据正常</span>
+                    </div>
+                    <div class="card-body">
+            <!-- 无人机状态 - 始终显示 -->
+            <div class="mb-4" id="drone-status">
+                <h6 class="text-muted mb-3">无人机状态</h6>
+                        <div class="row g-3">
+                        <div class="col-6" data-drone="height">
+                            <small class="text-muted d-block">飞行高度</small>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="sensor-value">50.5m</span>
+                                <i class="bi bi-arrow-up-circle text-success"></i>
+                            </div>
+                            </div>
+                            <div class="col-6" data-drone="speed">
+                                <small class="text-muted d-block">飞行速度</small>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="sensor-value">5.2m/s</span>
+                                    <i class="bi bi-speedometer2 text-success"></i>
+                            </div>
+                            </div>
+                            <div class="col-6" data-drone="battery">
+                                <small class="text-muted d-block">电池电量</small>
+                                <div class="progress-wrapper">
+                                    <div class="progress" style="height: 6px;">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: 75%"></div>
+                        </div>
+                                        <small class="sensor-value">75%</small>
+                    </div>
+                                </div>
+                                <div class="col-6" data-drone="signal">
+                                    <small class="text-muted d-block">信号强度</small>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="sensor-value">-65dBm</span>
+                                        <span class="signal-strength">
+                                            <i class="bi bi-reception-4 text-success"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="my-3">
+                        <!-- 数据切换按钮组 -->
+                        <div class="btn-group w-100 mb-3">
+                            <button type="button" class="btn btn-primary active" data-view="device-data">
+                                <i class="bi bi-tools"></i> 设备监测
+                            </button>
+                            <button type="button" class="btn btn-primary" data-view="weather-data">
+                                <i class="bi bi-cloud-sun"></i> 气象数据
+                            </button>
+                </div>
+
+                        <!-- 设备监测数据 -->
+                        <div class="monitoring-section active" id="device-monitoring">
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="text-muted mb-0">设备监测数据</h6>
+                                    <span class="badge bg-info">巡检模式</span>
+                    </div>
+                                <div class="row g-3">
+                                    <!-- 热成像数据 -->
+                                    <div class="col-6" data-sensor="surface-temp">
+                                        <small class="text-muted d-block">表面温度</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">32.5°C</span>
+                                            <span class="badge bg-warning status-badge">偏高</span>
+                            </div>
+                        </div>
+                                    <div class="col-6" data-sensor="temp-diff">
+                                        <small class="text-muted d-block">温差异常</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">2.3°C</span>
+                                            <span class="badge bg-success status-badge">正常</span>
+                            </div>
+                        </div>
+                                    <div class="col-6" data-sensor="hot-spot">
+                                        <small class="text-muted d-block">热点检测</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">0</span>
+                                            <span class="badge bg-success status-badge">正常</span>
+                            </div>
+                        </div>
+
+                                    <!-- 可见光检测 -->
+                                    <div class="col-6" data-sensor="surface-damage">
+                                        <small class="text-muted d-block">表面损伤</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">0.5%</span>
+                                            <span class="badge bg-success status-badge">正常</span>
+                            </div>
+                        </div>
+                                    <div class="col-6" data-sensor="contamination">
+                                        <small class="text-muted d-block">污渍覆盖率</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">3.2%</span>
+                                            <span class="badge bg-warning status-badge">需清理</span>
+                    </div>
+                </div>
+                                    <div class="col-6" data-sensor="deformation">
+                                        <small class="text-muted d-block">形变检测</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">0.2mm</span>
+                                            <span class="badge bg-success status-badge">正常</span>
+            </div>
+        </div>
+
+                                    <!-- 振动与声学检测 -->
+                                    <div class="col-6" data-sensor="vibration">
+                                        <small class="text-muted d-block">振动强度</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">0.15g</span>
+                                            <span class="badge bg-success status-badge">正常</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6" data-sensor="noise">
+                                        <small class="text-muted d-block">噪声水平</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">65dB</span>
+                                            <span class="badge bg-success status-badge">正常</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6" data-sensor="resonance">
+                                        <small class="text-muted d-block">共振频率</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">12.5Hz</span>
+                                            <span class="badge bg-success status-badge">正常</span>
+    </div>
+                        </div>
+
+                                    <!-- 电气特性检测 -->
+                                    <div class="col-6" data-sensor="corona">
+                                        <small class="text-muted d-block">电晕放电</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">15dB</span>
+                                            <span class="badge bg-success status-badge">正常</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6" data-sensor="insulation">
+                                        <small class="text-muted d-block">绝缘状态</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">正常</span>
+                                            <span class="badge bg-success status-badge">正常</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- 特殊检测 -->
+                                    <div class="col-6" data-sensor="blade-angle">
+                                        <small class="text-muted d-block">叶片角度</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">15°</span>
+                                            <span class="badge bg-success status-badge">正常</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6" data-sensor="panel-tilt">
+                                        <small class="text-muted d-block">光伏板倾角</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">32°</span>
+                                            <span class="badge bg-success status-badge">正常</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 气象数据 -->
+                        <div class="monitoring-section" id="weather-monitoring" style="display: none;">
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="text-muted mb-0">气象数据</h6>
+                                    <span class="badge bg-info">气象采集模式</span>
+                                </div>
+                                <div class="row g-3">
+                                    <!-- 温度相关 -->
+                                    <div class="col-6" data-weather="temperature">
+                                        <small class="text-muted d-block">环境温度</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">25.8°C</span>
+                                            <i class="bi bi-thermometer-half text-success"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-6" data-weather="temp-gradient">
+                                        <small class="text-muted d-block">温度梯度</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">0.6°C/100m</span>
+                                            <span class="badge bg-success status-badge">正常</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- 湿度相关 -->
+                                    <div class="col-6" data-weather="humidity">
+                                        <small class="text-muted d-block">相对湿度</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">45%</span>
+                                            <i class="bi bi-droplet-half text-success"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-6" data-weather="dew-point">
+                                        <small class="text-muted d-block">露点温度</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">13.2°C</span>
+                                            <span class="badge bg-success status-badge">正常</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- 风况数据 -->
+                                    <div class="col-6" data-weather="wind-speed">
+                                        <small class="text-muted d-block">风速</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">3.2m/s</span>
+                                            <span class="badge bg-success status-badge">适合飞行</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6" data-weather="wind-direction">
+                                        <small class="text-muted d-block">风向</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">225°</span>
+                                            <i class="bi bi-compass text-success"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-6" data-weather="wind-shear">
+                                        <small class="text-muted d-block">风切变</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">0.03s⁻¹</span>
+                                            <span class="badge bg-success status-badge">正常</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6" data-weather="turbulence">
+                                        <small class="text-muted d-block">湍流强度</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">0.15</span>
+                                            <span class="badge bg-success status-badge">正常</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- 大气条件 -->
+                                    <div class="col-6" data-weather="visibility">
+                                        <small class="text-muted d-block">能见度</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">12km</span>
+                                            <span class="badge bg-success status-badge">良好</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6" data-weather="pressure">
+                                        <small class="text-muted d-block">气压</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">1013.25hPa</span>
+                                            <i class="bi bi-arrow-down-circle text-success"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-6" data-weather="air-density">
+                                        <small class="text-muted d-block">空气密度</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">1.225kg/m³</span>
+                                            <span class="badge bg-success status-badge">正常</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- 辐射数据 -->
+                                    <div class="col-6" data-weather="solar-radiation">
+                                        <small class="text-muted d-block">太阳辐射</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">800W/m²</span>
+                                            <i class="bi bi-sun text-success"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-6" data-weather="cloud-cover">
+                                        <small class="text-muted d-block">云量</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">25%</span>
+                                            <i class="bi bi-cloud text-success"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-6" data-weather="clearness-index">
+                                        <small class="text-muted d-block">晴空指数</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">0.75</span>
+                                            <span class="badge bg-success status-badge">良好</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- 空气质量 -->
+                                    <div class="col-6" data-weather="pm25">
+                                        <small class="text-muted d-block">PM2.5</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">35µg/m³</span>
+                                            <span class="badge bg-success status-badge">良好</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6" data-weather="dust">
+                                        <small class="text-muted d-block">粉尘浓度</small>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="sensor-value">0.15mg/m³</span>
+                                            <span class="badge bg-success status-badge">正常</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 数据分析图表 -->
+                        <div class="card mt-3">
+                            <div class="card-header">
+                                <h6 class="card-title mb-0">数据分析</h6>
+                            </div>
+                            <div class="card-body">
+                                <ul class="nav nav-tabs mb-3" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-bs-toggle="tab" href="#tempChart" role="tab">温度分布</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#efficiencyChart" role="tab">发电效率</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#weatherChart" role="tab">气象趋势</a>
+                                    </li>
+                                </ul>
+
+                                <div class="tab-content">
+                                    <!-- 温度分布图表 -->
+                                    <div class="tab-pane fade show active" id="tempChart">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <h6 class="text-muted">光伏板温度分布热力图</h6>
+                                            <div class="btn-group btn-group-sm">
+                                                <button class="btn btn-outline-secondary active">日</button>
+                                                <button class="btn btn-outline-secondary">周</button>
+                                                <button class="btn btn-outline-secondary">月</button>
+                                            </div>
+                                        </div>
+                                        <div id="temperatureHeatmap" style="height: 200px;"></div>
+                                    </div>
+
+                                    <!-- 发电效率图表 -->
+                                    <div class="tab-pane fade" id="efficiencyChart">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <h6 class="text-muted">光伏板发电效率趋势</h6>
+                                            <select class="form-select form-select-sm" style="width: auto;">
+                                                <option>全部区域</option>
+                                                <option>A区</option>
+                                                <option>B区</option>
+                                                <option>C区</option>
+                                            </select>
+                                        </div>
+                                        <div id="efficiencyTrend" style="height: 200px;"></div>
+                                    </div>
+
+                                    <!-- 气象趋势图表 -->
+                                    <div class="tab-pane fade" id="weatherChart">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <h6 class="text-muted">气象参数相关性分析</h6>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="realtimeUpdate" checked>
+                                                <label class="form-check-label small" for="realtimeUpdate">实时更新</label>
+                                            </div>
+                                        </div>
+                                        <div class="row g-2">
+                            <div class="col-6">
+                                                <div class="card bg-light">
+                                                    <div class="card-body p-2">
+                                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                                            <small class="text-muted">温度-发电效率</small>
+                                                            <span class="badge bg-info">相关系数: 0.85</span>
+                                                        </div>
+                                                        <div id="tempEfficiencyChart" style="height: 100px;"></div>
+                                                    </div>
+                                                </div>
+                            </div>
+                            <div class="col-6">
+                                                <div class="card bg-light">
+                                                    <div class="card-body p-2">
+                                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                                            <small class="text-muted">风速-清洁度</small>
+                                                            <span class="badge bg-info">相关系数: -0.62</span>
+                                                        </div>
+                                                        <div id="windDustChart" style="height: 100px;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 巡检统计 -->
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h6 class="card-title mb-0">巡检统计</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="card bg-light">
+                            <div class="card-body p-2">
+                                <h6 class="text-muted mb-2">异常类型分布</h6>
+                                <div id="anomalyPieChart" style="height: 200px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                        </div>
+</div>
+                    </div>
+                    <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <script>document.write(new Date().getFullYear())</script> © 驭能能源管理系统.
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-sm-end d-none d-sm-block">
+                                    <p class="mb-0">由 <i class="mdi mdi-heart text-danger"></i> ES小分队倾情打造 </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        
+        <!-- Right Sidebar -->
+        <div class="right-bar">
+            <div data-simplebar="" class="h-100">
+                <div class="rightbar-title d-flex align-items-center bg-dark p-3">
+
+                    <h5 class="m-0 me-2 text-white">Theme Customizer</h5>
+
+                    <a href="javascript:void(0);" class="right-bar-toggle ms-auto">
+                        <i class="mdi mdi-close noti-icon"></i>
+                    </a>
+                </div>
+
+                <!-- Settings -->
+                <hr class="m-0">
+
+                <div class="p-4">
+                    <h6 class="mb-3">Layout</h6>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout" id="layout-vertical" value="vertical">
+                        <label class="form-check-label" for="layout-vertical">Vertical</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout" id="layout-horizontal" value="horizontal">
+                        <label class="form-check-label" for="layout-horizontal">Horizontal</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Layout Mode</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-mode" id="layout-mode-light" value="light">
+                        <label class="form-check-label" for="layout-mode-light">Light</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-mode" id="layout-mode-dark" value="dark">
+                        <label class="form-check-label" for="layout-mode-dark">Dark</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Layout Width</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-width" id="layout-width-fuild" value="fuild" onchange="document.body.setAttribute('data-layout-size', 'fluid')">
+                        <label class="form-check-label" for="layout-width-fuild">Fluid</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-width" id="layout-width-boxed" value="boxed" onchange="document.body.setAttribute('data-layout-size', 'boxed')">
+                        <label class="form-check-label" for="layout-width-boxed">Boxed</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Layout Position</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-position" id="layout-position-fixed" value="fixed" onchange="document.body.setAttribute('data-layout-scrollable', 'false')">
+                        <label class="form-check-label" for="layout-position-fixed">Fixed</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-position" id="layout-position-scrollable" value="scrollable" onchange="document.body.setAttribute('data-layout-scrollable', 'true')">
+                        <label class="form-check-label" for="layout-position-scrollable">Scrollable</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Topbar Color</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="topbar-color" id="topbar-color-light" value="light" onchange="document.body.setAttribute('data-topbar', 'light')">
+                        <label class="form-check-label" for="topbar-color-light">Light</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="topbar-color" id="topbar-color-dark" value="dark" onchange="document.body.setAttribute('data-topbar', 'dark')">
+                        <label class="form-check-label" for="topbar-color-dark">Dark</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2 sidebar-setting">Sidebar Size</h6>
+
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-size" id="sidebar-size-default" value="default" onchange="document.body.setAttribute('data-sidebar-size', 'lg')">
+                        <label class="form-check-label" for="sidebar-size-default">Default</label>
+                    </div>
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-size" id="sidebar-size-compact" value="compact" onchange="document.body.setAttribute('data-sidebar-size', 'md')">
+                        <label class="form-check-label" for="sidebar-size-compact">Compact</label>
+                    </div>
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-size" id="sidebar-size-small" value="small" onchange="document.body.setAttribute('data-sidebar-size', 'sm')">
+                        <label class="form-check-label" for="sidebar-size-small">Small (Icon View)</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2 sidebar-setting">Sidebar Color</h6>
+
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-color" id="sidebar-color-light" value="light" onchange="document.body.setAttribute('data-sidebar', 'light')">
+                        <label class="form-check-label" for="sidebar-color-light">Light</label>
+                    </div>
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-color" id="sidebar-color-dark" value="dark" onchange="document.body.setAttribute('data-sidebar', 'dark')">
+                        <label class="form-check-label" for="sidebar-color-dark">Dark</label>
+                    </div>
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-color" id="sidebar-color-brand" value="brand" onchange="document.body.setAttribute('data-sidebar', 'brand')">
+                        <label class="form-check-label" for="sidebar-color-brand">Brand</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Direction</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-direction" id="layout-direction-ltr" value="ltr">
+                        <label class="form-check-label" for="layout-direction-ltr">LTR</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-direction" id="layout-direction-rtl" value="rtl">
+                        <label class="form-check-label" for="layout-direction-rtl">RTL</label>
+                    </div>
+
+                </div>
+
+            </div> <!-- end slimscroll-menu-->
+        </div>
+        <!-- /Right-bar -->
+
+        <!-- Right bar overlay-->
+        <div class="rightbar-overlay"></div>
+
+        <!-- JAVASCRIPT -->
+        <script src="static/js/jquery.min.js"></script>
+        <script src="static/js/bootstrap.bundle.min.js"></script>
+        <script src="static/js/metisMenu.min.js"></script>
+        <script src="static/js/simplebar.min.js"></script>
+        <script src="static/js/waves.min.js"></script>
+        <script src="static/js/feather.min.js"></script>
+        <!-- pace js -->
+        <script src="static/js/pace.min.js"></script>
+
+        <!-- apexcharts -->
+        <script src="static/js/apexcharts.min.js"></script>
+
+        <!-- Plugins js-->
+        <script src="static/js/jquery-jvectormap-1.2.2.min.js"></script>
+        <script src="static/js/jquery-jvectormap-world-mill-en.js"></script>
+        <!-- dashboard init -->
+        <script src="static/js/dashboard.init.js"></script>
+
+       <!-- Leaflet JS -->
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+        <!-- 无人机巡检系统JS -->
+        <script src="static/js/drone-inspection.js"></script>
+
+        <script src="static/js/app.js"></script>
+        <script>
+            // 确保在DOM加载完成后初始化
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('DOM fully loaded, initializing drone system...');
+                if (typeof DroneInspectionSystem !== 'undefined') {
+                    window.droneSystem = new DroneInspectionSystem();
+                } else {
+                    console.error('DroneInspectionSystem class not found!');
+                }
+            });
+       </script>
+
+        <style>
+            .monitoring-section {
+                transition: opacity 0.3s ease;
+            }
+            .monitoring-section:not(.active) {
+                display: none;
+            }
+            .btn-group .btn.active {
+                background-color: #2196F3;
+                border-color: #2196F3;
+            }
+        </style>
+
+        <!-- 全屏容器 -->
+        <div id="fullscreen-container" class="fullscreen-container">
+            <div class="fullscreen-header">
+                <div class="view-switcher">
+                    <button class="btn btn-outline-light" data-view="map">
+                        <i class="bi bi-map"></i> 地图视图
+                    </button>
+                    <button class="btn btn-outline-light" data-view="video">
+                        <i class="bi bi-camera-video"></i> 实时视频
+                    </button>
+                    <button class="btn btn-outline-light" data-view="thermal">
+                        <i class="bi bi-thermometer-sun"></i> 热成像
+                    </button>
+                </div>
+                <button id="exit-fullscreen" class="btn btn-outline-light">
+                    <i class="bi bi-fullscreen-exit"></i> 退出全屏
+                </button>
+            </div>
+            <div class="fullscreen-content">
+                <div id="fullscreen-map" class="fullscreen-view"></div>
+                <div id="fullscreen-video" class="fullscreen-view">
+                    <div class="video-container">
+                        <video id="fullscreen-video-player" autoplay muted></video>
+                    </div>
+                </div>
+                <div id="fullscreen-thermal" class="fullscreen-view">
+                    <canvas id="fullscreen-thermal-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            .fullscreen-container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: #1a1a1a;
+                z-index: 9999;
+                display: none;
+            }
+
+            .fullscreen-container.active {
+                display: block;
+            }
+
+            .fullscreen-header {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                padding: 15px;
+                background: rgba(0, 0, 0, 0.8);
+                z-index: 10000;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .view-switcher {
+                display: flex;
+                gap: 10px;
+            }
+
+            .view-switcher .btn {
+                padding: 8px 20px;
+                font-size: 14px;
+            }
+
+            .fullscreen-content {
+                width: 100%;
+                height: 100%;
+                padding-top: 60px;
+                box-sizing: border-box;
+            }
+
+            .fullscreen-view {
+                width: 100%;
+                height: 100%;
+                display: none;
+                background: #000;
+            }
+
+            .fullscreen-view.active {
+                display: block;
+            }
+
+            #fullscreen-map {
+                background: #1a1a1a;
+            }
+
+            .video-container {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background: #000;
+            }
+
+            #fullscreen-video-player {
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: contain;
+            }
+
+            #fullscreen-thermal-canvas {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
+
+            /* 全屏按钮样式 */
+            .fullscreen-btn {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                z-index: 999;
+                background: rgba(255, 255, 255, 0.2);
+                color: white;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                padding: 6px 12px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 14px;
+                transition: all 0.3s ease;
+            }
+
+            .fullscreen-btn:hover {
+                background: rgba(255, 255, 255, 0.3);
+            }
+
+            /* 确保地图容器在全屏时有正确的高度 */
+            #fullscreen-map .leaflet-container {
+                height: 100% !important;
+            }
+        </style>
+
+        <!-- 紧急停止确认对话框 -->
+        <div class="modal fade" id="emergencyStopModal" tabindex="-1" aria-labelledby="emergencyStopModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content bg-dark text-white border-danger">
+                    <div class="modal-header border-danger">
+                        <h5 class="modal-title text-danger" id="emergencyStopModalLabel">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>紧急停止确认
+                        </h5>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mb-1">确认执行紧急停止？</p>
+                        <p class="text-warning mb-0"><small>这将立即中断所有飞行操作！</small></p>
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-danger" id="confirmEmergencyStop">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 巡检报告模态框 -->
+        <div class="modal fade" id="inspectionReportModal" tabindex="-1" aria-labelledby="inspectionReportModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="inspectionReportModalLabel">
+                            <i class="bi bi-file-earmark-text me-2"></i>巡检报告生成
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- 基本信息 -->
+                        <div class="mb-4">
+                            <h6 class="border-bottom pb-2">基本信息</h6>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">巡检任务编号</label>
+                                    <input type="text" class="form-control" id="reportTaskId" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">巡检时间</label>
+                                    <input type="text" class="form-control" id="reportDateTime" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">巡检区域</label>
+                                    <input type="text" class="form-control" id="reportArea" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">天气状况</label>
+                                    <input type="text" class="form-control" id="reportWeather" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 设备状态概览 -->
+                        <div class="mb-4">
+                            <h6 class="border-bottom pb-2">设备状态概览</h6>
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <div class="card bg-success bg-opacity-10">
+                                        <div class="card-body text-center">
+                                            <h3 class="text-success" id="reportNormalCount">0</h3>
+                                            <small class="text-muted">正常设备</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card bg-warning bg-opacity-10">
+                                        <div class="card-body text-center">
+                                            <h3 class="text-warning" id="reportWarningCount">0</h3>
+                                            <small class="text-muted">异常设备</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card bg-danger bg-opacity-10">
+                                        <div class="card-body text-center">
+                                            <h3 class="text-danger" id="reportErrorCount">0</h3>
+                                            <small class="text-muted">故障设备</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card bg-info bg-opacity-10">
+                                        <div class="card-body text-center">
+                                            <h3 class="text-info" id="reportTotalCount">0</h3>
+                                            <small class="text-muted">总计设备</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 异常详情 -->
+                        <div class="mb-4">
+                            <h6 class="border-bottom pb-2">异常详情</h6>
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="reportAnomalyTable">
+                                    <thead>
+                                        <tr>
+                                            <th>设备ID</th>
+                                            <th>设备类型</th>
+                                            <th>异常类型</th>
+                                            <th>异常值</th>
+                                            <th>状态</th>
+                                            <th>建议</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- 动态填充异常数据 -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 图片记录 -->
+                        <div class="mb-4">
+                            <h6 class="border-bottom pb-2">图片记录</h6>
+                            <div class="row g-3" id="reportImageGallery">
+                                <!-- 动态填充图片 -->
+                            </div>
+                        </div>
+
+                        <!-- 巡检轨迹 -->
+                        <div class="mb-4">
+                            <h6 class="border-bottom pb-2">巡检轨迹</h6>
+                            <div id="reportMap" style="height: 300px;"></div>
+                        </div>
+
+                        <!-- 补充说明 -->
+                        <div class="mb-4">
+                            <h6 class="border-bottom pb-2">补充说明</h6>
+                            <textarea class="form-control" id="reportNotes" rows="3" placeholder="请输入补充说明..."></textarea>
+                        </div>
+
+                        <!-- 维护建议 -->
+                        <div class="mb-4">
+                            <h6 class="border-bottom pb-2">维护建议</h6>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="recommendationUrgent">
+                                <label class="form-check-label text-danger" for="recommendationUrgent">
+                                    建议紧急维修
+                                </label>
+                            </div>
+                            <textarea class="form-control" id="reportRecommendations" rows="3" placeholder="请输入维护建议..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-outline-primary" id="previewReport">
+                            <i class="bi bi-eye me-1"></i>预览
+                        </button>
+                        <button type="button" class="btn btn-primary" id="generateReport">
+                            <i class="bi bi-file-earmark-pdf me-1"></i>生成报告
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 巡检报告预览模态框 -->
+        <div class="modal fade" id="reportPreviewModal" tabindex="-1" aria-labelledby="reportPreviewModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reportPreviewModalLabel">
+                            <i class="bi bi-file-earmark-text me-2"></i>巡检报告预览
+                        </h5>
+                        <div class="ms-auto me-2">
+                            <button class="btn btn-sm btn-outline-primary" id="printReport">
+                                <i class="bi bi-printer me-1"></i>打印
+                            </button>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body bg-light">
+                        <div class="container-fluid py-4" id="reportPreviewContent">
+                            <!-- 报告内容将通过JavaScript动态插入 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 生成报告加载提示 -->
+        <div class="modal fade" id="generateReportLoadingModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content bg-transparent border-0">
+                    <div class="modal-body text-center">
+                        <div class="spinner-border text-light mb-3" role="status" style="width: 3rem; height: 3rem;">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <h5 class="text-light" id="generateReportStatus">正在生成报告...</h5>
+                        <div class="progress mt-3 bg-light bg-opacity-25" style="height: 8px;">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" id="generateReportProgress"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 生成完成提示 -->
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1080">
+            <div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" id="reportGeneratedToast">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="bi bi-check-circle me-2"></i>报告已生成并开始下载
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 取消任务确认对话框 -->
+        <div class="modal fade" id="cancelTaskModal" tabindex="-1" aria-labelledby="cancelTaskModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content bg-dark text-white border-danger">
+                    <div class="modal-header border-danger">
+                        <h5 class="modal-title text-danger" id="cancelTaskModalLabel">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>取消任务确认
+                        </h5>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mb-1">确认要取消当前任务吗？</p>
+                        <p class="text-danger mb-0"><small>取消后任务进度将丢失！</small></p>
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">返回</button>
+                        <button type="button" class="btn btn-danger" id="confirmCancelTask">确认取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

@@ -1,0 +1,31 @@
+rosbag record \
+/debugPx4ctrl \
+/mavros/imu/data \
+/mavros/imu/data_raw \
+/mavros/setpoint_raw/target_attitude \
+/livox/imu \
+/ekf/ekf_odom \
+/mavros/rc/out \
+/traj_server/desired_position \
+/position_cmd \
+/Odometry \
+/Odometry_imu \
+/vins_estimator/imu_propagate \
+/vins_estimator/odometry \
+/imu_data_raw \
+/ekf/ekf_odom \
+/vrpn_client_node/cxw_fpv/pose \
+/ov_msckf/odomimu \
+/ov_msckf/loop_pose \
+/drone_0_ego_planner_node/grid_map/occupancy_inflate \
+/drone_0_ego_planner_node/optimal_list \
+/drone_0_ego_planner_node/goal_point \
+/drone_1_ego_planner_node/grid_map/occupancy_inflate \
+/drone_1_ego_planner_node/optimal_list \
+/drone_1_ego_planner_node/goal_point \
+/vins_estimator/path \
+/camera/gyro_accel/sample \
+/camera/depth/image_raw \
+/camera/left_ir/image_raw \
+/camera/right_ir/image_raw \
+--tcpnodelay

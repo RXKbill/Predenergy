@@ -1,0 +1,504 @@
+/* 主要内容区域 */
+.main-content {
+    padding: 15px;
+    padding-top: 75px;
+    padding-bottom: 90px;
+    background-color: #f8f9fa;
+    min-height: calc(100vh - 60px);
+}
+
+/* 移动端顶部导航栏 */
+.mobile-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+}
+
+/* 状态切换标签 */
+.status-tabs {
+    margin-bottom: 15px;
+    background: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.status-tabs .nav-pills {
+    display: flex;
+    gap: 10px;
+}
+
+.status-tabs .nav-link {
+    flex: 1;
+    text-align: center;
+    color: #666;
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 14px;
+    position: relative;
+}
+
+.status-tabs .nav-link.active {
+    background-color: #2196f3;
+    color: #fff;
+}
+
+.status-tabs .badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: 10px;
+    padding: 3px 6px;
+}
+
+/* 工单列表 */
+.workorder-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.workorder-item {
+    background: #fff;
+    border-radius: 8px;
+    padding: 15px;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.workorder-item.high-priority {
+    border-left: 4px solid #dc3545;
+}
+
+.workorder-item.medium-priority {
+    border-left: 4px solid #ffc107;
+}
+
+.workorder-item.completed {
+    border-left: 4px solid #28a745;
+}
+
+.priority-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 12px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.high-priority .priority-badge {
+    color: #dc3545;
+}
+
+.medium-priority .priority-badge {
+    color: #ffc107;
+}
+
+.completed .priority-badge {
+    color: #28a745;
+}
+
+.workorder-content {
+    padding-right: 80px;
+}
+
+.workorder-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.workorder-desc {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.workorder-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 12px;
+    color: #999;
+}
+
+.workorder-info span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.workorder-item .btn {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+}
+
+/* 工单详情模态框 */
+.detail-section {
+    background: #fff;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.detail-section h6 {
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-item label {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.info-item span {
+    font-size: 14px;
+    color: #333;
+}
+
+/* 时间线样式 */
+.timeline {
+    position: relative;
+    padding-left: 28px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 9px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e9ecef;
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 20px;
+}
+
+.timeline-badge {
+    position: absolute;
+    left: -28px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 12px;
+}
+
+.timeline-content {
+    background: #f8f9fa;
+    border-radius: 6px;
+    padding: 12px;
+}
+
+.timeline-content h6 {
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.timeline-content p {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.timeline-content small {
+    font-size: 12px;
+    color: #999;
+}
+
+/* 处理步骤 */
+.process-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    position: relative;
+    padding: 0 20px;
+}
+
+.process-steps::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 40px;
+    right: 40px;
+    height: 2px;
+    background: #e9ecef;
+    z-index: 1;
+}
+
+.step {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.step.active .step-number {
+    background: #2196f3;
+    border-color: #2196f3;
+    color: #fff;
+}
+
+.step.completed .step-number {
+    background: #28a745;
+    border-color: #28a745;
+    color: #fff;
+}
+
+.step-text {
+    font-size: 12px;
+    color: #666;
+}
+
+/* 照片上传 */
+.photo-upload {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.photo-preview {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.photo-preview img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+/* 配件列表 */
+.parts-list {
+    background: #f8f9fa;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.parts-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.parts-list-item:last-child {
+    border-bottom: none;
+}
+
+/* 响应式调整 */
+@media (max-width: 360px) {
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .workorder-info {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .process-steps {
+        padding: 0 10px;
+    }
+    
+    .step-number {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+    }
+    
+    .step-text {
+        font-size: 11px;
+    }
+}
+
+/* 移动端底部导航栏 */
+.mobile-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.footer-nav {
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #666;
+    font-size: 12px;
+}
+
+.nav-item i {
+    font-size: 20px;
+    margin-bottom: 2px;
+}
+
+.nav-item.active {
+    color: #2196f3;
+}
+
+/* Toast提示消息容器 */
+.toast-container {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1100;
+    width: calc(100% - 30px);
+    max-width: 400px;
+}
+
+.toast {
+    margin-bottom: 10px;
+}
+
+/* 巡检报告摘要 */
+.inspection-summary .card {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.inspection-summary .card-header {
+    background: none;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    padding: 15px;
+}
+
+.inspection-summary .alert {
+    margin: 0;
+    font-size: 12px;
+}
+
+.inspection-findings .finding-item {
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 6px;
+}
+
+.finding-info h6 {
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.inspection-images img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+}
+
+/* 待检测设备列表 */
+.device-list-section .card {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.device-list-section .card-header {
+    background: none;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    padding: 15px;
+}
+
+.device-list-section .list-group-item {
+    border-left: none;
+    border-right: none;
+    padding: 12px 15px;
+}
+
+.device-list-section .list-group-item:first-child {
+    border-top: none;
+}
+
+.device-list-section .list-group-item:last-child {
+    border-bottom: none;
+}
+
+.device-list-section h6 {
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.device-list-section small {
+    font-size: 12px;
+}
+
+.device-list-section .form-check-input {
+    width: 20px;
+    height: 20px;
+    margin-top: 0;
+}
+
+/* 按钮样式优化 */
+.btn-sm {
+    padding: 4px 8px;
+    font-size: 12px;
+}
+
+.btn-sm i {
+    font-size: 14px;
+    margin-right: 4px;
+} 

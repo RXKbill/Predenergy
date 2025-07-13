@@ -1,0 +1,21 @@
+Removed Pin From Net: NetName=+3.3V Pin=C13-1
+Removed Pin From Net: NetName=+3.3V Pin=C14-1
+Removed Pin From Net: NetName=+3.3V Pin=C15-1
+Removed Pin From Net: NetName=+3.3V Pin=C16-1
+Removed Pin From Net: NetName=+3.3V Pin=R9-1
+Removed Pin From Net: NetName=+3.3V Pin=R10-1
+Removed Pin From Net: NetName=+3.3V Pin=R12-1
+Removed Pin From Net: NetName=+3.3V Pin=R22-1
+Removed Pin From Net: NetName=+3.3V Pin=R23-1
+Removed Pin From Net: NetName=+3.3V Pin=U4-28
+Added Pin To Net: NetName=VCCA_3.3V Pin=C13-1
+Added Pin To Net: NetName=VCCA_3.3V Pin=C14-1
+Added Pin To Net: NetName=VCCA_3.3V Pin=C15-1
+Added Pin To Net: NetName=VCCA_3.3V Pin=C16-1
+Added Pin To Net: NetName=VCCA_3.3V Pin=R9-1
+Added Pin To Net: NetName=VCCA_3.3V Pin=R10-1
+Added Pin To Net: NetName=VCCA_3.3V Pin=R12-1
+Added Pin To Net: NetName=VCCA_3.3V Pin=R22-1
+Added Pin To Net: NetName=VCCA_3.3V Pin=R23-1
+Added Pin To Net: NetName=VCCA_3.3V Pin=U4-28
+Added Room: Name=气象传感器

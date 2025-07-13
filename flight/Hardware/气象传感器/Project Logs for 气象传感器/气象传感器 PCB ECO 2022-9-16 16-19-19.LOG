@@ -1,0 +1,9 @@
+Removed Pin From Net: NetName=GND Pin=P2-1
+Removed Pin From Net: NetName=GND Pin=P2-1
+Removed Pin From Net: NetName=+12V Pin=P2-2
+Removed Pin From Net: NetName=+12V Pin=P2-2
+Added Pin To Net: NetName=+12V Pin=P2-1
+Added Pin To Net: NetName=+12V Pin=P2-1
+Added Pin To Net: NetName=GND Pin=P2-2
+Added Pin To Net: NetName=GND Pin=P2-2
+Added Room: Name=气象传感器

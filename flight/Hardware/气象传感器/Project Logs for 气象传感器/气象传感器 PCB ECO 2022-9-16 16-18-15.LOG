@@ -1,0 +1,6 @@
+Removed Pin From Net: NetName=GND Pin=C2-2
+Removed Member From Class: ClassName=气象传感器 Member=C2
+Added Pin To Net: NetName=+12V Pin=C3-1
+Added Pin To Net: NetName=+12V Pin=U5-1
+Added Pin To Net: NetName=+3.3V Pin=U6-4
+Added Room: Name=气象传感器

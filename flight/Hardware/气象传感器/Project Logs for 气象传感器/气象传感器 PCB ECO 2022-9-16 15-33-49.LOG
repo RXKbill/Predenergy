@@ -1,0 +1,42 @@
+Added Component: Designator=U7(LQFP48 7X7_M)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "BOM名称"; Value = "32位STM单片机"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "学习资源"; Value = "www.ooocke.com"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "版权归属"; Value = "源创客"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=+3.3V Pin=U7-1
+Added Pin To Net: NetName=OSC_IN Pin=U7-5
+Added Pin To Net: NetName=OSC_OUT Pin=U7-6
+Added Pin To Net: NetName=RST Pin=U7-7
+Added Pin To Net: NetName=GND Pin=U7-8
+Added Pin To Net: NetName=+3.3V Pin=U7-9
+Added Pin To Net: NetName=NOISE_ADC Pin=U7-10
+Added Pin To Net: NetName=DHT11_DATA Pin=U7-11
+Added Pin To Net: NetName=TX2 Pin=U7-12
+Added Pin To Net: NetName=RX2 Pin=U7-13
+Added Pin To Net: NetName=PM_SENSER_SET Pin=U7-14
+Added Pin To Net: NetName=PM_SENSER_RESET Pin=U7-15
+Added Pin To Net: NetName=NOISE_INT Pin=U7-16
+Added Pin To Net: NetName=TX3 Pin=U7-21
+Added Pin To Net: NetName=RX3 Pin=U7-22
+Added Pin To Net: NetName=GND Pin=U7-23
+Added Pin To Net: NetName=+3.3V Pin=U7-24
+Added Pin To Net: NetName=W5500_SCSn Pin=U7-25
+Added Pin To Net: NetName=W5500_SCLK Pin=U7-26
+Added Pin To Net: NetName=W5500_MISO Pin=U7-27
+Added Pin To Net: NetName=W5500_MOSI Pin=U7-28
+Added Pin To Net: NetName=TX1 Pin=U7-30
+Added Pin To Net: NetName=RX1 Pin=U7-31
+Added Pin To Net: NetName=SWDIO Pin=U7-34
+Added Pin To Net: NetName=GND Pin=U7-35
+Added Pin To Net: NetName=+3.3V Pin=U7-36
+Added Pin To Net: NetName=SWCLK Pin=U7-37
+Added Pin To Net: NetName=LED_Tset Pin=U7-40
+Added Pin To Net: NetName=LED Pin=U7-41
+Added Pin To Net: NetName=SCL Pin=U7-42
+Added Pin To Net: NetName=SDA Pin=U7-43
+Added Pin To Net: NetName=BOOT0 Pin=U7-44
+Added Pin To Net: NetName=W5500_RST Pin=U7-45
+Added Pin To Net: NetName=W5500_INTn Pin=U7-46
+Added Pin To Net: NetName=GND Pin=U7-47
+Added Pin To Net: NetName=+3.3V Pin=U7-48
+Added Member To Class: ClassName=气象传感器 Member=Component U7 STM32F103C8T6

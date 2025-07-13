@@ -1,0 +1,8 @@
+<launch>
+    <node pkg="trajectory" type="traj_test" name="traj_test" output="screen" launch-prefix="">
+        <rosparam file="$(find trajectory)/parameters/traj.yaml"/>
+        <remap from="/trajectory" to="/trajectory_generator_node/trajectory"/>
+        <!-- <remap from="/odometry" to="/ekf/ekf_odom"/> -->
+        <remap from="/odometry" to="/Odometry_imu"/>
+	</node>
+</launch>

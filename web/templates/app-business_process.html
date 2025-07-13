@@ -1,0 +1,135 @@
+<head>
+    <link href="static/css/power-dispatch.css" rel="stylesheet" type="text/css" />
+</head> 
+
+<!-- 系统概览 -->
+<div class="card">
+    <div class="card-header bg-transparent border-bottom">
+        <h5 class="card-title mb-0">系统概览</h5>
+    </div>
+    <div class="card-body">
+        <!-- 电源构成 -->
+        <div class="mb-4">
+            // ... existing code ...
+        </div>
+
+        <!-- 设备状态 -->
+        <div class="mb-4">
+            <div class="equipment-overview">
+                <div class="equipment-status-card">
+                    <div class="status-icon normal">
+                        <i class="ri-checkbox-circle-line"></i>
+                    </div>
+                    <h4>正常运行</h4>
+                    <h2>108</h2>
+                    <div class="equipment-progress">
+                        <div class="progress" style="height: 6px;">
+                            <div class="progress-bar bg-success" style="width: 84.4%"></div>
+                        </div>
+                        <small class="text-muted">占比 84.4%</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 新增：系统运行指标 -->
+        <div class="system-metrics">
+            <h6 class="card-subtitle mb-3">系统运行指标</h6>
+            
+            <!-- 电网稳定性指标 -->
+            <div class="metric-group mb-3">
+                <div class="metric-header d-flex justify-content-between align-items-center mb-2">
+                    <span class="metric-title">电网稳定性</span>
+                    <span class="metric-value text-success">优</span>
+                </div>
+                <div class="metric-items">
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="metric-item">
+                                <small class="d-block text-muted">电压偏差</small>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>±0.5%</span>
+                                    <i class="ri-arrow-right-up-line text-success"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="metric-item">
+                                <small class="d-block text-muted">频率稳定度</small>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>99.9%</span>
+                                    <i class="ri-arrow-right-up-line text-success"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 能源利用指标 -->
+            <div class="metric-group mb-3">
+                <div class="metric-header d-flex justify-content-between align-items-center mb-2">
+                    <span class="metric-title">能源利用</span>
+                    <span class="metric-value text-primary">良好</span>
+                </div>
+                <div class="metric-items">
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="metric-item">
+                                <small class="d-block text-muted">能源利用率</small>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>87.5%</span>
+                                    <i class="ri-arrow-right-up-line text-success"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="metric-item">
+                                <small class="d-block text-muted">碳排放强度</small>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>0.42kg/kWh</span>
+                                    <i class="ri-arrow-right-down-line text-success"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 系统响应指标 -->
+            <div class="metric-group">
+                <div class="metric-header d-flex justify-content-between align-items-center mb-2">
+                    <span class="metric-title">系统响应</span>
+                    <span class="metric-value text-success">优秀</span>
+                </div>
+                <div class="metric-items">
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="metric-item">
+                                <small class="d-block text-muted">调度响应时间</small>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>1.2s</span>
+                                    <i class="ri-arrow-right-down-line text-success"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="metric-item">
+                                <small class="d-block text-muted">指令执行率</small>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>99.8%</span>
+                                    <i class="ri-arrow-right-up-line text-success"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 告警信息 -->
+        <div class="mb-4">
+            // ... existing code ...
+        </div>
+    </div>
+</div> 

@@ -1,0 +1,46 @@
+{
+    "processing": "处理中...",
+    "lengthMenu": "显示 _MENU_ 项结果",
+    "zeroRecords": "没有匹配结果",
+    "info": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+    "infoEmpty": "显示第 0 至 0 项结果，共 0 项",
+    "infoFiltered": "(由 _MAX_ 项结果过滤)",
+    "search": "搜索:",
+    "emptyTable": "表中数据为空",
+    "paginate": {
+        "first": "首页",
+        "previous": "上页",
+        "next": "下页",
+        "last": "末页"
+    },
+    "aria": {
+        "sortAscending": ": 以升序排列此列",
+        "sortDescending": ": 以降序排列此列"
+    },
+    "autoFill": {
+        "cancel": "取消",
+        "fill": "用 <i>%d</i> 填充所有单元格",
+        "fillHorizontal": "水平填充单元格",
+        "fillVertical": "垂直填充单元格"
+    },
+    "buttons": {
+        "collection": "集合 <span class=\"ui-button-icon-primary ui-icon ui-icon-triangle-1-s\"></span>",
+        "colvis": "列可见性",
+        "colvisRestore": "恢复列可见性",
+        "copy": "复制",
+        "copyKeys": "按 ctrl 或者 u2318 + C 将表数据复制到剪贴板。<br><br>要取消，请单击此消息或按Escape键。",
+        "copySuccess": {
+            "1": "复制了 1 行到剪贴板",
+            "_": "复制了 %d 行到剪贴板"
+        },
+        "copyTitle": "复制到剪贴板",
+        "csv": "CSV",
+        "excel": "Excel",
+        "pageLength": {
+            "-1": "显示所有行",
+            "_": "显示 %d 行"
+        },
+        "pdf": "PDF",
+        "print": "打印"
+    }
+} 

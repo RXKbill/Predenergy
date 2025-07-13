@@ -1,0 +1,39 @@
+# The shape of trajectory
+shape: 0 # 0-eight; 1-circle; 2-star; 3-s-shape
+
+# The time interval
+dt: 0.05
+
+# Height of trajectory
+height: 1.00 # m
+
+# Size of eight trajectory
+eightWidth:  2.00 # m
+eightLength: 2.00 # m
+
+# Radius of circle trajectory
+circleRadius: 2.00 # m
+
+# Radius of star trajectory
+starRadius: 3.00 # m
+
+# Size of S-Shape trajectory
+sWidth: 3.00 # m
+sLength: 14.00 # m
+
+# Max reference velocity and acceleration of trajectory
+maxVel: 1.0 # m/s
+maxAcc: 1.0 # m/s^2
+
+# Minco
+K: 32
+rhoT: 20000
+rhoV: 10000
+rhoA: 10000
+pauseDebug: false
+
+# The start and end point of trajectory
+startX: 0.0
+startY: 0.0
+endX: 10.0
+endY: 0.0

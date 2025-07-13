@@ -1,0 +1,1248 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        
+        <meta charset="utf-8">
+        <title>Invoice Detail | 驭能 - Minimal Admin & Dashboard Template</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="Premium Multipurpose Admin & Dashboard Template" name="description">
+        <meta content="Themesbrand" name="author">
+
+        <!-- preloader css -->
+        <link rel="stylesheet" href="static/css/preloader.min.css" type="text/css">
+
+        <!-- Bootstrap Css -->
+        <link href="static/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css">
+        <!-- Icons Css -->
+        <link href="static/css/icons.min.css" rel="stylesheet" type="text/css">
+        <!-- App Css-->
+        <link href="static/css/app.min.css" id="app-style" rel="stylesheet" type="text/css">
+
+    </head>
+
+    <body data-layout-mode="dark" data-topbar="dark" data-sidebar="dark" class="sidebar-enable">
+
+    <!-- <body data-layout="horizontal"> -->
+
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            
+            <header id="page-topbar">
+                <div class="navbar-header">
+                    <div class="d-flex">
+                        <!-- LOGO -->
+                        <div class="navbar-brand-box">
+                            <a href="index.html" class="logo logo-dark">
+                                <span class="logo-sm">
+                                    <img src="static/picture/logo.png" alt="" height="24">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="static/picture/logo.png" alt="" height="24"> <span class="logo-txt">驭能能源管理系统</span>
+                                </span>
+                            </a>
+
+                            <a href="index.html" class="logo logo-light">
+                                <span class="logo-sm">
+                                    <img src="static/picture/logo.png" alt="" height="24">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="static/picture/logo.png" alt="" height="24"> <span class="logo-txt">驭能能源管理系统</span>
+                                </span>
+                            </a>
+                        </div>
+
+                        <button type="button" class="btn btn-sm px-3 font-size-16 header-item" id="vertical-menu-btn">
+                            <i class="fa fa-fw fa-bars"></i>
+                        </button>
+
+                        <!-- App Search-->
+                        <form class="app-search d-none d-lg-block">
+                            <div class="position-relative">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <button class="btn btn-primary" type="button"><i class="bx bx-search-alt align-middle"></i></button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="d-flex">
+
+                        <div class="dropdown d-inline-block d-lg-none ms-2">
+                            <button type="button" class="btn header-item" id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i data-feather="search" class="icon-lg"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-search-dropdown">
+        
+                                <form class="p-3">
+                                    <div class="form-group m-0">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Search ..." aria-label="Search Result">
+
+                                            <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-none d-sm-inline-block">
+                            <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img id="header-lang-img" src="static/picture/cn.png" alt="Header Language" height="16">
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end">
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="en">
+                                    <img src="static/picture/cn.png" alt="user-image" class="me-1" height="12"> <span class="align-middle">Chinese</span>
+                                </a>
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="sp">
+                                    <img src="static/picture/spain.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Spanish</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="gr">
+                                    <img src="static/picture/germany.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">German</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="it">
+                                    <img src="static/picture/italy.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Italian</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ru">
+                                    <img src="static/picture/russia.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Russian</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-none d-sm-inline-block">
+                            <button type="button" class="btn header-item" id="mode-setting-btn">
+                                <i data-feather="moon" class="icon-lg layout-mode-dark"></i>
+                                <i data-feather="sun" class="icon-lg layout-mode-light"></i>
+                            </button>
+                        </div>
+
+                        <div class="dropdown d-none d-lg-inline-block ms-1">
+                            <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i data-feather="grid" class="icon-lg"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                                <div class="p-2">
+                                    <div class="row g-0">
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/github.png" alt="Github">
+                                                <span>GitHub</span>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/bitbucket.png" alt="bitbucket">
+                                                <span>Bitbucket</span>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/dribbble.png" alt="dribbble">
+                                                <span>Dribbble</span>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-0">
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/dropbox.png" alt="dropbox">
+                                                <span>Dropbox</span>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/mail_chimp.png" alt="mail_chimp">
+                                                <span>Mail Chimp</span>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/slack.png" alt="slack">
+                                                <span>Slack</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item noti-icon position-relative" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i data-feather="bell" class="icon-lg"></i>
+                                <span class="badge bg-danger rounded-pill">5</span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown">
+                                <div class="p-3">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <h6 class="m-0"> Notifications </h6>
+                                        </div>
+                                        <div class="col-auto">
+                                            <a href="#!" class="small text-reset text-decoration-underline"> Unread (3)</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-simplebar="" style="max-height: 230px;">
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <img src="static/picture/avatar-3.jpg" class="rounded-circle avatar-sm" alt="user-pic">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">James Lemire</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">It will seem like simplified Chinese.</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>1 hours ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 avatar-sm me-3">
+                                                <span class="avatar-title bg-primary rounded-circle font-size-16">
+                                                    <i class="bx bx-cart"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">Your order is placed</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">If several languages coalesce the grammar</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>3 min ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 avatar-sm me-3">
+                                                <span class="avatar-title bg-success rounded-circle font-size-16">
+                                                    <i class="bx bx-badge-check"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">Your item is shipped</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">If several languages coalesce the grammar</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>3 min ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <img src="static/picture/avatar-6.jpg" class="rounded-circle avatar-sm" alt="user-pic">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">Salena Layfield</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">As a skeptical Cambridge friend of mine occidental.</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>1 hours ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="p-2 border-top d-grid">
+                                    <a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">
+                                        <i class="mdi mdi-arrow-right-circle me-1"></i> <span>View More..</span> 
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item right-bar-toggle me-2">
+                                <i data-feather="settings" class="icon-lg"></i>
+                            </button>
+                        </div>
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item bg-soft-light border-start border-end" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img class="rounded-circle header-profile-user" src="static/picture/avatar-1.jpg" alt="Header Avatar">
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium">张明</span>
+                                <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <!-- item-->
+                                <a class="dropdown-item" href="apps-contacts-profile.html"><i class="mdi mdi-face-profile font-size-16 align-middle me-1"></i> Profile</a>
+                                <a class="dropdown-item" href="auth-lock-screen.html"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i> Lock screen</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="auth-logout.html"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </header>
+
+             <!-- ========== Left Sidebar Start ========== -->
+             <div class="vertical-menu">
+                <div data-simplebar="" class="h-100">
+
+                    <!--- Sidemenu -->
+                    <div id="sidebar-menu">
+                        <!-- Left Menu Start -->
+                        <ul class="metismenu list-unstyled" id="side-menu">
+                            <li class="menu-title" data-key="t-menu">View</li>
+
+                            <li>
+                                <a href="app-index.html">
+                                    <i data-feather="home"></i>
+                                    <span data-key="t-dashboard">数据总览</span>
+                                </a>
+                            </li>
+                            <li class="menu-title mt-2" data-key="t-components">Basic</li>
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow">
+                                    <i data-feather="users"></i>
+                                    <span data-key="t-authentication">个人界面</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li>
+                                        <a href="app-contacts-profile.html">
+                                            <span data-key="t-calendar">个人信息</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="app-calendar.html">
+                                            <span data-key="t-calendar">日程表</span>
+                                        </a>
+                                    </li>
+        
+                                    <li>
+                                        <a href="app-chat.html">
+                                            <span data-key="t-chat">聊天</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="app-contacts-list.html">
+                                    <i data-feather="file-text"></i>
+                                    <span data-key="t-pages">用户列表</span>
+                                </a>
+                            </li>
+
+                            <li class="menu-title mt-2" data-key="t-components">Operations</li>
+
+                            
+                            <li>
+                                <a href="app-system_management.html">
+                                    <i data-feather="grid"></i>
+                                    <span data-key="t-apps">系统设置</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="app-data_management.html">
+                                    <i data-feather="sliders"></i>
+                                    <span data-key="t-tables">数据管理</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="app-business_process.html">
+                                    <i data-feather="briefcase"></i>
+                                    <span data-key="t-components">业务处理</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="app-equipment_management.html">
+                                    <i data-feather="cpu"></i>
+                                    <span data-key="t-icons">设备管理</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Sidebar -->
+                </div>
+            </div>
+            <!-- Left Sidebar End -->
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <!-- REMOVED Navbar -->
+                        
+                        <!-- Main content container - REMOVED tab-content wrapper -->
+                        <div class="container-fluid mt-4">
+                            <!-- 数据源管理主界面 -->
+                            <div class="row mb-4">
+                                <div class="col">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h4 class="mb-0">数据管理</h4>
+                                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDataSourceModal">
+                                            <i class="fas fa-plus"></i> 添加数据源
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <!-- 数据源概览卡片 -->
+                                    <div class="row mb-4">
+                                <div class="col-md-4">
+                                            <div class="card">
+                                                <div class="card-body">
+                                            <h6 class="card-title">已连接数据源</h6>
+                                            <h2 class="card-text">12</h2>
+                                            <div class="progress mt-2" style="height: 5px;">
+                                                <div class="progress-bar bg-success" style="width: 85%"></div>
+                                                            </div>
+                                                        </div>
+                                                            </div>
+                                                        </div>
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6 class="card-title">数据完整率</h6>
+                                            <h2 class="card-text">98.5%</h2>
+                                            <div class="progress mt-2" style="height: 5px;">
+                                                <div class="progress-bar bg-info" style="width: 98.5%"></div>
+                                                            </div>
+                                                        </div>
+                                                            </div>
+                                                        </div>
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6 class="card-title">异常数据源</h6>
+                                            <h2 class="card-text">2</h2>
+                                            <div class="progress mt-2" style="height: 5px;">
+                                                <div class="progress-bar bg-warning" style="width: 15%"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                        
+                            <!-- 数据源分类导航 -->
+                            <div class="row mb-4">
+                                <div class="col">
+                                            <ul class="nav nav-pills">
+                                                <li class="nav-item">
+                                            <a class="nav-link active" href="#" data-category="all">全部</a>
+                                                </li>
+                                                <li class="nav-item">
+                                            <a class="nav-link" href="#" data-category="iot">IoT设备</a>
+                                                </li>
+                                                <li class="nav-item">
+                                            <a class="nav-link" href="#" data-category="weather">气象数据</a>
+                                                </li>
+                                                <li class="nav-item">
+                                            <a class="nav-link" href="#" data-category="energy">能耗数据</a>
+                                                </li>
+                                                <li class="nav-item">
+                                            <a class="nav-link" href="#" data-category="market">市场交易</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#" data-category="policy">政策法规</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                        
+                            <!-- 数据源列表 -->
+                            <div class="row" id="dataSourceList">
+                                <!-- 数据源卡片将由JavaScript动态生成 -->
+            </div>
+        </div>
+
+                <!-- 历史数据仓库页面 -->
+                         <!-- REMOVED tab-pane classes, made it a standard div -->
+                        <div id="dataHistory" class="mt-5">
+                            <!-- Added heading and margin-top for separation -->
+                            <h2>历史数据仓库</h2> 
+                            <hr>
+                            <div class="row">
+                                <!-- 查询条件面板 -->
+                                <div class="col-12 mb-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <form id="historyDataQueryForm">
+                                                <div class="row mb-3">
+                                                    <div class="col-md-3">
+                                                        <label class="form-label">场景类型</label>
+                                                        <select class="form-select" id="sceneType" name="sceneType">
+                                                            <option value="">请选择场景类型</option>
+                                                            <option value="wind">风电场景</option>
+                                                            <option value="solar">光伏场景</option>
+                                                            <option value="storage">储能场景</option>
+                                                            <option value="charging">充电场景</option>
+                                                            <option value="multiple">跨场景数据</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label class="form-label">数据类型</label>
+                                                        <select class="form-select" id="dataType" name="dataType">
+                                                            <option value="">请选择数据类型</option>
+                                                            <option value="generation">发电记录</option>
+                                                            <option value="price">交易价格</option>
+                                                            <option value="load">负荷曲线</option>
+                                                            <option value="charging">充电记录</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">时间范围</label>
+                                                        <div class="input-group">
+                                                            <input type="date" class="form-control" id="startDate" name="startDate">
+                                                            <span class="input-group-text">至</span>
+                                                            <input type="date" class="form-control" id="endDate" name="endDate">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label class="form-label">数据粒度</label>
+                                                        <select class="form-select" id="granularity" name="granularity">
+                                                            <option value="5min">5分钟</option>
+                                                            <option value="15min">15分钟</option>
+                                                            <option value="hour">1小时</option>
+                                                            <option value="day" selected>1天</option>
+                                                            <option value="month">1月</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">数据站点/设备</label>
+                                                        <select class="form-select" id="stationSelector" name="station">
+                                                            <option value="">请选择站点/设备</option>
+                                                            <!-- 动态选项将通过JavaScript加载 -->
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">高级过滤条件</label>
+                                                        <div class="input-group">
+                                                            <select class="form-select" id="filterField" name="filterField">
+                                                                <option value="">选择字段</option>
+                                                                <!-- 将根据数据类型动态加载 -->
+                                                            </select>
+                                                            <select class="form-select" id="filterOperator" name="filterOperator">
+                                                                <option value="=">等于 (=)</option>
+                                                                <option value=">">大于 (>)</option>
+                                                                <option value="<">小于 (<)</option>
+                                                                <option value=">=">大于等于 (>=)</option>
+                                                                <option value="<=">小于等于 (<=)</option>
+                                                                <option value="between">介于 (between)</option>
+                                                                <option value="contains">包含</option>
+                                                                <option value="startsWith">开头是</option>
+                                                                <option value="endsWith">结尾是</option>
+                                                            </select>
+                                                            <input type="text" class="form-control" id="filterValue" name="filterValue" placeholder="输入过滤值">
+                                                        </div>
+                                                        <div class="form-text text-muted mt-1" id="filterValueHelp"></div>
+                                                    </div>
+                                                    <div class="col-md-4 align-self-end">
+                                                        <div class="form-check mb-2">
+                                                            <input class="form-check-input" type="checkbox" id="includeQualityData" name="includeQualityData">
+                                                            <label class="form-check-label" for="includeQualityData">
+                                                                包含数据质量指标
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-text text-muted">选中后将显示数据质量分析图表</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <button type="button" class="btn btn-primary" id="queryHistoryBtn">
+                                                            <i class="fas fa-search me-1"></i> 查询
+                                                        </button>
+                                                        <button type="button" class="btn btn-success ms-2" id="exportHistoryBtn">
+                                                            <i class="fas fa-download me-1"></i> 导出
+                                                        </button>
+                                                        <button type="reset" class="btn btn-light ms-2" id="resetFilterBtn">
+                                                            <i class="fas fa-redo me-1"></i> 重置
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 历史数据结果区域 -->
+                            <div class="row mt-2" id="historyResultArea" style="display: none;">
+                                <!-- 数据汇总卡片 -->
+                                <div class="col-12 mb-4">
+                                    <div class="row" id="historyDataSummary">
+                                        <div class="col-md-3">
+                                            <div class="card">
+                                                <div class="card-body text-center">
+                                                    <h5 class="card-title mb-1">数据总量</h5>
+                                                    <h2 class="mt-2 mb-2" id="totalRecords">0</h2>
+                                                    <p class="text-muted mb-0">条记录</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="card">
+                                                <div class="card-body text-center">
+                                                    <h5 class="card-title mb-1">数据时间跨度</h5>
+                                                    <h2 class="mt-2 mb-2" id="timeSpan">0</h2>
+                                                    <p class="text-muted mb-0">天</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="card">
+                                                <div class="card-body text-center">
+                                                    <h5 class="card-title mb-1">缺失数据率</h5>
+                                                    <h2 class="mt-2 mb-2" id="missingRate">0%</h2>
+                                                    <div class="progress mt-2" style="height: 5px;">
+                                                        <div class="progress-bar bg-warning" id="missingRateBar" style="width: 0%"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="card">
+                                                <div class="card-body text-center">
+                                                    <h5 class="card-title mb-1">异常数据率</h5>
+                                                    <h2 class="mt-2 mb-2" id="anomalyRate">0%</h2>
+                                                    <div class="progress mt-2" style="height: 5px;">
+                                                        <div class="progress-bar bg-danger" id="anomalyRateBar" style="width: 0%"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 数据可视化区域 -->
+                                <div class="col-12 mb-4">
+                                    <div class="card">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <h5 class="mb-0">数据趋势</h5>
+                                            <div>
+                                                <button type="button" class="btn btn-sm btn-primary" id="viewModeChartBtn">图表</button>
+                                                <button type="button" class="btn btn-sm btn-light" id="viewModeTableBtn">表格</button>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div id="historyDataChart" style="height: 350px;"></div>
+                                            <div id="historyDataTable" style="display: none;">
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered table-striped" id="dataResultTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>时间</th>
+                                                                <th>值</th>
+                                                                <th>单位</th>
+                                                                <th>状态</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <!-- 数据行将通过JavaScript动态生成 -->
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="d-flex justify-content-between mt-3">
+                                                    <div class="text-muted">
+                                                        显示 <span id="startRecord">0</span> 到 <span id="endRecord">0</span> 共 <span id="totalRecordsTable">0</span> 条记录
+                                                    </div>
+                                                    <nav>
+                                                        <ul class="pagination pagination-sm mb-0" id="tablePagination">
+                                                            <!-- 分页控件将通过JavaScript生成 -->
+                                                        </ul>
+                                                    </nav>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 数据质量分析 -->
+                                <div class="col-12 mb-4" id="dataQualitySection" style="display: none;">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">数据质量分析</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h6 class="card-title mb-3">预处理前后数据完整性对比</h6>
+                                                            <div id="completenessChart" style="height: 280px;"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h6 class="card-title mb-3">数据异常分布</h6>
+                                                            <div id="anomalyChart" style="height: 280px;"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-4">
+                                                <div class="col-12">
+                                                    <h6>数据质量详情</h6>
+                                                    <div class="table-responsive">
+                                                        <table class="table table-sm">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>质量指标</th>
+                                                                    <th>预处理前</th>
+                                                                    <th>预处理后</th>
+                                                                    <th>改善</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>缺失值率</td>
+                                                                    <td id="missingBefore">2.3%</td>
+                                                                    <td id="missingAfter">0%</td>
+                                                                    <td><span class="badge bg-success">100%</span></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>异常值率</td>
+                                                                    <td id="anomalyBefore">1.5%</td>
+                                                                    <td id="anomalyAfter">0.8%</td>
+                                                                    <td><span class="badge bg-success">46.7%</span></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>重复值率</td>
+                                                                    <td id="duplicateBefore">0.5%</td>
+                                                                    <td id="duplicateAfter">0%</td>
+                                                                    <td><span class="badge bg-success">100%</span></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>一致性指标</td>
+                                                                    <td id="consistencyBefore">97.2%</td>
+                                                                    <td id="consistencyAfter">99.5%</td>
+                                                                    <td><span class="badge bg-success">2.4%</span></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 无数据提示 -->
+                            <div class="row mt-2" id="noDataMessage" style="display: none;">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-body text-center py-5">
+                                            <i class="fas fa-database fa-3x text-muted mb-3"></i>
+                                            <h4 class="text-muted">暂无数据</h4>
+                                            <p class="mb-0">请调整查询条件后再次尝试</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 日期格式错误提示 -->
+                            <div class="alert alert-danger alert-dismissible fade" role="alert" id="dateErrorAlert">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <span id="dateErrorMessage">日期格式错误，请输入有效日期</span>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+
+                            <!-- 权限错误提示 -->
+                            <div class="alert alert-warning alert-dismissible fade" role="alert" id="permissionErrorAlert">
+                                <i class="fas fa-lock me-2"></i>
+                                <span id="permissionErrorMessage">权限不足，无法访问此区域数据</span>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            
+                            </div> <!-- End of #dataHistory -->
+
+                        </div> <!-- End of main content container -->
+                    </div> <!-- container-fluid -->
+                </div> <!-- page-content -->
+
+                <!-- Footer -->
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <script>document.write(new Date().getFullYear())</script> © 驭能能源管理系统.
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-sm-end d-none d-sm-block">
+                                    <p class="mb-0">由 <i class="mdi mdi-heart text-danger"></i> ES小分队倾情打造 </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+
+            </div> <!-- main-content -->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        
+        <!-- Right Sidebar -->
+        <div class="right-bar">
+            <div data-simplebar="" class="h-100">
+                <div class="rightbar-title d-flex align-items-center bg-dark p-3">
+
+                    <h5 class="m-0 me-2 text-white">Theme Customizer</h5>
+
+                    <a href="javascript:void(0);" class="right-bar-toggle ms-auto">
+                        <i class="mdi mdi-close noti-icon"></i>
+                    </a>
+                </div>
+
+                <!-- Settings -->
+                <hr class="m-0">
+
+                <div class="p-4">
+                    <h6 class="mb-3">Layout</h6>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout" id="layout-vertical" value="vertical">
+                        <label class="form-check-label" for="layout-vertical">Vertical</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout" id="layout-horizontal" value="horizontal">
+                        <label class="form-check-label" for="layout-horizontal">Horizontal</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Layout Mode</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-mode" id="layout-mode-light" value="light">
+                        <label class="form-check-label" for="layout-mode-light">Light</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-mode" id="layout-mode-dark" value="dark">
+                        <label class="form-check-label" for="layout-mode-dark">Dark</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Layout Width</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-width" id="layout-width-fuild" value="fuild" onchange="document.body.setAttribute('data-layout-size', 'fluid')">
+                        <label class="form-check-label" for="layout-width-fuild">Fluid</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-width" id="layout-width-boxed" value="boxed" onchange="document.body.setAttribute('data-layout-size', 'boxed')">
+                        <label class="form-check-label" for="layout-width-boxed">Boxed</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Layout Position</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-position" id="layout-position-fixed" value="fixed" onchange="document.body.setAttribute('data-layout-scrollable', 'false')">
+                        <label class="form-check-label" for="layout-position-fixed">Fixed</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-position" id="layout-position-scrollable" value="scrollable" onchange="document.body.setAttribute('data-layout-scrollable', 'true')">
+                        <label class="form-check-label" for="layout-position-scrollable">Scrollable</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Topbar Color</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="topbar-color" id="topbar-color-light" value="light" onchange="document.body.setAttribute('data-topbar', 'light')">
+                        <label class="form-check-label" for="topbar-color-light">Light</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="topbar-color" id="topbar-color-dark" value="dark" onchange="document.body.setAttribute('data-topbar', 'dark')">
+                        <label class="form-check-label" for="topbar-color-dark">Dark</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2 sidebar-setting">Sidebar Size</h6>
+
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-size" id="sidebar-size-default" value="default" onchange="document.body.setAttribute('data-sidebar-size', 'lg')">
+                        <label class="form-check-label" for="sidebar-size-default">Default</label>
+                    </div>
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-size" id="sidebar-size-compact" value="compact" onchange="document.body.setAttribute('data-sidebar-size', 'md')">
+                        <label class="form-check-label" for="sidebar-size-compact">Compact</label>
+                    </div>
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-size" id="sidebar-size-small" value="small" onchange="document.body.setAttribute('data-sidebar-size', 'sm')">
+                        <label class="form-check-label" for="sidebar-size-small">Small (Icon View)</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Sidebar Color</h6>
+
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-color" id="sidebar-color-light" value="light" onchange="document.body.setAttribute('data-sidebar', 'light')">
+                        <label class="form-check-label" for="sidebar-color-light">Light</label>
+                    </div>
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-color" id="sidebar-color-dark" value="dark" onchange="document.body.setAttribute('data-sidebar', 'dark')">
+                        <label class="form-check-label" for="sidebar-color-dark">Dark</label>
+                    </div>
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-color" id="sidebar-color-brand" value="brand" onchange="document.body.setAttribute('data-sidebar', 'brand')">
+                        <label class="form-check-label" for="sidebar-color-brand">Brand</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Direction</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-direction" id="layout-direction-ltr" value="ltr">
+                        <label class="form-check-label" for="layout-direction-ltr">LTR</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-direction" id="layout-direction-rtl" value="rtl">
+                        <label class="form-check-label" for="layout-direction-rtl">RTL</label>
+                    </div>
+
+                </div>
+
+            </div> <!-- end slimscroll-menu-->
+        </div>
+        <!-- /Right-bar -->
+
+        <!-- Right bar overlay-->
+        <div class="rightbar-overlay"></div>
+
+        <!-- JAVASCRIPT -->
+        <script src="static/js/jquery.min.js"></script>
+        <script src="static/js/bootstrap.bundle.min.js"></script>
+        <script src="static/js/metisMenu.min.js"></script>
+        <script src="static/js/simplebar.min.js"></script>
+        <script src="static/js/waves.min.js"></script>
+        <script src="static/js/feather.min.js"></script>
+        <!-- pace js -->
+        <script src="static/js/pace.min.js"></script>
+
+        <!-- SheetJS for Excel export -->
+        <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+        <!-- Chart.js for data visualization -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        <script src="static/js/app.js"></script>
+        <script src="static/js/data_management.js"></script>
+
+        <!-- Initialize our custom scripts -->
+        <script>
+            // Ensure DOM is fully loaded before initializing our modules
+            document.addEventListener('DOMContentLoaded', function() {
+                // Initialize DataSourceManager only
+                if (typeof DataSourceManager !== 'undefined') {
+                    console.log('Initializing DataSourceManager...');
+                    DataSourceManager.init();
+                } else {
+                    console.error('DataSourceManager not found!');
+                }
+            });
+        </script>
+
+        <!-- 添加必要的模态框结构 -->
+        <!-- 配置参数模态框 -->
+        <div class="modal fade" id="configModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="configModalLabel">配置参数</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="configContent"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" id="configConfirmBtn">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 实时监控模态框 -->
+        <div class="modal fade" id="monitoringModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="monitoringModalLabel">实时监控</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="monitoringContent"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 数据导出模态框 -->
+        <div class="modal fade" id="exportModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exportModalLabel">数据导出</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="exportContent"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" id="exportConfirmBtn">导出</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 告警设置模态框 -->
+        <div class="modal fade" id="alarmModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="alarmModalLabel">告警设置</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="alarmContent"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" id="alarmConfirmBtn">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 添加数据源模态框 -->
+        <div class="modal fade" id="addDataSourceModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">添加数据源</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addDataSourceForm">
+                <div class="mb-3">
+                                <label class="form-label">数据源名称</label>
+                                <input type="text" class="form-control" name="name" required>
+                </div>
+                <div class="mb-3">
+                                <label class="form-label">数据源类型</label>
+                                <select class="form-select" id="dataSourceType" name="type" required>
+                                    <option value="">请选择...</option>
+                                    <option value="modbus">Modbus设备</option>
+                                    <option value="opcua">OPC UA设备</option>
+                                    <option value="weather_api">气象数据API</option>
+                                </select>
+                </div>
+                            <div id="dynamicConfigArea">
+                                <!-- 动态配置字段将由JavaScript生成 -->
+                </div>
+                        </form>
+                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" onclick="addDataSource()">添加</button>
+                </div>
+                </div>
+                </div>
+                </div>
+
+        <!-- 配置数据源模态框 -->
+        <div class="modal fade" id="configureDataSourceModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">配置数据源</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                    <div class="modal-body" id="configureContent">
+                        <!-- 配置表单将由JavaScript动态生成 -->
+                            </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" onclick="saveDataSourceConfig()">保存</button>
+                        </div>
+                                </div>
+                            </div>
+                        </div>
+
+        <!-- 数据预览模态框 -->
+        <div class="modal fade" id="previewDataModal" tabindex="-1">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">数据预览</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>时间戳</th>
+                                        <th>参数1</th>
+                                        <th>参数2</th>
+                                        <th>参数3</th>
+                                        <th>状态</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2024-02-13 14:30:25</td>
+                                        <td>23.5</td>
+                                        <td>1800</td>
+                                        <td>45.2</td>
+                                        <td><span class="badge bg-success">正常</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2024-02-13 14:30:20</td>
+                                        <td>23.4</td>
+                                        <td>1795</td>
+                                        <td>45.0</td>
+                                        <td><span class="badge bg-success">正常</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                    </div>
+                    </div>
+                </div>
+                </div>
+
+        <!-- 添加必要的样式 -->
+        <style>
+        .connection-status {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .connection-status.connected {
+            background-color: #28a745;
+        }
+        .connection-status.disconnected {
+            background-color: #dc3545;
+        }
+        .connection-status.warning {
+            background-color: #ffc107;
+        }
+        
+        /* 高级过滤条件样式 */
+        .filter-group {
+            position: relative;
+        }
+        
+        .filter-group .form-text {
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+        
+        .filter-group .form-control.is-invalid,
+        .filter-group .form-select.is-invalid {
+            border-color: #dc3545;
+            padding-right: calc(1.5em + 0.75rem);
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right calc(0.375em + 0.1875rem) center;
+            background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+        }
+        
+        .filter-group .form-control.is-valid,
+        .filter-group .form-select.is-valid {
+            border-color: #198754;
+            padding-right: calc(1.5em + 0.75rem);
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right calc(0.375em + 0.1875rem) center;
+            background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+        }
+        
+        .filter-group .invalid-feedback {
+            display: none;
+            width: 100%;
+            margin-top: 0.25rem;
+            font-size: 0.75rem;
+            color: #dc3545;
+        }
+        
+        .filter-group .form-control.is-invalid ~ .invalid-feedback {
+            display: block;
+        }
+        
+        .filter-group .input-group > .form-control:focus,
+        .filter-group .input-group > .form-select:focus {
+            z-index: 3;
+        }
+        
+        .filter-group .input-group > .form-select {
+            position: relative;
+            flex: 1 1 auto;
+            width: 1%;
+            min-width: 0;
+        }
+        
+        .filter-group .input-group-text {
+            display: flex;
+            align-items: center;
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #fff;
+            text-align: center;
+            white-space: nowrap;
+            background-color: #2a3042;
+            border: 1px solid #32394e;
+            border-radius: 0.25rem;
+        }
+        
+        /* 暗色主题适配 */
+        [data-layout-mode="dark"] .filter-group .form-control,
+        [data-layout-mode="dark"] .filter-group .form-select {
+            background-color: #2a3042;
+            border-color: #32394e;
+            color: #fff;
+        }
+        
+        [data-layout-mode="dark"] .filter-group .form-text {
+            color: #8c98a5;
+        }
+        
+        [data-layout-mode="dark"] .filter-group .form-control:focus,
+        [data-layout-mode="dark"] .filter-group .form-select:focus {
+            border-color: #556ee6;
+            box-shadow: 0 0 0 0.15rem rgba(85, 110, 230, 0.25);
+        }
+        
+        [data-layout-mode="dark"] .filter-group .form-control.is-invalid,
+        [data-layout-mode="dark"] .filter-group .form-select.is-invalid {
+            border-color: #f46a6a;
+            box-shadow: none;
+        }
+        
+        [data-layout-mode="dark"] .filter-group .form-control.is-valid,
+        [data-layout-mode="dark"] .filter-group .form-select.is-valid {
+            border-color: #34c38f;
+            box-shadow: none;
+        }
+        </style>
+
+    </body>
+
+    <!-- REMOVED SCRIPT BLOCK -->
+</html>

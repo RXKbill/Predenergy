@@ -1,0 +1,44 @@
+Added Component: Designator=STM32(STM32_A)
+Add component. Clean all parameters for all variants
+Added Pin To Net: NetName=RS485_3_EN Pin=STM32-1
+Added Pin To Net: NetName=NetCN4_19 Pin=STM32-2
+Added Pin To Net: NetName=NetCN4_18 Pin=STM32-3
+Added Pin To Net: NetName=NetCN4_17 Pin=STM32-4
+Added Pin To Net: NetName=RS485_1_EN Pin=STM32-5
+Added Pin To Net: NetName=TX1 Pin=STM32-6
+Added Pin To Net: NetName=RX1 Pin=STM32-7
+Added Pin To Net: NetName=NetCN4_13 Pin=STM32-8
+Added Pin To Net: NetName=NetCN4_12 Pin=STM32-9
+Added Pin To Net: NetName=NetCN4_11 Pin=STM32-10
+Added Pin To Net: NetName=NetCN4_10 Pin=STM32-11
+Added Pin To Net: NetName=NetCN4_9 Pin=STM32-12
+Added Pin To Net: NetName=NetCN4_8 Pin=STM32-13
+Added Pin To Net: NetName=SCL Pin=STM32-14
+Added Pin To Net: NetName=SDA Pin=STM32-15
+Added Pin To Net: NetName=NetCN4_5 Pin=STM32-16
+Added Pin To Net: NetName=NetCN4_4 Pin=STM32-17
+Added Pin To Net: NetName=NetCN4_3 Pin=STM32-18
+Added Pin To Net: NetName=GND Pin=STM32-19
+Added Pin To Net: NetName=+3.3V Pin=STM32-20
+Added Pin To Net: NetName=NetCN3_20 Pin=STM32-21
+Added Pin To Net: NetName=NetCN3_19 Pin=STM32-22
+Added Pin To Net: NetName=NetCN3_18 Pin=STM32-23
+Added Pin To Net: NetName=NetCN3_17 Pin=STM32-24
+Added Pin To Net: NetName=NOISE_ADC Pin=STM32-25
+Added Pin To Net: NetName=DHT11_DATA Pin=STM32-26
+Added Pin To Net: NetName=TX2 Pin=STM32-27
+Added Pin To Net: NetName=RX2 Pin=STM32-28
+Added Pin To Net: NetName=PM_SENSER_SET Pin=STM32-29
+Added Pin To Net: NetName=PM_SENSER_RESET Pin=STM32-30
+Added Pin To Net: NetName=NOISE_INT Pin=STM32-31
+Added Pin To Net: NetName=NetCN3_9 Pin=STM32-32
+Added Pin To Net: NetName=NetCN3_8 Pin=STM32-33
+Added Pin To Net: NetName=NetCN3_7 Pin=STM32-34
+Added Pin To Net: NetName=TX3 Pin=STM32-35
+Added Pin To Net: NetName=RX3 Pin=STM32-36
+Added Pin To Net: NetName=NetCN3_4 Pin=STM32-37
+Added Pin To Net: NetName=+3.3V Pin=STM32-38
+Added Pin To Net: NetName=GND Pin=STM32-39
+Added Pin To Net: NetName=GND Pin=STM32-40
+Added Member To Class: ClassName=气象传感器 Member=Component STM32 STM32 核心板
+Added Room: Name=气象传感器

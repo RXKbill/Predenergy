@@ -1,0 +1,946 @@
+<!doctype html>
+<html lang="zh-CN">
+
+    <head>
+        
+        <meta charset="utf-8">
+        <title>个人信息 | 驭能能源管理系统</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="驭能能源管理系统管理后台" name="description">
+        <meta content="驭能科技" name="author">
+
+        <!-- preloader css -->
+        <link rel="stylesheet" href="static/css/preloader.min.css" type="text/css">
+
+        <!-- Bootstrap Css -->
+        <link href="static/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css">
+        <!-- Icons Css -->
+        <link href="static/css/icons.min.css" rel="stylesheet" type="text/css">
+        <!-- App Css-->
+        <link href="static/css/app.min.css" id="app-style" rel="stylesheet" type="text/css">
+
+    </head>
+
+    <body data-layout-mode="dark" data-topbar="dark" data-sidebar="dark" class="sidebar-enable">
+
+    <!-- <body data-layout="horizontal"> -->
+
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            
+            <header id="page-topbar">
+                <div class="navbar-header">
+                    <div class="d-flex">
+                        <!-- LOGO -->
+                        <div class="navbar-brand-box">
+                            <a href="index.html" class="logo logo-dark">
+                                <span class="logo-sm">
+                                    <img src="static/picture/logo.png" alt="" height="24">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="static/picture/logo.png" alt="" height="24"> <span class="logo-txt">驭能能源管理系统</span>
+                                </span>
+                            </a>
+
+                            <a href="index.html" class="logo logo-light">
+                                <span class="logo-sm">
+                                    <img src="static/picture/logo.png" alt="" height="24">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="static/picture/logo.png" alt="" height="24"> <span class="logo-txt">驭能能源管理系统</span>
+                                </span>
+                            </a>
+                        </div>
+
+                        <button type="button" class="btn btn-sm px-3 font-size-16 header-item" id="vertical-menu-btn">
+                            <i class="fa fa-fw fa-bars"></i>
+                        </button>
+
+                        <!-- App Search-->
+                        <form class="app-search d-none d-lg-block">
+                            <div class="position-relative">
+                                <input type="text" class="form-control" placeholder="搜索...">
+                                <button class="btn btn-primary" type="button"><i class="bx bx-search-alt align-middle"></i></button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="d-flex">
+
+                        <div class="dropdown d-inline-block d-lg-none ms-2">
+                            <button type="button" class="btn header-item" id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i data-feather="search" class="icon-lg"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-search-dropdown">
+        
+                                <form class="p-3">
+                                    <div class="form-group m-0">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Search ..." aria-label="Search Result">
+
+                                            <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-none d-sm-inline-block">
+                            <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img id="header-lang-img" src="static/picture/cn.png" alt="Header Language" height="16">
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end">
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="en">
+                                    <img src="static/picture/cn.png" alt="user-image" class="me-1" height="12"> <span class="align-middle">Chinese</span>
+                                </a>
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="sp">
+                                    <img src="static/picture/spain.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Spanish</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="gr">
+                                    <img src="static/picture/germany.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">German</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="it">
+                                    <img src="static/picture/italy.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Italian</span>
+                                </a>
+
+                                <!-- item-->
+                                <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ru">
+                                    <img src="static/picture/russia.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Russian</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-none d-sm-inline-block">
+                            <button type="button" class="btn header-item" id="mode-setting-btn">
+                                <i data-feather="moon" class="icon-lg layout-mode-dark"></i>
+                                <i data-feather="sun" class="icon-lg layout-mode-light"></i>
+                            </button>
+                        </div>
+
+                        <div class="dropdown d-none d-lg-inline-block ms-1">
+                            <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i data-feather="grid" class="icon-lg"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                                <div class="p-2">
+                                    <div class="row g-0">
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/github.png" alt="Github">
+                                                <span>GitHub</span>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/bitbucket.png" alt="bitbucket">
+                                                <span>Bitbucket</span>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/dribbble.png" alt="dribbble">
+                                                <span>Dribbble</span>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-0">
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/dropbox.png" alt="dropbox">
+                                                <span>Dropbox</span>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/mail_chimp.png" alt="mail_chimp">
+                                                <span>Mail Chimp</span>
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="dropdown-icon-item" href="#">
+                                                <img src="static/picture/slack.png" alt="slack">
+                                                <span>Slack</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item noti-icon position-relative" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i data-feather="bell" class="icon-lg"></i>
+                                <span class="badge bg-danger rounded-pill">5</span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown">
+                                <div class="p-3">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <h6 class="m-0"> 通知 </h6>
+                                        </div>
+                                        <div class="col-auto">
+                                            <a href="#!" class="small text-reset text-decoration-underline"> 未读 (3)</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-simplebar="" style="max-height: 230px;">
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <img src="static/picture/avatar-3.jpg" class="rounded-circle avatar-sm" alt="user-pic">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">James Lemire</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">It will seem like simplified Chinese.</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>1 hours ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 avatar-sm me-3">
+                                                <span class="avatar-title bg-primary rounded-circle font-size-16">
+                                                    <i class="bx bx-cart"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">Your order is placed</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">If several languages coalesce the grammar</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>3 min ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 avatar-sm me-3">
+                                                <span class="avatar-title bg-success rounded-circle font-size-16">
+                                                    <i class="bx bx-badge-check"></i>
+                                                </span>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">Your item is shipped</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">If several languages coalesce the grammar</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>3 min ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    <a href="#!" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <img src="static/picture/avatar-6.jpg" class="rounded-circle avatar-sm" alt="user-pic">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">Salena Layfield</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">As a skeptical Cambridge friend of mine occidental.</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>1 hours ago</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="p-2 border-top d-grid">
+                                    <a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">
+                                        <i class="mdi mdi-arrow-right-circle me-1"></i> <span>View More..</span> 
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item right-bar-toggle me-2">
+                                <i data-feather="settings" class="icon-lg"></i>
+                            </button>
+                        </div>
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item bg-soft-light border-start border-end" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img class="rounded-circle header-profile-user" src="static/picture/avatar-1.jpg" alt="Header Avatar">
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium">张明</span>
+                                <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <!-- item-->
+                                <a class="dropdown-item" href=""><i class="mdi mdi-face-profile font-size-16 align-middle me-1"></i> 个人信息</a>
+                                <a class="dropdown-item" href="auth-lock-screen.html"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i> 锁定屏幕</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="auth-logout.html"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> 退出登录</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </header>
+
+            <!-- ========== Left Sidebar Start ========== -->
+            <div class="vertical-menu">
+                <div data-simplebar="" class="h-100">
+
+                    <!--- Sidemenu -->
+                    <div id="sidebar-menu">
+                        <!-- Left Menu Start -->
+                        <ul class="metismenu list-unstyled" id="side-menu">
+                            <li class="menu-title" data-key="t-menu">View</li>
+
+                            <li>
+                                <a href="app-index.html">
+                                    <i data-feather="home"></i>
+                                    <span data-key="t-dashboard">数据总览</span>
+                                </a>
+                            </li>
+                            <li class="menu-title mt-2" data-key="t-components">Basic</li>
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow">
+                                    <i data-feather="users"></i>
+                                    <span data-key="t-authentication">个人界面</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li>
+                                        <a href="app-contacts-profile.html">
+                                            <span data-key="t-calendar">个人信息</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="app-calendar.html">
+                                            <span data-key="t-calendar">日程表</span>
+                                        </a>
+                                    </li>
+        
+                                    <li>
+                                        <a href="app-chat.html">
+                                            <span data-key="t-chat">聊天</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="app-contacts-list.html">
+                                    <i data-feather="file-text"></i>
+                                    <span data-key="t-pages">用户列表</span>
+                                </a>
+                            </li>
+
+                            <li class="menu-title mt-2" data-key="t-components">Operations</li>
+
+                            
+                            <li>
+                                <a href="app-system_management.html">
+                                    <i data-feather="grid"></i>
+                                    <span data-key="t-apps">系统设置</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="app-data_management.html">
+                                    <i data-feather="sliders"></i>
+                                    <span data-key="t-tables">数据管理</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="app-business_process.html">
+                                    <i data-feather="briefcase"></i>
+                                    <span data-key="t-components">业务处理</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="app-equipment_management.html">
+                                    <i data-feather="cpu"></i>
+                                    <span data-key="t-icons">设备管理</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Sidebar -->
+                </div>
+            </div>
+            <!-- Left Sidebar End -->
+            
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                                    <h4 class="mb-sm-0 font-size-18">个人信息</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">联系人</a></li>
+                                            <li class="breadcrumb-item active">个人信息</li>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row">
+                            <div class="col-xl-9 col-lg-8">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm order-2 order-sm-1">
+                                                <div class="d-flex align-items-start mt-3 mt-sm-0">
+                                                    <div class="flex-shrink-0">
+                                                        <div class="avatar-xl me-3">
+                                                            <img src="static/picture/avatar-1.jpg" alt="" class="img-fluid rounded-circle d-block">
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <div>
+                                                            <h5 class="font-size-16 mb-1">张明</h5>
+                                                            <p class="text-muted font-size-13">能源调度管理员</p>
+
+                                                            <div class="d-flex flex-wrap align-items-start gap-2 gap-lg-3 text-muted font-size-13">
+                                                                <div><i class="mdi mdi-circle-medium me-1 text-success align-middle"></i>调度管理部</div>
+                                                                <div><i class="mdi mdi-circle-medium me-1 text-success align-middle"></i>zhangming@yunenergy.com</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-auto order-1 order-sm-2">
+                                                <div class="d-flex align-items-start justify-content-end gap-2">
+                                                    <div>
+                                                        <button type="button" class="btn btn-soft-light"><i class="me-1"></i> 发送消息</button>
+                                                    </div>
+                                                    <div>
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-link font-size-16 shadow-none text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                <i class="bx bx-dots-horizontal-rounded"></i>
+                                                            </button>
+                                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                                <li><a class="dropdown-item" href="#">Action</a></li>
+                                                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <ul class="nav nav-tabs-custom card-header-tabs border-top mt-4" id="pills-tab" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link px-3 active" data-bs-toggle="tab" href="#overview" role="tab">概览</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link px-3" data-bs-toggle="tab" href="#about" role="tab">关于</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link px-3" data-bs-toggle="tab" href="#post" role="tab">工作记录</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- end card body -->
+                                </div>
+                                <!-- end card -->
+
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="overview" role="tabpanel">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5 class="card-title mb-0">关于</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <div>
+                                                    <div class="pb-3">
+                                                        <div class="row">
+                                                            <div class="col-xl-2">
+                                                                <div>
+                                                                    <h5 class="font-size-15">简介：</h5>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl">
+                                                                <div class="text-muted">
+                                                                    <p class="mb-2">您好，我是张明，驭能能源管理系统的调度管理员。拥有超过8年的能源调度管理经验，主要负责系统的日常运营维护和能源调度管理工作。</p>
+                                                                    <p class="mb-0">致力于通过先进的预测技术和科学的调度管理，实现能源使用的最优化配置。</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="py-3">
+                                                        <div class="row">
+                                                            <div class="col-xl-2">
+                                                                <div>
+                                                                    <h5 class="font-size-15">工作经验：</h5>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl">
+                                                                <div class="text-muted">
+                                                                    <p>在能源调度管理领域有丰富的实践经验，精通各类能源管理系统的操作和维护。通过数据分析和预测模型的应用，成功帮助多个项目实现了能源使用效率的显著提升。</p>
+
+                                                                    <ul class="list-unstyled mb-0">
+                                                                        <li class="py-1"><i class="mdi mdi-circle-medium me-1 text-success align-middle"></i>主导完成多个大型能源调度优化项目</li>
+                                                                        <li class="py-1"><i class="mdi mdi-circle-medium me-1 text-success align-middle"></i>建立并完善能源预测模型系统</li>
+                                                                        <li class="py-1"><i class="mdi mdi-circle-medium me-1 text-success align-middle"></i>优化调度策略，提高能源使用效率</li>
+                                                                        <li class="py-1"><i class="mdi mdi-circle-medium me-1 text-success align-middle"></i>团队管理与技术培训</li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- end card body -->
+                                        </div>
+                                        <!-- end card -->
+
+                                        
+                                    </div>
+                                    <!-- end tab pane -->
+
+                                    <div class="tab-pane" id="about" role="tabpanel">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5 class="card-title mb-0">关于我</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <div>
+                                                    <div class="pb-3">
+                                                        <h5 class="font-size-15">个人简介</h5>
+                                                        <div class="text-muted">
+                                                            <p class="mb-2">作为驭能能源管理系统的资深调度管理员，我专注于能源系统的智能调度和优化管理。在过去8年的工作经历中，我参与并主导了多个大型能源调度项目，建立了完善的预测模型体系。</p>
+                                                            <p class="mb-2">我的工作重点是利用先进的数据分析技术和人工智能算法，提高能源使用效率，降低运营成本，实现能源消费的智能化管理。</p>
+                                                            <p>在团队管理方面，我注重培养团队成员的专业能力，建立了高效的协作机制，确保系统的稳定运行和持续优化。</p>
+
+                                                            <ul class="list-unstyled mb-0">
+                                                                <li class="py-1"><i class="mdi mdi-circle-medium me-1 text-success align-middle"></i>能源调度管理专家认证</li>
+                                                                <li class="py-1"><i class="mdi mdi-circle-medium me-1 text-success align-middle"></i>高级数据分析师资格</li>
+                                                                <li class="py-1"><i class="mdi mdi-circle-medium me-1 text-success align-middle"></i>项目管理专业认证(PMP)</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="pt-3">
+                                                        <h5 class="font-size-15">专业成就</h5>
+                                                        <div class="text-muted">
+                                                            <p>在能源预测和调度管理领域取得了显著的成果，主要包括：</p>
+
+                                                            <ul class="list-unstyled mb-0">
+                                                                <li class="py-1"><i class="mdi mdi-circle-medium me-1 text-success align-middle"></i>优化能源调度算法，使系统预测准确率提升15%</li>
+                                                                <li class="py-1"><i class="mdi mdi-circle-medium me-1 text-success align-middle"></i>设计实施智能预警机制，减少异常事件响应时间50%</li>
+                                                                <li class="py-1"><i class="mdi mdi-circle-medium me-1 text-success align-middle"></i>开发新的数据分析模型，节省运营成本超过20%</li>
+                                                                <li class="py-1"><i class="mdi mdi-circle-medium me-1 text-success align-middle"></i>带领团队完成系统升级改造，提升用户满意度30%</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end tab pane -->
+
+                                    <div class="tab-pane" id="post" role="tabpanel">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5 class="card-title mb-0">工作记录</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <div>
+                                                    <div class="row justify-content-center">
+                                                        <div class="col-xl-12">
+                                                            <div>
+                                                                <div class="d-flex align-items-start">
+                                                                    <div class="flex-grow-1 overflow-hidden">
+                                                                        <h5 class="font-size-15 text-truncate"><a href="#" class="text-dark">系统预测模型优化</a></h5>
+                                                                        <p class="font-size-13 text-muted mb-0">2024年3月15日</p>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="pt-3">
+                                                                    <ul class="list-inline">
+                                                                        <li class="list-inline-item me-3">
+                                                                            <a href="javascript: void(0);" class="text-muted">
+                                                                                <i class="bx bx-purchase-tag-alt align-middle text-muted me-1"></i> 技术优化
+                                                                            </a>
+                                                                        </li>
+                                                                        <li class="list-inline-item me-3">
+                                                                            <a href="javascript: void(0);" class="text-muted">
+                                                                                <i class="bx bx-comment-dots align-middle text-muted me-1"></i> 5条反馈
+                                                                            </a>
+                                                                        </li>
+                                                                    </ul>
+                                                                    <p class="text-muted">完成了对能源预测模型的季节性调整，提高了极端天气条件下的预测准确率。通过引入新的机器学习算法，系统的整体预测精度提升了8%。</p>
+                                                                    </div>
+                                                                </div>
+
+                                                            <hr class="my-5">
+
+                                                            <div>
+                                                                <div class="d-flex align-items-start">
+                                                                    <div class="flex-grow-1 overflow-hidden">
+                                                                        <h5 class="font-size-15 text-truncate"><a href="#" class="text-dark">团队培训与技术交流</a></h5>
+                                                                        <p class="font-size-13 text-muted mb-0">2024年3月10日</p>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="pt-3">
+                                                                    <ul class="list-inline">
+                                                                        <li class="list-inline-item me-3">
+                                                                            <a href="javascript: void(0);" class="text-muted">
+                                                                                <i class="bx bx-purchase-tag-alt align-middle text-muted me-1"></i> 团队建设
+                                                                            </a>
+                                                                        </li>
+                                                                        <li class="list-inline-item me-3">
+                                                                            <a href="javascript: void(0);" class="text-muted">
+                                                                                <i class="bx bx-comment-dots align-middle text-muted me-1"></i> 8条反馈
+                                                                            </a>
+                                                                        </li>
+                                                                    </ul>
+                                                                    <p class="text-muted">组织了为期两天的团队技术培训，内容涵盖最新的能源预测算法和调度优化方法。团队成员的技术水平得到显著提升，形成了3个技术改进提案。</p>
+                                                                    </div>
+                                                                </div>
+
+                                                            <hr class="my-5">
+
+                                                            <div>
+                                                                <div class="d-flex align-items-start">
+                                                                    <div class="flex-grow-1 overflow-hidden">
+                                                                        <h5 class="font-size-15 text-truncate"><a href="#" class="text-dark">系统应急预案更新</a></h5>
+                                                                        <p class="font-size-13 text-muted mb-0">2024年3月5日</p>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="pt-3">
+                                                                    <ul class="list-inline">
+                                                                        <li class="list-inline-item me-3">
+                                                                            <a href="javascript: void(0);" class="text-muted">
+                                                                                <i class="bx bx-purchase-tag-alt align-middle text-muted me-1"></i> 安全管理
+                                                                            </a>
+                                                                        </li>
+                                                                        <li class="list-inline-item me-3">
+                                                                            <a href="javascript: void(0);" class="text-muted">
+                                                                                <i class="bx bx-comment-dots align-middle text-muted me-1"></i> 12条反馈
+                                                                            </a>
+                                                                        </li>
+                                                                    </ul>
+                                                                    <p class="text-muted">完成了系统应急预案的全面更新，新增了极端天气和设备故障的处理流程。通过桌面演练验证了预案的可行性，进一步提高了系统的安全性和可靠性。</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    <div class="row g-0 mt-4">
+                                                        <div class="col-sm-6">
+                                                            <div>
+                                                                <p class="mb-sm-0">显示 1 到 3 条记录，共 12 条</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="float-sm-end">
+                                                                <ul class="pagination mb-sm-0">
+                                                                    <li class="page-item disabled">
+                                                                        <a href="#" class="page-link"><i class="mdi mdi-chevron-left"></i></a>
+                                                                    </li>
+                                                                    <li class="page-item active">
+                                                                        <a href="#" class="page-link">1</a>
+                                                                    </li>
+                                                                    <li class="page-item">
+                                                                        <a href="#" class="page-link">2</a>
+                                                                    </li>
+                                                                    <li class="page-item">
+                                                                        <a href="#" class="page-link">3</a>
+                                                                    </li>
+                                                                    <li class="page-item">
+                                                                        <a href="#" class="page-link">4</a>
+                                                                    </li>
+                                                                    <li class="page-item">
+                                                                        <a href="#" class="page-link"><i class="mdi mdi-chevron-right"></i></a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end tab pane -->
+                                </div>
+                                <!-- end tab content -->
+                            </div>
+                            <!-- end col -->
+
+                            <div class="col-xl-3 col-lg-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-3">专业技能</h5>
+
+                                        <div class="d-flex flex-wrap gap-2 font-size-16">
+                                            <a href="#" class="badge badge-soft-primary">能源调度管理</a>
+                                            <a href="#" class="badge badge-soft-primary">数据分析</a>
+                                            <a href="#" class="badge badge-soft-primary">预测模型</a>
+                                            <a href="#" class="badge badge-soft-primary">系统优化</a>
+                                            <a href="#" class="badge badge-soft-primary">项目管理</a>
+                                            <a href="#" class="badge badge-soft-primary">团队协作</a>
+                                            <a href="#" class="badge badge-soft-primary">问题解决</a>
+                                        </div>
+                                    </div>
+                                    <!-- end card body -->
+                                </div>
+                                <!-- end card -->
+
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-3">工作职责</h5>
+
+                                        <div>
+                                            <ul class="list-unstyled mb-0">
+                                                <li>
+                                                    <a href="#" class="py-2 d-block text-muted"><i class="mdi mdi-chart-line text-primary me-1"></i> 能源预测分析</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="py-2 d-block text-muted"><i class="mdi mdi-cog-outline text-primary me-1"></i> 系统维护管理</a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="py-2 d-block text-muted"><i class="mdi mdi-account-group text-primary me-1"></i> 团队协调</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <!-- end card body -->
+                                </div>
+                                <!-- end card -->
+
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-3">团队成员</h5>
+
+                                        <div class="list-group list-group-flush">
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar-sm flex-shrink-0 me-3">
+                                                        <img src="static/picture/avatar-1.jpg" alt="" class="img-thumbnail rounded-circle">
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <div>
+                                                            <h5 class="font-size-14 mb-1">李华</h5>
+                                                            <p class="font-size-13 text-muted mb-0">能源分析师</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar-sm flex-shrink-0 me-3">
+                                                        <img src="static/picture/avatar-3.jpg" alt="" class="img-thumbnail rounded-circle">
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <div>
+                                                            <h5 class="font-size-14 mb-1">王芳</h5>
+                                                            <p class="font-size-13 text-muted mb-0">系统工程师</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar-sm flex-shrink-0 me-3">
+                                                        <div class="avatar-title bg-soft-light text-light rounded-circle font-size-22">
+                                                            <i class="bx bxs-user-circle"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <div>
+                                                            <h5 class="font-size-14 mb-1">赵强</h5>
+                                                            <p class="font-size-13 text-muted mb-0">调度员</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <!-- end card body -->
+                                </div>
+                                <!-- end card -->
+                            </div>
+                            <!-- end col -->
+                        </div>
+                        <!-- end row -->
+                        
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <script>document.write(new Date().getFullYear())</script> © 驭能能源管理系统.
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-sm-end d-none d-sm-block">
+                                    <p class="mb-0">由 <i class="mdi mdi-heart text-danger"></i> ES小分队倾情打造 </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        
+        <!-- Right Sidebar -->
+        <div class="right-bar">
+            <div data-simplebar="" class="h-100">
+                <div class="rightbar-title d-flex align-items-center bg-dark p-3">
+
+                    <h5 class="m-0 me-2 text-white">Theme Customizer</h5>
+
+                    <a href="javascript:void(0);" class="right-bar-toggle ms-auto">
+                        <i class="mdi mdi-close noti-icon"></i>
+                    </a>
+                </div>
+
+                <!-- Settings -->
+                <hr class="m-0">
+
+                <div class="p-4">
+                    <h6 class="mb-3">Layout</h6>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout" id="layout-vertical" value="vertical">
+                        <label class="form-check-label" for="layout-vertical">Vertical</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout" id="layout-horizontal" value="horizontal">
+                        <label class="form-check-label" for="layout-horizontal">Horizontal</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Layout Mode</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-mode" id="layout-mode-light" value="light">
+                        <label class="form-check-label" for="layout-mode-light">Light</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-mode" id="layout-mode-dark" value="dark">
+                        <label class="form-check-label" for="layout-mode-dark">Dark</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Layout Width</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-width" id="layout-width-fuild" value="fuild" onchange="document.body.setAttribute('data-layout-size', 'fluid')">
+                        <label class="form-check-label" for="layout-width-fuild">Fluid</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-width" id="layout-width-boxed" value="boxed" onchange="document.body.setAttribute('data-layout-size', 'boxed')">
+                        <label class="form-check-label" for="layout-width-boxed">Boxed</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Layout Position</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-position" id="layout-position-fixed" value="fixed" onchange="document.body.setAttribute('data-layout-scrollable', 'false')">
+                        <label class="form-check-label" for="layout-position-fixed">Fixed</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-position" id="layout-position-scrollable" value="scrollable" onchange="document.body.setAttribute('data-layout-scrollable', 'true')">
+                        <label class="form-check-label" for="layout-position-scrollable">Scrollable</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Topbar Color</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="topbar-color" id="topbar-color-light" value="light" onchange="document.body.setAttribute('data-topbar', 'light')">
+                        <label class="form-check-label" for="topbar-color-light">Light</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="topbar-color" id="topbar-color-dark" value="dark" onchange="document.body.setAttribute('data-topbar', 'dark')">
+                        <label class="form-check-label" for="topbar-color-dark">Dark</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2 sidebar-setting">Sidebar Size</h6>
+
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-size" id="sidebar-size-default" value="default" onchange="document.body.setAttribute('data-sidebar-size', 'lg')">
+                        <label class="form-check-label" for="sidebar-size-default">Default</label>
+                    </div>
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-size" id="sidebar-size-compact" value="compact" onchange="document.body.setAttribute('data-sidebar-size', 'md')">
+                        <label class="form-check-label" for="sidebar-size-compact">Compact</label>
+                    </div>
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-size" id="sidebar-size-small" value="small" onchange="document.body.setAttribute('data-sidebar-size', 'sm')">
+                        <label class="form-check-label" for="sidebar-size-small">Small (Icon View)</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Sidebar Color</h6>
+
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-color" id="sidebar-color-light" value="light" onchange="document.body.setAttribute('data-sidebar', 'light')">
+                        <label class="form-check-label" for="sidebar-color-light">Light</label>
+                    </div>
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-color" id="sidebar-color-dark" value="dark" onchange="document.body.setAttribute('data-sidebar', 'dark')">
+                        <label class="form-check-label" for="sidebar-color-dark">Dark</label>
+                    </div>
+                    <div class="form-check sidebar-setting">
+                        <input class="form-check-input" type="radio" name="sidebar-color" id="sidebar-color-brand" value="brand" onchange="document.body.setAttribute('data-sidebar', 'brand')">
+                        <label class="form-check-label" for="sidebar-color-brand">Brand</label>
+                    </div>
+
+                    <h6 class="mt-4 mb-3 pt-2">Direction</h6>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-direction" id="layout-direction-ltr" value="ltr">
+                        <label class="form-check-label" for="layout-direction-ltr">LTR</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="layout-direction" id="layout-direction-rtl" value="rtl">
+                        <label class="form-check-label" for="layout-direction-rtl">RTL</label>
+                    </div>
+
+                </div>
+
+            </div> <!-- end slimscroll-menu-->
+        </div>
+        <!-- /Right-bar -->
+
+        <!-- Right bar overlay-->
+        <div class="rightbar-overlay"></div>
+
+        <!-- JAVASCRIPT -->
+        <script src="static/js/jquery.min.js"></script>
+        <script src="static/js/bootstrap.bundle.min.js"></script>
+        <script src="static/js/metisMenu.min.js"></script>
+        <script src="static/js/simplebar.min.js"></script>
+        <script src="static/js/waves.min.js"></script>
+        <script src="static/js/feather.min.js"></script>
+        <!-- pace js -->
+        <script src="static/js/pace.min.js"></script>
+
+        <script src="static/js/app.js"></script>
+
+    </body>
+</html>

@@ -1,0 +1,437 @@
+.slider-container {
+    margin: 20px 0;
+}
+.slider-label {
+    margin-bottom: 10px;
+}
+.noUi-connect {
+    background: #4F8CBE;
+}
+.config-version {
+    font-size: 0.9em;
+    color: #6c757d;
+}
+.strategy-card {
+    margin-bottom: 1rem;
+}
+.permission-switch {
+    margin: 10px 0;
+}
+/* 添加状态面板样式 */
+.status-panel {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background: rgba(79, 140, 190, 0.1);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.status-item:hover {
+    background: rgba(79, 140, 190, 0.15);
+    transform: translateY(-2px);
+}
+
+.status-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    margin-right: 16px;
+    font-size: 24px;
+}
+
+.status-icon.update {
+    background: linear-gradient(45deg, #4F8CBE, #2ab57d);
+    color: #fff;
+}
+
+.status-icon.version {
+    background: linear-gradient(45deg, #4F8CBE, #3b7ddd);
+    color: #fff;
+}
+
+.status-icon.sync {
+    background: linear-gradient(45deg, #2ab57d, #4F8CBE);
+    color: #fff;
+}
+
+.status-icon.history {
+    background: linear-gradient(45deg, #ffbf53, #fd625e);
+    color: #fff;
+}
+
+.status-content {
+    flex: 1;
+}
+
+.status-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #e9ecef;
+    margin-bottom: 4px;
+}
+
+.status-value {
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.status-badge {
+    font-size: 14px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: rgba(42, 181, 125, 0.15);
+    color: #2ab57d;
+}
+
+/* 阈值图表样式 */
+.threshold-chart {
+    height: 120px;
+    margin: 15px 0;
+    background-color: transparent !important;
+}
+
+/* 滑块样式 */
+.slider {
+    height: 6px;
+    margin: 20px 0;
+}
+
+.noUi-connect {
+    background: #4F8CBE;
+}
+
+.noUi-handle {
+    width: 18px !important;
+    height: 18px !important;
+    border-radius: 50%;
+    background: #4F8CBE;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    cursor: pointer;
+}
+
+/* 为每个滑块设置不同的颜色 */
+#windSlider {
+    --slider-color: #4F8CBE;
+}
+
+#loadSlider {
+    --slider-color: #2ab57d;
+}
+
+#confidenceSlider {
+    --slider-color: #fd625e;
+}
+
+.noUi-target {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    box-shadow: none;
+}
+
+.noUi-handle:before,
+.noUi-handle:after {
+    display: none;
+}
+
+/* 输入框样式 */
+.slider-value {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.form-control-sm {
+    width: 80px !important;
+    text-align: center;
+    margin: 0 10px;
+}
+
+ /* 卡片样式优化 */
+ .card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* 表格样式优化 */
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    border-top: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+    font-weight: 500;
+    color: #8f9498;
+}
+
+.table tbody tr {
+    transition: all 0.3s ease;
+}
+
+.table tbody tr:hover {
+    background: rgba(79, 140, 190, 0.1);
+}
+
+.table td {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* 标签页样式优化 */
+.nav-tabs-custom {
+    background: rgba(255, 255, 255, 0.02);
+    padding: 0.5rem 1rem 0;
+}
+
+.nav-tabs-custom .nav-link {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.nav-tabs-custom .nav-link:hover {
+    color: #fff;
+}
+
+.nav-tabs-custom .nav-link.active {
+    background: transparent;
+    color: #4F8CBE;
+}
+
+.nav-tabs-custom .nav-link.active:after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #4F8CBE;
+}
+
+/* 按钮样式优化 */
+.btn-group .btn {
+    padding: 0.25rem 0.5rem;
+    line-height: 1.5;
+}
+
+.btn-light {
+    background: rgba(255, 255, 255, 0.05);
+    border: none;
+}
+
+.btn-light:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* 状态标签样式 */
+.badge {
+    padding: 0.4em 0.8em;
+    font-weight: 500;
+}
+
+.badge.bg-success {
+    background-color: rgba(40, 167, 69, 0.2) !important;
+    color: #28a745;
+}
+
+.badge.bg-warning {
+    background-color: rgba(255, 193, 7, 0.2) !important;
+    color: #ffc107;
+}
+
+/* 下拉菜单样式 */
+.dropdown-menu {
+    background: #1a1f24;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-item {
+    color: #e9ecef;
+}
+
+.dropdown-item:hover {
+    background: rgba(79, 140, 190, 0.1);
+    color: #fff;
+}
+
+/* 工具提示样式 */
+.tooltip .tooltip-inner {
+    background: #1a1f24;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* 表单控件样式 */
+.form-control-sm {
+    height: calc(1.5em + 0.5rem + 2px);
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 0.2rem;
+}
+
+/* 工具提示样式 */
+.tooltip {
+    font-size: 0.875rem;
+}
+
+/* 模态框样式 */
+.modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.modal-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+}
+
+/* 表格样式优化 */
+.table {
+    --bs-table-bg: rgba(255, 255, 255, 0.02);
+    --bs-table-color: #e9ecef;
+    --bs-table-border-color: rgba(255, 255, 255, 0.1);
+    margin-bottom: 0;
+}
+
+.table > :not(caption) > * > * {
+    border-bottom-width: 1px;
+    padding: 1rem 1.25rem;
+    background-color: var(--bs-table-bg);
+    border-color: var(--bs-table-border-color);
+    color: var(--bs-table-color);
+}
+
+.table > thead {
+    border-bottom: 2px solid var(--bs-table-border-color);
+}
+
+.table > thead th {
+    font-weight: 600;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    white-space: nowrap;
+}
+
+.table-hover > tbody > tr:hover {
+    --bs-table-hover-bg: rgba(79, 140, 190, 0.1);
+    --bs-table-hover-color: #fff;
+    transition: all 0.3s ease;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+/* 状态标签样式 */
+.badge {
+    padding: 0.5em 0.75em;
+    font-weight: 500;
+}
+
+.badge.bg-info {
+    background-color: rgba(79, 140, 190, 0.2) !important;
+    color: #4F8CBE;
+}
+
+.badge.bg-success {
+    background-color: rgba(16, 183, 89, 0.2) !important;
+    color: #10b759;
+}
+
+/* 按钮样式优化 */
+.btn-outline-primary {
+    border-color: #4F8CBE;
+    color: #4F8CBE;
+}
+
+.btn-outline-primary:hover {
+    background-color: #4F8CBE;
+    color: #fff;
+}
+
+.btn-outline-warning {
+    border-color: #ffc107;
+    color: #ffc107;
+}
+
+.btn-outline-warning:hover {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.btn-outline-danger {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+/* 输入框样式 */
+.form-control {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #e9ecef;
+}
+
+.form-control:focus {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #4F8CBE;
+    color: #fff;
+}
+
+/* 滑块容器样式优化 */
+.slider-container {
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.375rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Energy Strategy Library Styles */
+.nav-tabs-custom .nav-link {
+    color: #adb5bd;
+}
+
+.nav-tabs-custom .nav-link.active {
+    color: #4F8CBE; /* Or your primary color */
+    border-bottom-color: #4F8CBE;
+}
+
+#strategyTabContent .table thead th {
+    white-space: nowrap;
+}
+
+#strategyTabContent .table td .badge {
+    margin-right: 0.5rem;
+}
+
+#strategyTabContent .btn-group .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+}
+
+#strategyTabContent .form-check-input {
+    margin-top: 0.3em; /* Align switch with text */
+}

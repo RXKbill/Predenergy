@@ -1,0 +1,413 @@
+/* 时间轴样式 */
+.timeline-vertical {
+    position: relative;
+    padding: 1rem;
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 2.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.timeline-item:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 2px;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.timeline-item:after {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #4F8CBE;
+    border: 2px solid #2a3042;
+}
+
+.timeline-time {
+    font-size: 0.875rem;
+    color: #ccc;
+    margin-bottom: 0.5rem;
+}
+
+.timeline-content {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    border-radius: 0.25rem;
+}
+
+/* 调度效果分析样式 */
+.dispatch-effect-chart {
+    background-color: rgba(255, 255, 255, 0.02);
+    border-radius: 0.25rem;
+    margin: 1rem 0;
+}
+
+.optimization-suggestions .suggestion-item {
+    padding: 0.75rem;
+    background-color: rgba(255, 255, 255, 0.02);
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.optimization-suggestions .suggestion-item:last-child {
+    margin-bottom: 0;
+}
+
+.optimization-suggestions .ri-lightbulb-line {
+    font-size: 1.25rem;
+    color: #f1b44c;
+}
+
+/* 预警样式 */
+.dispatch-alerts .alert {
+    margin: 0;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+.dispatch-alerts .alert-warning {
+    border-left: 4px solid #f1b44c;
+}
+
+.dispatch-alerts .alert-info {
+    border-left: 4px solid #4F8CBE;
+}
+
+.dispatch-alerts .alert-danger {
+    border-left: 4px solid #ef5350;
+}
+
+.dispatch-alerts .fs-24 {
+    font-size: 1.5rem;
+}
+
+/* 快速调度按钮样式 */
+.quick-dispatch .btn {
+    padding: 0.75rem;
+    font-weight: 500;
+}
+
+.btn-soft-primary {
+    background-color: rgba(79, 140, 190, 0.1);
+    color: #4F8CBE;
+}
+
+.btn-soft-success {
+    background-color: rgba(42, 181, 125, 0.1);
+    color: #2ab57d;
+}
+
+.btn-soft-warning {
+    background-color: rgba(241, 180, 76, 0.1);
+    color: #f1b44c;
+}
+
+.btn-soft-info {
+    background-color: rgba(85, 110, 230, 0.1);
+    color: #556ee6;
+}
+
+/* 滚动条样式 */
+[data-simplebar] {
+    position: relative;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+    align-items: flex-start;
+}
+
+.simplebar-wrapper {
+    overflow: hidden;
+    width: inherit;
+    height: inherit;
+    max-width: inherit;
+    max-height: inherit;
+}
+
+.simplebar-mask {
+    direction: inherit;
+    position: absolute;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: auto !important;
+    height: auto !important;
+    z-index: 0;
+}
+
+.simplebar-offset {
+    direction: inherit !important;
+    box-sizing: inherit !important;
+    resize: none !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    -webkit-overflow-scrolling: touch;
+}
+
+.simplebar-content-wrapper {
+    direction: inherit;
+    box-sizing: border-box !important;
+    position: relative;
+    display: block;
+    height: 100%;
+    width: auto;
+    visibility: visible;
+    overflow: auto;
+    max-width: 100%;
+    max-height: 100%;
+    scrollbar-width: none;
+    padding: 0 !important;
+}
+
+.simplebar-content:before,
+.simplebar-content:after {
+    content: ' ';
+    display: table;
+}
+
+.simplebar-placeholder {
+    max-height: 100%;
+    max-width: 100%;
+    width: 100%;
+    pointer-events: none;
+}
+
+.simplebar-height-auto-observer-wrapper {
+    box-sizing: inherit !important;
+    height: 100%;
+    width: 100%;
+    max-width: 1px;
+    position: relative;
+    float: left;
+    max-height: 1px;
+    overflow: hidden;
+    z-index: -1;
+    padding: 0;
+    margin: 0;
+    pointer-events: none;
+    flex-grow: inherit;
+    flex-shrink: 0;
+    flex-basis: 0;
+}
+
+.simplebar-height-auto-observer {
+    box-sizing: inherit;
+    display: block;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 1000%;
+    width: 1000%;
+    min-height: 1px;
+    min-width: 1px;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.simplebar-track {
+    z-index: 1;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+[data-simplebar].simplebar-dragging .simplebar-content {
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+[data-simplebar].simplebar-dragging .simplebar-track {
+    pointer-events: all;
+}
+
+.simplebar-scrollbar {
+    position: absolute;
+    right: 2px;
+    width: 4px;
+    min-height: 10px;
+}
+
+.simplebar-scrollbar:before {
+    position: absolute;
+    content: '';
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 7px;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    transition: opacity 0.2s linear;
+}
+
+.simplebar-scrollbar.simplebar-visible:before {
+    opacity: 0.5;
+    transition: opacity 0s linear;
+}
+
+.simplebar-track.simplebar-vertical {
+    top: 0;
+    width: 11px;
+}
+
+.simplebar-track.simplebar-vertical .simplebar-scrollbar:before {
+    top: 2px;
+    bottom: 2px;
+}
+
+.simplebar-track.simplebar-horizontal {
+    left: 0;
+    height: 11px;
+}
+
+.simplebar-track.simplebar-horizontal .simplebar-scrollbar:before {
+    height: 100%;
+    left: 2px;
+    right: 2px;
+}
+
+.simplebar-track.simplebar-horizontal .simplebar-scrollbar {
+    right: auto;
+    left: 0;
+    top: 2px;
+    height: 7px;
+    min-height: 0;
+    min-width: 10px;
+    width: auto;
+}
+
+/* 系统运行指标样式 */
+.system-metrics {
+    background-color: rgba(255, 255, 255, 0.02);
+    border-radius: 0.25rem;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.metric-group {
+    background-color: rgba(255, 255, 255, 0.03);
+    border-radius: 0.25rem;
+    padding: 1rem;
+    transition: all 0.3s ease;
+}
+
+.metric-group:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    transform: translateY(-2px);
+}
+
+.metric-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.metric-title {
+    font-weight: 500;
+    color: #ccc;
+}
+
+.metric-value {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.metric-item {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 0.25rem;
+    padding: 0.75rem;
+    height: 100%;
+}
+
+.metric-item small {
+    font-size: 0.75rem;
+    opacity: 0.7;
+}
+
+.metric-item .d-flex {
+    margin-top: 0.5rem;
+}
+
+.metric-item span {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #fff;
+}
+
+.metric-item i {
+    font-size: 1rem;
+}
+
+/* 指标趋势图标样式 */
+.ri-arrow-right-up-line {
+    color: #2ab57d;
+}
+
+.ri-arrow-right-down-line {
+    color: #2ab57d;
+}
+
+/* 状态颜色 */
+.text-success {
+    color: #2ab57d !important;
+}
+
+.text-primary {
+    color: #4F8CBE !important;
+}
+
+.text-warning {
+    color: #f1b44c !important;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .timeline-item {
+        padding-left: 2rem;
+    }
+
+    .dispatch-effect-chart {
+        height: 150px !important;
+    }
+
+    .quick-dispatch .btn {
+        padding: 0.5rem;
+        font-size: 0.875rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .system-metrics {
+        padding: 1rem;
+    }
+
+    .metric-group {
+        padding: 0.75rem;
+    }
+
+    .metric-item {
+        padding: 0.5rem;
+    }
+} 

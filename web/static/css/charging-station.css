@@ -1,0 +1,329 @@
+/* 充电桩管理系统样式 */
+
+/* 卡片样式优化 */
+.card {
+    border: none;
+    margin-bottom: 24px;
+    box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.06), 0 1px 0 0 rgba(0, 0, 0, 0.02);
+    background-color: #2a3042;
+}
+
+.card-title {
+    font-size: 16px;
+    margin: 0;
+}
+
+/* 数据概览卡片 */
+.avatar-sm {
+    height: 3rem;
+    width: 3rem;
+}
+
+.avatar-title {
+    align-items: center;
+    display: flex;
+    font-weight: 500;
+    height: 100%;
+    justify-content: center;
+    width: 100%;
+}
+
+.bg-soft-primary {
+    background-color: rgba(85, 110, 230, 0.18) !important;
+}
+
+.bg-soft-success {
+    background-color: rgba(52, 195, 143, 0.18) !important;
+}
+
+.bg-soft-warning {
+    background-color: rgba(241, 180, 76, 0.18) !important;
+}
+
+.bg-soft-info {
+    background-color: rgba(80, 165, 241, 0.18) !important;
+}
+
+.bg-soft-danger {
+    background-color: rgba(244, 106, 106, 0.18) !important;
+}
+
+/* 地图容器样式 */
+#station-map {
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* 实时监控样式 */
+.station-monitor .monitor-header {
+    background-color: #2a3042;
+    padding: 15px;
+    border-radius: 4px;
+}
+
+.station-monitor .monitor-stats {
+    background-color: #2a3042;
+    border-radius: 4px;
+}
+
+.monitor-list {
+    background-color: #2a3042;
+    border-radius: 4px;
+    padding: 15px;
+}
+
+/* 快捷功能卡片 */
+.quick-action-card {
+    padding: 1.25rem;
+    background-color: #2a3042;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.quick-action-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* 告警列表样式 */
+.alert-list {
+    padding: 0;
+}
+
+.alert-item {
+    padding: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.alert-item:last-child {
+    border-bottom: none;
+}
+
+.alert-item .alert-time {
+    font-size: 12px;
+    color: #8c98a5;
+}
+
+.alert-item .alert-title {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.alert-item .alert-content {
+    font-size: 13px;
+    color: #8c98a5;
+}
+
+/* 充电站详情模态框样式 */
+.modal-content {
+    background-color: #2a3042;
+    border-color: #32394e;
+}
+
+.modal-header {
+    border-bottom-color: #32394e;
+}
+
+.modal-footer {
+    border-top-color: #32394e;
+}
+
+.table-sm td {
+    padding: 0.5rem;
+}
+
+/* 表格样式优化 */
+.table {
+    color: #a6b0cf;
+}
+
+.table > :not(:first-child) {
+    border-top: 1px solid #32394e;
+}
+
+.table > :not(caption) > * > * {
+    border-bottom-color: #32394e;
+}
+
+/* 表单控件样式 */
+.form-control, .form-select {
+    background-color: #2a3042;
+    border-color: #32394e;
+    color: #a6b0cf;
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: #2a3042;
+    border-color: #556ee6;
+    color: #a6b0cf;
+}
+
+/* 按钮样式优化 */
+.btn-soft-danger {
+    color: #f46a6a;
+    background-color: rgba(244, 106, 106, 0.18);
+    border-color: transparent;
+}
+
+.btn-soft-danger:hover {
+    color: #fff;
+    background-color: #f46a6a;
+}
+
+/* 进度条样式 */
+.progress {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 实时监控列表项样式 */
+.monitor-item {
+    padding: 10px 15px;
+    border-bottom: 1px solid #32394e;
+    transition: background-color 0.3s ease;
+}
+
+.monitor-item:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.monitor-item:last-child {
+    border-bottom: none;
+}
+
+.monitor-item .device-name {
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.monitor-item .device-status {
+    font-size: 13px;
+}
+
+.monitor-item .device-power {
+    font-size: 13px;
+    color: #8c98a5;
+}
+
+/* 图表容器样式 */
+#charging-trend-chart {
+    background-color: #2a3042;
+    border-radius: 4px;
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1rem;
+    }
+    
+    #station-map {
+        height: 300px !important;
+    }
+    
+    .monitor-list {
+        height: 200px !important;
+    }
+    
+    .quick-action-card {
+        margin-bottom: 1rem;
+    }
+}
+
+.charging-station-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.station-card {
+    background: var(--bs-dark);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    transition: all 0.3s ease;
+}
+
+.station-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.station-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.station-header h6 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.station-body {
+    margin-bottom: 1rem;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.info-row .label {
+    color: var(--bs-gray-500);
+}
+
+.info-row .value {
+    font-weight: 500;
+}
+
+.station-footer {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+.station-footer .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+.station-footer .btn i {
+    margin-right: 0.25rem;
+}
+
+#distribution-map {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
+    height: 500px;
+    width: 100%;
+}
+
+#heatmap-chart,
+#monitor-grid {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+/* 图表加载状态 */
+.chart-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+} 

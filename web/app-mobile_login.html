@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - 驭能能源管理系统</title>
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/css/icons.min.css">
+    <link rel="stylesheet" href="static/css/app.min.css">
+    <link rel="stylesheet" href="static/css/mobile-login.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css">
+</head>
+<body>
+    <!-- 页面头部 -->
+    <header class="login-header">
+        <div class="header-content">
+            <img src="static/picture/logo.png" alt="驭能科技" class="logo">
+            <h2 class="header-title">驭能能源管理系统</h2>
+        </div>
+    </header>
+
+    <div class="login-container">
+        <!-- 返回按钮 -->
+        <div class="back-button">
+            <button class="btn-icon" onclick="history.back()">
+                <i class="mdi mdi-arrow-left"></i>
+            </button>
+            <span class="help-text">帮助</span>
+        </div>
+
+        <!-- 登录表单区域 -->
+        <div class="login-form-container">
+            <h1 class="login-title">密码登录</h1>
+            <p class="login-subtitle">欢迎回来，请输入您的账号信息</p>
+
+            <form class="login-form" id="loginForm">
+                <!-- 账号输入框 -->
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="mdi mdi-account-outline"></i>
+                        </span>
+                        <input type="text" class="form-control" id="account" placeholder="请输入账号" required>
+                    </div>
+                </div>
+
+                <!-- 密码输入框 -->
+                <div class="form-group password-group">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="mdi mdi-lock-outline"></i>
+                        </span>
+                        <input type="password" class="form-control" id="password" placeholder="输入密码" required>
+                        <button type="button" class="toggle-password" id="togglePassword">
+                            <i class="mdi mdi-eye-outline"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 登录选项 -->
+                <div class="login-options">
+                    <a href="app-mobile-verification.html" class="verification-login">
+                        <i class="mdi mdi-message-text-outline"></i> 验证码登录
+                    </a>
+                    <a href="app-mobile-forgot.html" class="forgot-password">
+                        <i class="mdi mdi-lock-question"></i> 忘记密码？
+                    </a>
+                </div>
+
+                <!-- 登录按钮 -->
+                <button type="submit" class="btn btn-primary btn-login">登 录</button>
+            </form>
+
+            <!-- 用户协议 -->
+            <div class="agreement-section">
+                <label class="agreement-checkbox">
+                    <input type="checkbox" id="agreeTerms">
+                    <span class="checkmark"></span>
+                    <span class="agreement-text">
+                        我已阅读并同意
+                        <a href="#" class="link-primary">《用户协议》</a>
+                        <a href="#" class="link-primary">《隐私政策》</a>
+                    </span>
+                </label>
+            </div>
+
+            <!-- 其他登录方式 -->
+            <div class="other-login-methods">
+                <div class="divider">
+                    <span>其他登录方式</span>
+                </div>
+                <div class="social-login">
+                    <button class="social-btn">
+                        <i class="mdi mdi-wechat text-success"></i>
+                    </button>
+                    <button class="social-btn">
+                        <i class="mdi mdi-cellphone-android text-primary"></i>
+                    </button>
+                    <button class="social-btn">
+                        <i class="mdi mdi-email-outline text-danger"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部信息 -->
+        <footer class="login-footer">
+            <p>© 2024 驭能科技 版权所有</p>
+            <p>技术支持：ES小分队</p>
+        </footer>
+    </div>
+
+    <!-- 引入JavaScript文件 -->
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/bootstrap.bundle.min.js"></script>
+    <script src="static/js/mobile-login.js"></script>
+</body>
+</html>

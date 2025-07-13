@@ -1,0 +1,837 @@
+<!doctype html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <title>驭能能源管理系统</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta content="移动端能源管理系统" name="description">
+        <meta content="Themesbrand" name="author">
+        <meta name="theme-color" content="#2196f3">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+        <!-- 引入CSS文件 -->
+        <link href="static/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="static/css/icons.min.css" rel="stylesheet" type="text/css">
+        <link href="static/css/app.min.css" rel="stylesheet" type="text/css">
+        <link href="static/css/energy-mobile.css" rel="stylesheet" type="text/css">
+        <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css" rel="stylesheet">
+        
+        <!-- 引入字体图标 -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+        <!-- 引入第三方库 -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    </head>
+
+<body>
+        <div id="layout-wrapper">
+        <!-- 添加通知容器 -->
+        <div id="notification-container" class="notification-container"></div>
+
+        <!-- 移动端顶部导航栏 -->
+        <!-- 顶部导航栏 -->
+        <header class="mobile-header">
+            <div class="header-container">
+                <div class="header-left">
+                    <button class="btn-icon" id="menuToggle">
+                        <i class="mdi mdi-menu"></i>
+                        </button>
+                    </div>
+
+                <div class="header-title">
+                    <h1>驭能管理</h1>
+                        </div>
+
+                <div class="header-right">
+                    <button class="btn-icon" id="refreshBtn" onclick="refreshData()">
+                        <i class="mdi mdi-refresh"></i>
+                            </button>
+                    <button class="btn-icon" id="notificationBtn">
+                        <i class="mdi mdi-bell"></i>
+                        <!-- <span class="notification-badge">1</span> -->
+                    </button>
+                            </div>
+                        </div>
+        </header>
+
+        <!-- 主要内容区域 -->
+        <div class="main-content" style="padding-top: 1px; padding-bottom: 1px;">
+            <div class="page-content" style="padding-bottom: 1px;">
+                <div class="container-fluid" style="padding-bottom: 1px;">
+                    <!-- 预测图表区域 -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                                <h5 class="mb-0">预测分析</h5>
+                                <div class="d-flex align-items-center mt-2 mt-sm-0">
+                                    <!-- 图表类型切换 -->
+                                    <div class="btn-group" role="group" id="chartTypeToggle">
+                                        <button type="button" class="btn btn-primary btn-sm active" data-chart-type="power">
+                                            <i class="mdi mdi-flash"></i>发电
+                            </button>
+                                        <button type="button" class="btn btn-primary btn-sm" data-chart-type="load">
+                                            <i class="mdi mdi-power-plug"></i>负荷
+                            </button>
+                                        <button type="button" class="btn btn-primary btn-sm" data-chart-type="price">
+                                            <i class="mdi mdi-currency-cny"></i>电价
+                            </button>
+                                        <button type="button" class="btn btn-primary btn-sm" data-chart-type="charging">
+                                            <i class="mdi mdi-ev-station"></i>充电
+                            </button>
+                        </div>
+                            </div>
+                        </div>
+                            <!-- 时间范围选择 -->
+                            <div class="sub-header bg-light text-dark mt-3">
+                                <div class="tab-nav">
+                                    <button class="tab-btn active" data-tab="24h">24h</button>
+                                    <button class="tab-btn" data-tab="7d">7天</button>
+                                    <button class="tab-btn" data-tab="30d">30天</button>
+                    </div>
+                </div>
+                            <!-- 添加数据筛选和分析工具栏 -->
+                            <div class="chart-toolbar mt-3">
+                                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                                    <div class="d-flex align-items-center">
+                                        <div class="form-check form-switch me-3">
+                                            <input class="form-check-input" type="checkbox" id="showConfidenceInterval">
+                                            <label class="form-check-label" for="showConfidenceInterval">置信区间</label>
+                                </div>
+                                        <div class="form-check form-switch me-3">
+                                            <input class="form-check-input" type="checkbox" id="showTrend">
+                                            <label class="form-check-label" for="showTrend">趋势线</label>
+                            </div>
+                        </div>
+                                        <div class="d-flex align-items-center">
+                                        <button class="btn btn-outline-secondary btn-sm me-2" id="analyzeBtn">
+                                            <i class="mdi mdi-chart-line me-1"></i>分析
+                                            </button>
+                                        <button class="btn btn-outline-primary btn-sm" id="exportChartBtn">
+                                            <i class="mdi mdi-download me-1"></i>导出
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        <div class="card-body">
+                            <!-- 图表容器 -->
+                            <div class="chart-wrapper">
+                                <div class="chart-container active" id="powerChartContainer">
+                                    <canvas id="powerPredictionChart"></canvas>
+                            </div>
+                                <div class="chart-container" id="loadChartContainer">
+                                    <canvas id="loadPredictionChart"></canvas>
+                                                    </div>
+                                <div class="chart-container" id="priceChartContainer">
+                                    <canvas id="pricePredictionChart"></canvas>
+                                                    </div>
+                                <div class="chart-container" id="chargingChartContainer">
+                                    <canvas id="chargingPredictionChart"></canvas>
+                                                                </div>
+                                                            </div>
+                                                            
+                            <!-- 指标数据展示 -->
+                            <div class="metrics-container">
+                                <div class="metrics-group active" id="powerMetrics">
+                                    <div class="row">
+                                                            <div class="col-4 text-center">
+                                                                <h6 class="text-muted mb-1">当前发电量</h6>
+                                            <h4 class="mb-0 current-value">256.8 MW</h4>
+                                                    </div>
+                                                            <div class="col-4 text-center border-start border-end">
+                                                                <h6 class="text-muted mb-1">预测峰值</h6>
+                                            <h4 class="mb-0 peak-value">320.5 MW</h4>
+                                                            </div>
+                                                            <div class="col-4 text-center">
+                                                                <h6 class="text-muted mb-1">预测准确率</h6>
+                                            <h4 class="text-success mb-0 accuracy-value">95.2%</h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                <div class="metrics-group" id="loadMetrics">
+                                    <div class="row">
+                                                            <div class="col-4 text-center">
+                                                                <h6 class="text-muted mb-1">当前负荷</h6>
+                                            <h4 class="mb-0 current-value">189.2 MW</h4>
+                                                    </div>
+                                                            <div class="col-4 text-center border-start border-end">
+                                                                <h6 class="text-muted mb-1">预测峰值</h6>
+                                            <h4 class="mb-0 peak-value">245.8 MW</h4>
+                                                            </div>
+                                                            <div class="col-4 text-center">
+                                                                <h6 class="text-muted mb-1">负荷率</h6>
+                                            <h4 class="text-warning mb-0 rate-value">78.5%</h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                <div class="metrics-group" id="priceMetrics">
+                                    <div class="row">
+                                                            <div class="col-4 text-center">
+                                                                <h6 class="text-muted mb-1">当前电价</h6>
+                                            <h4 class="mb-0 current-value">0.68 ¥</h4>
+                                                    </div>
+                                                            <div class="col-4 text-center border-start border-end">
+                                                                <h6 class="text-muted mb-1">预测峰值</h6>
+                                            <h4 class="mb-0 peak-value">0.85 ¥</h4>
+                                                            </div>
+                                                            <div class="col-4 text-center">
+                                                                <h6 class="text-muted mb-1">波动率</h6>
+                                            <h4 class="text-danger mb-0 rate-value">+12.3%</h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                <div class="metrics-group" id="chargingMetrics">
+                                    <div class="row">
+                                                            <div class="col-4 text-center">
+                                                                <h6 class="text-muted mb-1">当前充电量</h6>
+                                            <h4 class="mb-0 current-value">45.6 kW</h4>
+                                                    </div>
+                                                            <div class="col-4 text-center border-start border-end">
+                                                                <h6 class="text-muted mb-1">预测峰值</h6>
+                                            <h4 class="mb-0 peak-value">95.0 kW</h4>
+                                                            </div>
+                                                            <div class="col-4 text-center">
+                                                                <h6 class="text-muted mb-1">使用率</h6>
+                                            <h4 class="text-primary mb-0 rate-value">76.5%</h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                            </div>
+                                        </div>
+
+        <!-- 实时告警区域 -->
+        <div class="card mt-4">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">实时告警</h5>
+                <span class="badge bg-danger">2 条未处理</span>
+                                        </div>
+                                        <div class="card-body">
+                <div class="alert-timeline">
+                    <!-- 紧急告警 -->
+                    <div class="alert-item urgent">
+                        <div class="d-flex justify-content-between mb-2">
+                            <h6 class="text-danger mb-0">负荷超限预警</h6>
+                            <small class="text-muted">10分钟前</small>
+                                                        </div>
+                        <p class="mb-2">预计14:00负荷将超过安全阈值</p>
+                        <div class="d-flex">
+                            <button class="btn btn-sm btn-danger me-2">立即处理</button>
+                            <button class="btn btn-sm btn-light">忽略</button>
+                                                </div>
+                                            </div>
+
+                    <!-- 警告告警 -->
+                    <div class="alert-item warning">
+                        <div class="d-flex justify-content-between mb-2">
+                            <h6 class="text-warning mb-0">发电量异常</h6>
+                            <small class="text-muted">25分钟前</small>
+                                                </div>
+                        <p class="mb-2">光伏发电量低于预期20%</p>
+                        <div class="d-flex">
+                            <button class="btn btn-sm btn-warning me-2">查看详情</button>
+                            <button class="btn btn-sm btn-light">忽略</button>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+        <!-- 设备状态区域 -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0">设备状态</h5>
+                                        </div>
+                                        <div class="card-body">
+                <div class="row">
+                                                <!-- 光伏设备状态 -->
+                    <div class="col-md-6 col-lg-3">
+                                                    <div class="device-status-card">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                            <div>
+                                    <h6 class="mb-1">光伏设备</h6>
+                                                                <small class="text-muted">运行效率: 92%</small>
+                                                            </div>
+                                                            <div class="status-indicator">
+                                                                <i class="fas fa-sun text-warning"></i>
+                                                                <span class="badge bg-success">正常</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 92%"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- 风机设备状态 -->
+                    <div class="col-md-6 col-lg-3">
+                                                    <div class="device-status-card">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                            <div>
+                                    <h6 class="mb-1">风机设备</h6>
+                                                                <small class="text-muted">运行效率: 85%</small>
+                                                            </div>
+                                                            <div class="status-indicator">
+                                                                <i class="fas fa-wind text-info"></i>
+                                                                <span class="badge bg-success">正常</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-info" role="progressbar" style="width: 85%"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- 储能设备状态 -->
+                    <div class="col-md-6 col-lg-3">
+                                                    <div class="device-status-card">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                            <div>
+                                    <h6 class="mb-1">储能设备</h6>
+                                                                <small class="text-muted">充电状态: 75%</small>
+                                                            </div>
+                                                            <div class="status-indicator">
+                                                                <i class="fas fa-battery-three-quarters text-primary"></i>
+                                                                <span class="badge bg-success">充电中</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 75%"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- 充电设施状态 -->
+                    <div class="col-md-6 col-lg-3">
+                                                    <div class="device-status-card">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                            <div>
+                                    <h6 class="mb-1">充电设施</h6>
+                                                                <small class="text-muted">使用率: 80%</small>
+                                                            </div>
+                                                            <div class="status-indicator">
+                                                                <i class="fas fa-charging-station text-success"></i>
+                                                                <span class="badge bg-success">运行中</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 80%"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                            </div>
+
+            <!-- 底部导航栏 -->
+            <footer class="mobile-footer">
+                <nav class="footer-nav">
+                    <a href="app-mobile_home.html" class="nav-item">
+                        <i class="mdi mdi-home"></i>
+                        <span>首页</span>
+                    </a>
+                    <a href="app-mobile_index.html" class="nav-item active">
+                        <i class="mdi mdi-chart-line"></i>
+                        <span>预测</span>
+                    </a>
+                    <a href="app-mobile_workorder.html" class="nav-item">
+                        <i class="mdi mdi-clipboard-text"></i>
+                        <span>工单</span>
+                    </a>
+                    <a href="app-mobile_profile.html" class="nav-item">
+                        <i class="mdi mdi-account"></i>
+                        <span>我的</span>
+                    </a>
+                </nav>
+            </footer>
+
+    <!-- 侧边菜单 -->
+    <div class="side-menu" id="sideMenu">
+        <div class="side-menu-header">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <img src="static/images/avatar.png" alt="用户头像">
+                                            </div>
+                <div class="user-details">
+                    <h3>管理员</h3>
+                    <p>系统管理员</p>
+                                        </div>
+                                    </div>
+                                        </div>
+        <nav class="side-menu-nav">
+            <a href="#" class="menu-item">
+                <i class="fas fa-home"></i>
+                <span>首页</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-chart-pie"></i>
+                <span>数据分析</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-history"></i>
+                <span>历史记录</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-bell"></i>
+                <span>告警管理</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-user"></i>
+                <span>个人中心</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-cog"></i>
+                <span>系统设置</span>
+            </a>
+        </nav>
+                </div>
+
+    <!-- 遮罩层 -->
+    <div class="overlay" id="overlay"></div>
+                    </div>
+
+<!-- 引入JavaScript文件 -->
+        <script src="static/js/jquery.min.js"></script>
+        <script src="static/js/bootstrap.bundle.min.js"></script>
+        <script src="static/js/app.js"></script>
+        <script src="static/js/energy-mobile.js"></script>
+    <!-- 添加导航相关的JavaScript -->
+    <script>
+        // 确保导航链接正常工作
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取所有导航链接
+            const navLinks = document.querySelectorAll('.footer-nav .nav-item');
+            
+            // 为每个链接添加点击事件
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (href) {
+                        window.location.href = href;
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        // 图表通用配置
+        const chartCommonOptions = {
+                responsive: true,
+            maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 15,
+                        font: {
+                            size: 12
+                        }
+                    }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                    intersect: false,
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                    titleColor: '#000',
+                    bodyColor: '#666',
+                    borderColor: '#ddd',
+                    borderWidth: 1,
+                    padding: 10,
+                    boxPadding: 5,
+                    usePointStyle: true
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        grid: {
+                        drawBorder: false,
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    },
+                    ticks: {
+                        font: {
+                            size: 11
+                        }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 11
+                        }
+                        }
+                    }
+                }
+            };
+
+        // 初始化发电预测图表
+        function initPowerPredictionChart() {
+            const ctx = document.getElementById('powerPredictionChart').getContext('2d');
+            return new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00'],
+                    datasets: [{
+                        label: '光伏发电预测',
+                        data: [50, 120, 180, 200, 190, 160, 100, 40],
+                        borderColor: '#ffc107',
+                    backgroundColor: 'rgba(255, 193, 7, 0.2)',
+                    borderWidth: 2,
+                        tension: 0.4,
+                    fill: true,
+                    pointStyle: 'circle',
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                    }, {
+                        label: '风电预测',
+                        data: [80, 95, 110, 100, 85, 95, 120, 110],
+                        borderColor: '#20c997',
+                    backgroundColor: 'rgba(32, 201, 151, 0.2)',
+                    borderWidth: 2,
+                        tension: 0.4,
+                    fill: true,
+                    pointStyle: 'circle',
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                    }, {
+                        label: '实际发电量',
+                        data: [75, 110, 170, 185, 175, 150, 95, null],
+                        borderColor: '#dc3545',
+                        borderDash: [5, 5],
+                    borderWidth: 2,
+                        tension: 0.4,
+                    fill: false,
+                    pointStyle: 'circle',
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    ...chartCommonOptions,
+                    plugins: {
+                        ...chartCommonOptions.plugins,
+                        title: {
+                        display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // 初始化负荷预测图表
+        function initLoadPredictionChart() {
+            const ctx = document.getElementById('loadPredictionChart').getContext('2d');
+            return new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00'],
+                    datasets: [{
+                        label: '负荷预测',
+                    data: [150, 180, 220, 240, 260, 250, 220, 180],
+                    borderColor: '#0dcaf0',
+                    backgroundColor: 'rgba(13, 202, 240, 0.2)',
+                    borderWidth: 2,
+                        tension: 0.4,
+                    fill: true,
+                    pointStyle: 'circle',
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                    }, {
+                        label: '实际负荷',
+                    data: [155, 175, 215, 235, 255, null, null, null],
+                    borderColor: '#dc3545',
+                        borderDash: [5, 5],
+                    borderWidth: 2,
+                        tension: 0.4,
+                    fill: false,
+                    pointStyle: 'circle',
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }, {
+                    label: '安全阈值',
+                    data: [280, 280, 280, 280, 280, 280, 280, 280],
+                    borderColor: '#ffc107',
+                    borderWidth: 2,
+                    borderDash: [2, 2],
+                    tension: 0,
+                    fill: false,
+                    pointStyle: 'line'
+                    }]
+                },
+                options: {
+                    ...chartCommonOptions,
+                    plugins: {
+                        ...chartCommonOptions.plugins,
+                        title: {
+                        display: false
+                    }
+                },
+                scales: {
+                        ...chartCommonOptions.scales,
+                    y: {
+                            ...chartCommonOptions.scales.y,
+                        suggestedMax: 300
+                        }
+                    }
+                }
+            });
+        }
+
+        // 初始化电价预测图表
+        function initPricePredictionChart() {
+            const ctx = document.getElementById('pricePredictionChart').getContext('2d');
+            return new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00'],
+                    datasets: [{
+                        label: '电价预测',
+                    data: [0.45, 0.52, 0.68, 0.75, 0.82, 0.78, 0.65, 0.55],
+                    borderColor: '#198754',
+                    backgroundColor: 'rgba(25, 135, 84, 0.2)',
+                    borderWidth: 2,
+                        tension: 0.4,
+                    fill: true,
+                    pointStyle: 'circle',
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                    }, {
+                        label: '实际电价',
+                        data: [0.46, 0.54, 0.65, 0.72, 0.80, null, null, null],
+                    borderColor: '#dc3545',
+                        borderDash: [5, 5],
+                    borderWidth: 2,
+                        tension: 0.4,
+                    fill: false,
+                    pointStyle: 'circle',
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }, {
+                    label: '基准电价',
+                    data: [0.60, 0.60, 0.60, 0.60, 0.60, 0.60, 0.60, 0.60],
+                    borderColor: '#6c757d',
+                    borderWidth: 2,
+                    borderDash: [2, 2],
+                    tension: 0,
+                    fill: false,
+                    pointStyle: 'line'
+                    }]
+                },
+                options: {
+                    ...chartCommonOptions,
+                    plugins: {
+                        ...chartCommonOptions.plugins,
+                        title: {
+                        display: false
+                    },
+                    tooltip: {
+                            ...chartCommonOptions.plugins.tooltip,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                label += context.parsed.y + ' ¥/kWh';
+                                return label;
+                            }
+                        }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 初始化充电预测图表
+        function initChargingPredictionChart() {
+            const ctx = document.getElementById('chargingPredictionChart').getContext('2d');
+            return new Chart(ctx, {
+            type: 'line',
+                data: {
+                    labels: ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00'],
+                    datasets: [{
+                        label: '充电需求预测',
+                    data: [30, 45, 65, 85, 95, 90, 75, 50],
+                    borderColor: '#fd7e14',
+                    backgroundColor: 'rgba(253, 126, 20, 0.2)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true,
+                    pointStyle: 'circle',
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }, {
+                    label: '实际充电需求',
+                    data: [32, 48, 62, 88, 92, null, null, null],
+                    borderColor: '#dc3545',
+                    borderDash: [5, 5],
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: false,
+                    pointStyle: 'circle',
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }, {
+                    label: '充电站容量',
+                    data: [100, 100, 100, 100, 100, 100, 100, 100],
+                    borderColor: '#6c757d',
+                    borderWidth: 2,
+                    borderDash: [2, 2],
+                    tension: 0,
+                    fill: false,
+                    pointStyle: 'line'
+                    }]
+                },
+                options: {
+                    ...chartCommonOptions,
+                    plugins: {
+                        ...chartCommonOptions.plugins,
+                    title: {
+                        display: false
+                    },
+                    tooltip: {
+                            ...chartCommonOptions.plugins.tooltip,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                label += context.parsed.y + ' kW';
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        }
+
+        // 初始化所有图表
+        document.addEventListener('DOMContentLoaded', function() {
+            const charts = {
+                power: initPowerPredictionChart(),
+                load: initLoadPredictionChart(),
+                price: initPricePredictionChart(),
+                charging: initChargingPredictionChart()
+            };
+
+            // 图表类型切换
+            document.querySelectorAll('#chartTypeToggle button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const chartType = this.dataset.chartType;
+                    document.querySelectorAll('.chart-container').forEach(container => {
+                        container.classList.remove('active');
+                    });
+                    document.getElementById(`${chartType}ChartContainer`).classList.add('active');
+                    
+                    document.querySelectorAll('.metrics-group').forEach(group => {
+                        group.classList.remove('active');
+                    });
+                    document.getElementById(`${chartType}Metrics`).classList.add('active');
+                    
+                    // 移除其他按钮的active类
+                    document.querySelectorAll('#chartTypeToggle button').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    this.classList.add('active');
+        });
+        });
+
+            // 时间范围切换
+            document.querySelectorAll('.tab-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    document.querySelectorAll('.tab-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // 更新图表数据
+                    updateChartsData(this.dataset.tab);
+                });
+            });
+
+            // 图表工具栏功能
+            document.getElementById('showConfidenceInterval').addEventListener('change', function() {
+                updateChartsDisplay('confidence', this.checked);
+            });
+
+            document.getElementById('showTrend').addEventListener('change', function() {
+                updateChartsDisplay('trend', this.checked);
+            });
+
+            document.getElementById('analyzeBtn').addEventListener('click', function() {
+                showAnalysisDialog();
+            });
+
+            document.getElementById('exportChartBtn').addEventListener('click', function() {
+                exportChartData();
+            });
+        });
+
+        // 更新图表数据
+        function updateChartsData(timeRange) {
+            // 这里添加根据时间范围更新图表数据的逻辑
+            showToast(`正在加载${timeRange}数据...`);
+        }
+
+        // 更新图表显示
+        function updateChartsDisplay(type, show) {
+            // 这里添加更新图表显示的逻辑
+            showToast(`${type === 'confidence' ? '置信区间' : '趋势线'}已${show ? '显示' : '隐藏'}`);
+        }
+
+        // 显示分析对话框
+        function showAnalysisDialog() {
+            // 这里添加显示分析对话框的逻辑
+            showToast('正在分析数据...');
+        }
+
+        // 导出图表数据
+        function exportChartData() {
+            // 这里添加导出图表数据的逻辑
+            showToast('正在导出数据...');
+        }
+
+        // Toast提示
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast align-items-center text-white bg-primary border-0 position-fixed';
+            toast.style.bottom = '20px';
+            toast.style.right = '20px';
+            toast.style.zIndex = '1050';
+            
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">${message}</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+
+            document.body.appendChild(toast);
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+            
+            toast.addEventListener('hidden.bs.toast', () => {
+                toast.remove();
+            });
+        }
+    </script>
+    </body>
+</html>

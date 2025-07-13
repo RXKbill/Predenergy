@@ -1,0 +1,432 @@
+<!-- 充电桩管理系统主界面 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>充电桩管理系统</title>
+    <!-- 引入基础样式 -->
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/css/icons.min.css" rel="stylesheet">
+    <link href="static/css/app.min.css" rel="stylesheet">
+    <!-- 引入专用样式 -->
+    <link href="static/css/charging-station.css" rel="stylesheet">
+    <!-- Remixicon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body data-layout-mode="dark" data-sidebar="dark" data-topbar="dark">
+
+    <div class="main-content">
+        <div class="page-content">
+            <div class="container-fluid">
+                <!-- 顶部概览卡片 -->
+                <div class="row">
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1">
+                                        <h4 class="mb-0 font-size-20">156</h4>
+                                        <p class="text-muted mb-2">总充电桩数量</p>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="badge bg-success">128</span>
+                                            <span class="text-muted">在线</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <div class="avatar-sm">
+                                            <span class="avatar-title bg-soft-primary rounded">
+                                                <i class="ri-charging-pile-2-line font-size-24 text-primary"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1">
+                                        <h4 class="mb-0 font-size-20">89.2%</h4>
+                                        <p class="text-muted mb-2">设备健康率</p>
+                                        <div class="progress" style="height: 6px;">
+                                            <div class="progress-bar bg-success" style="width: 89.2%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <div class="avatar-sm">
+                                            <span class="avatar-title bg-soft-success rounded">
+                                                <i class="ri-heart-pulse-line font-size-24 text-success"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1">
+                                        <h4 class="mb-0 font-size-20">42.8 MWh</h4>
+                                        <p class="text-muted mb-2">今日充电量</p>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="ri-arrow-up-line text-success"></i>
+                                            <span class="text-success">+12.5%</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <div class="avatar-sm">
+                                            <span class="avatar-title bg-soft-warning rounded">
+                                                <i class="ri-flash-line font-size-24 text-warning"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1">
+                                        <h4 class="mb-0 font-size-20">¥25,680.50</h4>
+                                        <p class="text-muted mb-2">今日收入</p>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="ri-arrow-up-line text-success"></i>
+                                            <span class="text-success">+8.3%</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <div class="avatar-sm">
+                                            <span class="avatar-title bg-soft-info rounded">
+                                                <i class="ri-money-cny-circle-line font-size-24 text-info"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 主要内容区域 -->
+                <div class="row">
+                    <!-- 左侧：充电站地图 -->
+                    <div class="col-xl-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <h5 class="card-title flex-grow-1 mb-0">充电站分布</h5>
+                                    <div class="flex-shrink-0">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-primary btn-sm">
+                                                <i class="ri-map-pin-add-line align-middle me-1"></i>添加站点
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="station-map" style="height: 400px;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右侧：实时监控 -->
+                    <div class="col-xl-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title mb-3">实时监控</h5>
+                                <div class="station-monitor">
+                                    <div class="monitor-header d-flex align-items-center mb-3">
+                                        <select class="form-select me-2">
+                                            <option>全部站点</option>
+                                            <option>高新区站点</option>
+                                            <option>天府新区站点</option>
+                                        </select>
+                                        <button class="btn btn-sm btn-light">
+                                            <i class="ri-refresh-line"></i>
+                                        </button>
+                                    </div>
+                                    <div class="monitor-stats mb-3">
+                                        <div class="row g-0">
+                                            <div class="col-4">
+                                                <div class="p-2 text-center">
+                                                    <h4 class="mb-1 text-success">42</h4>
+                                                    <p class="text-muted mb-0">空闲</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="p-2 text-center">
+                                                    <h4 class="mb-1 text-warning">28</h4>
+                                                    <p class="text-muted mb-0">充电中</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="p-2 text-center">
+                                                    <h4 class="mb-1 text-danger">6</h4>
+                                                    <p class="text-muted mb-0">故障</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="monitor-list" style="height: 300px; overflow-y: auto;">
+                                        <!-- 实时状态列表 -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- 充电趋势图 -->
+                    <div class="col-xl-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <h5 class="card-title flex-grow-1 mb-0">充电趋势分析</h5>
+                                    <div class="flex-shrink-0">
+                                        <select class="form-select form-select-sm">
+                                            <option>最近24小时</option>
+                                            <option>最近7天</option>
+                                            <option>最近30天</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div id="charging-trend-chart" style="height: 300px;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 告警信息 -->
+                    <div class="col-xl-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <h5 class="card-title flex-grow-1 mb-0">告警信息</h5>
+                                    <div class="flex-shrink-0">
+                                        <button type="button" class="btn btn-soft-danger btn-sm">
+                                            <i class="ri-alarm-warning-line align-middle me-1"></i>查看全部
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="alert-list" style="height: 300px; overflow-y: auto;">
+                                    <!-- 告警列表 -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 功能快捷入口 -->
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title mb-3">快捷功能</h5>
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <div class="quick-action-card cursor-pointer" onclick="location.href='#'">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <div class="avatar-sm">
+                                                        <span class="avatar-title bg-soft-primary rounded">
+                                                            <i class="ri-calendar-check-line font-size-24 text-primary"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h5 class="mb-1">预约管理</h5>
+                                                    <p class="text-muted mb-0">管理充电预约订单</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="quick-action-card cursor-pointer" onclick="location.href='#'">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <div class="avatar-sm">
+                                                        <span class="avatar-title bg-soft-success rounded">
+                                                            <i class="ri-tools-line font-size-24 text-success"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h5 class="mb-1">设备维护</h5>
+                                                    <p class="text-muted mb-0">设备检修与维护</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="quick-action-card cursor-pointer" onclick="location.href='#'">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <div class="avatar-sm">
+                                                        <span class="avatar-title bg-soft-warning rounded">
+                                                            <i class="ri-price-tag-3-line font-size-24 text-warning"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h5 class="mb-1">电价管理</h5>
+                                                    <p class="text-muted mb-0">设置充电价格策略</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="quick-action-card cursor-pointer" onclick="location.href='#'">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <div class="avatar-sm">
+                                                        <span class="avatar-title bg-soft-info rounded">
+                                                            <i class="ri-file-chart-line font-size-24 text-info"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h5 class="mb-1">统计报表</h5>
+                                                    <p class="text-muted mb-0">查看运营数据报表</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 充电站详情模态框 -->
+    <div class="modal fade" id="stationDetailModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">充电站详情</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <h6 class="text-muted">基本信息</h6>
+                                <div class="table-responsive">
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <td width="100">站点名称</td>
+                                            <td>高新区充电站</td>
+                                        </tr>
+                                        <tr>
+                                            <td>站点地址</td>
+                                            <td>成都市高新区天府大道1234号</td>
+                                        </tr>
+                                        <tr>
+                                            <td>运营状态</td>
+                                            <td><span class="badge bg-success">正常运营</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>充电桩数</td>
+                                            <td>12个</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <h6 class="text-muted">实时数据</h6>
+                                <div class="table-responsive">
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <td width="100">当前功率</td>
+                                            <td>256.8 kW</td>
+                                        </tr>
+                                        <tr>
+                                            <td>今日电量</td>
+                                            <td>1,234.5 kWh</td>
+                                        </tr>
+                                        <tr>
+                                            <td>今日订单</td>
+                                            <td>45笔</td>
+                                        </tr>
+                                        <tr>
+                                            <td>今日收入</td>
+                                            <td>¥3,456.78</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <h6 class="text-muted">充电桩状态</h6>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>编号</th>
+                                            <th>类型</th>
+                                            <th>状态</th>
+                                            <th>功率</th>
+                                            <th>累计电量</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>#01</td>
+                                            <td>直流快充</td>
+                                            <td><span class="badge bg-success">空闲</span></td>
+                                            <td>0 kW</td>
+                                            <td>12,345.6 kWh</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary">远程控制</button>
+                                                <button class="btn btn-sm btn-info">查看详情</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>#02</td>
+                                            <td>直流快充</td>
+                                            <td><span class="badge bg-warning">充电中</span></td>
+                                            <td>45.6 kW</td>
+                                            <td>10,234.5 kWh</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary">远程控制</button>
+                                                <button class="btn btn-sm btn-info">查看详情</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 基础脚本 -->
+    <script src="static/libs/jquery/jquery.min.js"></script>
+    <script src="static/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="static/libs/metismenu/metisMenu.min.js"></script>
+    <script src="static/libs/simplebar/simplebar.min.js"></script>
+    <script src="static/libs/node-waves/waves.min.js"></script>
+    <script src="static/libs/feather-icons/feather.min.js"></script>
+    <!-- echarts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <!-- 高德地图 -->
+    <script src="https://webapi.amap.com/maps?v=2.0&key=your-key"></script>
+    <!-- 自定义脚本 -->
+    <script src="static/js/charging-station.js"></script>
+</body>
+</html> 

@@ -1,0 +1,13 @@
+Change Component Footprint: Designator=LED1 Old Footprint=LED0603-R-RD_RED New Footprint=0603-LED
+Change Component Footprint: Designator=LED2 Old Footprint=LED0603-R-RD_RED New Footprint=0603-LED
+Change Component Footprint: Designator=LED3 Old Footprint=LED0603-R-RD_RED New Footprint=0603-LED
+Change Component Comment : Designator=LED2 Old Comment=LED-绿色 New Comment=LED
+Change Component Comment : Designator=LED1 Old Comment=LED-蓝色 New Comment=LED
+Change Component Comment : Designator=LED3 Old Comment=LED-黄色 New Comment=LED
+Change component parameters: Designator = "LED1"; Footprint = "0603-LED"; UniqueID = "\PBDWESDF"
+Change component parameters. Clean all parameters for all variants
+Change component parameters: Designator = "LED2"; Footprint = "0603-LED"; UniqueID = "\HHDEITVL"
+Change component parameters. Clean all parameters for all variants
+Change component parameters: Designator = "LED3"; Footprint = "0603-LED"; UniqueID = "\HNPMEAUE"
+Change component parameters. Clean all parameters for all variants
+Added Room: Name=气象传感器

@@ -1,0 +1,5 @@
+Added Pin To Net: NetName=RS485_1_EN Pin=U1-2
+Added Pin To Net: NetName=RS485_1_EN Pin=U1-3
+Added Pin To Net: NetName=RS485_3_EN Pin=U2-2
+Added Pin To Net: NetName=RS485_3_EN Pin=U2-3
+Added Room: Name=气象传感器

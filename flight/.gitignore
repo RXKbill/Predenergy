@@ -1,0 +1,6 @@
+build/
+devel/
+.vscode
+.history
+*.bag
+.catkin_workspace

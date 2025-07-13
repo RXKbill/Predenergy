@@ -1,0 +1,67 @@
+Added Component: Designator=C11(0805C)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Value"; Value = "0.1uf"; VariantName = "[No Variations]"
+Added Component: Designator=C12(0805C)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Value"; Value = "0.1uf"; VariantName = "[No Variations]"
+Added Component: Designator=LED?(LED0603_RED)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "BOM_Manufacturer"; Value = "EVERLIGHT(台湾亿光)"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "BOM_Manufacturer Part"; Value = "19-217/R6C-AL1M2VY/3T"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "BOM_Supplier"; Value = "LCSC"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "BOM_Supplier Part"; Value = "C72044"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Contributor"; Value = "LCEDA_01"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "link"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "spicePre"; Value = "L"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "spiceSymbolName"; Value = "LED-0603_R"; VariantName = "[No Variations]"
+Added Component: Designator=R9(0603R)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "27-Jul-20  -  Semtech"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "10k"; VariantName = "[No Variations]"
+Added Component: Designator=R10(0603R)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "27-Jul-20  -  Semtech"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "10k"; VariantName = "[No Variations]"
+Added Component: Designator=R11(0603R)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "27-Jul-20  -  Semtech"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "4.7K"; VariantName = "[No Variations]"
+Added Component: Designator=SW1(复位按键)
+Add component. Clean all parameters for all variants
+Added Component: Designator=SW2(复位按键)
+Add component. Clean all parameters for all variants
+Added Pin To Net: NetName=GND Pin=C11-2
+Added Pin To Net: NetName=GND Pin=C12-2
+Added Pin To Net: NetName=3.3V Pin=R9-2
+Added Pin To Net: NetName=3.3V Pin=R10-2
+Added Pin To Net: NetName=3.3V Pin=R11-2
+Added Pin To Net: NetName=GND Pin=SW1-2
+Added Pin To Net: NetName=GND Pin=SW2-2
+Added Pin To Net: NetName=KEY1 Pin=C11-1
+Added Pin To Net: NetName=KEY1 Pin=CN4-10
+Added Pin To Net: NetName=KEY1 Pin=R9-1
+Added Pin To Net: NetName=KEY1 Pin=STM32-11
+Added Pin To Net: NetName=KEY1 Pin=SW1-1
+Added Net: Name=KEY1
+Added Pin To Net: NetName=KEY2 Pin=C12-1
+Added Pin To Net: NetName=KEY2 Pin=CN4-9
+Added Pin To Net: NetName=KEY2 Pin=R10-1
+Added Pin To Net: NetName=KEY2 Pin=STM32-12
+Added Pin To Net: NetName=KEY2 Pin=SW2-1
+Added Net: Name=KEY2
+Added Pin To Net: NetName=LED Pin=CN4-8
+Added Pin To Net: NetName=LED Pin=LED?-2
+Added Pin To Net: NetName=LED Pin=STM32-13
+Added Net: Name=LED
+Added Pin To Net: NetName=NetLED?_1 Pin=LED?-1
+Added Pin To Net: NetName=NetLED?_1 Pin=R11-1
+Added Net: Name=NetLED?_1
+Added Member To Class: ClassName=气象传感器 Member=Component C11 Capacitor
+Added Member To Class: ClassName=气象传感器 Member=Component C12 Capacitor
+Added Member To Class: ClassName=气象传感器 Member=Component LED? LED
+Added Member To Class: ClassName=气象传感器 Member=Component R9 Resistor
+Added Member To Class: ClassName=气象传感器 Member=Component R10 Resistor
+Added Member To Class: ClassName=气象传感器 Member=Component R11 Resistor
+Added Member To Class: ClassName=气象传感器 Member=Component SW1 SW-PB_V
+Added Member To Class: ClassName=气象传感器 Member=Component SW2 SW-PB_V
+Added Room: Name=气象传感器
