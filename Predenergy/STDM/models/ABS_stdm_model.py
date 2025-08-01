@@ -1,7 +1,7 @@
-from STDM.DFCM.linear_extractor_cluster import Linear_extractor_cluster
+from layers.linear_extractor_cluster import Linear_extractor_cluster
 import torch.nn as nn
 from einops import rearrange
-from STDM.DFFM.masked_attention import Mahalanobis_mask, Encoder, EncoderLayer, FullAttention, AttentionLayer
+from utils.masked_attention import Mahalanobis_mask, Encoder, EncoderLayer, FullAttention, AttentionLayer
 import torch
 
 

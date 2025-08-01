@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 from collections import OrderedDict
 from typing import List, Optional, Tuple
 import pandas as pd

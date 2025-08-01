@@ -6,10 +6,10 @@ import pandas as pd
 import torch
 from torch.utils.data import DataLoader
 
-from STDM.TS_Lib.utils.timefeatures import (
+from TS_Lib.utils.timefeatures import (
     time_features,
 )
-from STDM.utils.data_processing import split_time
+from .data_processing import split_time
 
 
 def adjust_learning_rate(optimizer, epoch, args):

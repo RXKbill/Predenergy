@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from ..DFCM.Autoformer_EncDec import series_decomp
+from .Autoformer_EncDec import series_decomp
 
 
 class Linear_extractor(nn.Module):

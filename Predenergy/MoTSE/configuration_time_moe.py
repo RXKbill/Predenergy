@@ -1,7 +1,6 @@
 from typing import List
 from transformers import PretrainedConfig
 
-
 class ToMSEConfig(PretrainedConfig):
     model_type = "time_moe"
     keys_to_ignore_at_inference = ["past_key_values"]
