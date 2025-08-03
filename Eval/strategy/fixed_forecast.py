@@ -5,35 +5,14 @@ from typing import List, Optional
 import numpy as np
 import pandas as pd
 
-from ts_benchmark.evaluation.metrics import regression_metrics
-from ts_benchmark.evaluation.strategy.constants import FieldNames
-from ts_benchmark.evaluation.strategy.forecasting import ForecastingStrategy
-from ts_benchmark.models import ModelFactory
-from ts_benchmark.utils.data_processing import split_before
+from Eval.metrics import regression_metrics
+from Eval.strategy.constants import FieldNames
+from Eval.strategy.forecasting import ForecastingStrategy
+from models.models import ModelFactory
+from utils.data_processing import split_before
 
 
 class FixedForecast(ForecastingStrategy):
-    """
-    Fixed forecast strategy class
-
-    This strategy defines a forecasting task with fixed prediction length.
-
-    The required strategy configs include:
-
-    - horizon (int): The length to predict, i.e. the length of the test series;
-    - train_ratio_in_tv (float): The ratio of the training series when performing train-validation split.
-
-    The accepted metrics include all regression metrics.
-
-    The return fields other than the specified metrics are (in order):
-
-    - FieldNames.FILE_NAME: The name of the series;
-    - FieldNames.FIT_TIME: The training time;
-    - FieldNames.INFERENCE_TIME: The inference time;
-    - FieldNames.ACTUAL_DATA: The true test data, encoded as a string.
-    - FieldNames.INFERENCE_DATA: The predicted data, encoded as a string.
-    - FieldNames.LOG_INFO: Any log returned by the evaluator.
-    """
 
     REQUIRED_CONFIGS = [
         "horizon",

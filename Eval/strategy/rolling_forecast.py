@@ -7,12 +7,12 @@ import numpy as np
 import pandas as pd
 from numpy.lib.stride_tricks import sliding_window_view
 
-from ts_benchmark.evaluation.metrics import regression_metrics
-from ts_benchmark.evaluation.strategy.constants import FieldNames
-from ts_benchmark.evaluation.strategy.forecasting import ForecastingStrategy
-from ts_benchmark.models import ModelFactory
-from ts_benchmark.models.model_base import BatchMaker, ModelBase
-from ts_benchmark.utils.data_processing import split_before
+from Eval.metrics import regression_metrics
+from Eval.strategy.constants import FieldNames
+from Eval.strategy.forecasting import ForecastingStrategy
+from models.models import ModelFactory
+from models.models.model_base import BatchMaker, ModelBase
+from utils.data_processing import split_before
 
 
 class RollingForecastEvalBatchMaker:
@@ -96,33 +96,6 @@ class RollingForecastPredictBatchMaker(BatchMaker):
 
 
 class RollingForecast(ForecastingStrategy):
-    """
-    Rolling forecast strategy class
-
-    This strategy defines a forecasting task that fits once on the training set and
-    forecasts on the testing set in a rolling window style.
-
-    The required strategy configs include:
-
-    - horizon (int): The length of each prediction;
-    - tv_ratio (float): The ratio of the train-validation series when performing
-      train-test split;
-    - train_ratio_in_tv (float): The ratio of the training series when performing
-      train-validation split;
-    - stride (int): Rolling stride, i.e. the interval between two windows;
-    - num_rollings (int): The maximum number of steps to forecast;
-
-    The accepted metrics include all regression metrics.
-
-    The return fields other than the specified metrics are (in order):
-
-    - FieldNames.FILE_NAME: The name of the series;
-    - FieldNames.FIT_TIME: The training time;
-    - FieldNames.INFERENCE_TIME: The inference time;
-    - FieldNames.ACTUAL_DATA: The true test data, encoded as a string.
-    - FieldNames.INFERENCE_DATA: The predicted data, encoded as a string.
-    - FieldNames.LOG_INFO: Any log returned by the evaluator.
-    """
 
     REQUIRED_CONFIGS = [
         "horizon",
@@ -158,15 +131,7 @@ class RollingForecast(ForecastingStrategy):
         meta_info: Optional[pd.Series],
         tv_ratio: float,
     ) -> Tuple[int, int]:
-        """
-        Gets the size of the train-validation series and the test series
-
-        :param series: Target series.
-        :param meta_info: Meta-information of the target series.
-        :param tv_ratio: The ratio of the train-validation series when performing
-            train-test split;
-        :return: The length of the train-validation series, and the length of the test series.
-        """
+    
         data_len = int(self._get_meta_info(meta_info, "length", len(series)))
         train_length = int(tv_ratio * data_len)
         test_length = data_len - train_length
@@ -183,15 +148,7 @@ class RollingForecast(ForecastingStrategy):
         model_factory: ModelFactory,
         series_name: str,
     ) -> List:
-        """
-        The entry function of execution pipeline of forecasting tasks
-
-        :param series: Target series to evaluate.
-        :param meta_info: The corresponding meta-info.
-        :param model_factory: The factory to create models.
-        :param series_name: the name of the target series.
-        :return: The evaluation results.
-        """
+        
         model = model_factory()
         if model.batch_forecast.__annotations__.get("not_implemented_batch"):
             return self._eval_sample(series, meta_info, model, series_name)
@@ -205,15 +162,7 @@ class RollingForecast(ForecastingStrategy):
         model: ModelBase,
         series_name: str,
     ) -> List:
-        """
-        The sample execution pipeline of forecasting tasks.
-
-        :param series: Target series to evaluate.
-        :param meta_info: The corresponding meta-info.
-        :param model: The model used for prediction.
-        :param series_name: the name of the target series.
-        :return: The evaluation results.
-        """
+        
         stride = self._get_scalar_config_value("stride", series_name)
         horizon = self._get_scalar_config_value("horizon", series_name)
         num_rollings = self._get_scalar_config_value("num_rollings", series_name)
@@ -283,15 +232,7 @@ class RollingForecast(ForecastingStrategy):
         model: ModelBase,
         series_name: str,
     ) -> List:
-        """
-        The batch execution pipeline of forecasting tasks.
-
-        :param series: Target series to evaluate.
-        :param meta_info: The corresponding meta-info.
-        :param model: The model used for prediction.
-        :param series_name: The name of the target series.
-        :return: The evaluation results.
-        """
+        
         stride = self._get_scalar_config_value("stride", series_name)
         horizon = self._get_scalar_config_value("horizon", series_name)
         num_rollings = self._get_scalar_config_value("num_rollings", series_name)
