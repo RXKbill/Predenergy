@@ -3,8 +3,9 @@
 import numpy as np
 import os
 import pandas as pd
-from torch.utils.data import Dataset
-from sklearn.preprocessing import StandardScaler
+import paddle
+from paddle.io import Dataset
+from paddlets.transform import StandardScaler
 
 from general_dataset import GeneralDataset
 from utils.log_util import log_in_local_rank_0
@@ -47,8 +48,17 @@ class BenchmarkEvalDataset(Dataset):
 
         # scaling
         scaler = StandardScaler()
-        scaler.fit(train_data)
-        scaled_test_data = scaler.transform(test_data)
+        # 使用PaddleTS的StandardScaler
+        from paddlets.datasets import TSDataset
+        train_df = pd.DataFrame(train_data, columns=[f'col_{i}' for i in range(train_data.shape[1])])
+        test_df = pd.DataFrame(test_data, columns=[f'col_{i}' for i in range(test_data.shape[1])])
+        
+        train_ts = TSDataset.load_from_dataframe(train_df, target_cols=train_df.columns.tolist())
+        test_ts = TSDataset.load_from_dataframe(test_df, target_cols=test_df.columns.tolist())
+        
+        scaler.fit(train_ts)
+        scaled_test_ts = scaler.transform(test_ts)
+        scaled_test_data = scaled_test_ts.to_dataframe().values
 
         # assignment
         self.hf_dataset = scaled_test_data.transpose(1, 0)

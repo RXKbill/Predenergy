@@ -1,17 +1,3 @@
-"""
-@article{paparrizos2022volume,
-  title={{Volume Under the Surface: A New Accuracy Evaluation Measure for Time-Series Anomaly Detection}},
-  author={Paparrizos, John and Boniol, Paul and Palpanas, Themis and Tsay, Ruey S and Elmore, Aaron and Franklin, Michael J},
-  journal={Proceedings of the VLDB Endowment},
-  volume={15},
-  number={11},
-  pages={2774--2787},
-  year={2022},
-  publisher={VLDB Endowment}
-}
-
-"""
-
 # -*- coding: utf-8 -*-
 from typing import List
 

@@ -8,12 +8,12 @@ This script demonstrates how to train a Predenergy model using the PredenergyRun
 
 import os
 from models.Predenergy.runner import PredenergyRunner
-from models.Predenergy.models.configuration_Predenergy import PredenergyConfig
+from models.Predenergy.models.unified_config import PredenergyUnifiedConfig
 
 
 def main():
     # Configuration
-    model_config = PredenergyConfig(
+    model_config = PredenergyUnifiedConfig(
         input_size=1,
         hidden_size=512,
         seq_len=96,

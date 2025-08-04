@@ -1,6 +1,6 @@
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+import paddle
+import paddle.nn as nn
+import paddle.nn.functional as F
 
 
 class my_Layernorm(nn.Module):
@@ -14,7 +14,7 @@ class my_Layernorm(nn.Module):
 
     def forward(self, x):
         x_hat = self.layernorm(x)
-        bias = torch.mean(x_hat, dim=1).unsqueeze(1).repeat(1, x.shape[1], 1)
+        bias = paddle.mean(x_hat, axis=1).unsqueeze(1).repeat(1, x.shape[1], 1)
         return x_hat - bias
 
 
@@ -32,7 +32,7 @@ class moving_avg(nn.Module):
         # padding on the both ends of time data
         front = x[:, 0:1, :].repeat(1, (self.kernel_size - 1) // 2, 1)
         end = x[:, -1:, :].repeat(1, (self.kernel_size - 1) // 2, 1)
-        x = torch.cat([front, x, end], dim=1)
+        x = paddle.concat([front, x, end], axis=1)
         x = self.avg(x.permute(0, 2, 1))
         x = x.permute(0, 2, 1)
         return x

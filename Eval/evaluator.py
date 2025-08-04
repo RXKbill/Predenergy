@@ -5,8 +5,7 @@ from typing import List, Tuple, Any
 
 import numpy as np
 
-
-from ts_benchmark.evaluation.metrics import METRICS
+from Eval.metrics import METRICS
 
 
 def encode_params(params):

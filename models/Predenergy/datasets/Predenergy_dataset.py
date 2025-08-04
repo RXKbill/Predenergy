@@ -2,6 +2,11 @@
 # -*- coding:utf-8 _*-
 import os
 import numpy as np
+import pandas as pd
+import paddle
+from paddlets.datasets import TSDataset
+from paddlets.transform import StandardScaler, MinMaxScaler
+from paddlets.utils import get_target_cols
 
 from ts_dataset import TimeSeriesDataset
 from general_dataset import GeneralDataset
@@ -23,6 +28,10 @@ class PredenergyDataset(TimeSeriesDataset):
                 self.normalization_method = max_scaler
             elif normalization_method.lower() == 'zero':
                 self.normalization_method = zero_scaler
+            elif normalization_method.lower() == 'paddlets_standard':
+                self.normalization_method = paddlets_standard_scaler
+            elif normalization_method.lower() == 'paddlets_minmax':
+                self.normalization_method = paddlets_minmax_scaler
             else:
                 raise ValueError(f'Unknown normalization method: {normalization_method}')
         else:
@@ -121,6 +130,42 @@ def max_scaler(seq):
         normed_seq = seq / max_val
 
     return normed_seq.astype(origin_dtype)
+
+
+def paddlets_standard_scaler(seq):
+    """使用PaddleTS的StandardScaler进行标准化"""
+    if not isinstance(seq, np.ndarray):
+        seq = np.array(seq)
+    
+    # 创建TSDataset格式的数据
+    df = pd.DataFrame(seq, columns=['value'])
+    ts_data = TSDataset.load_from_dataframe(df, target_cols=['value'])
+    
+    # 使用PaddleTS的StandardScaler
+    scaler = StandardScaler()
+    ts_data_scaled = scaler.fit_transform(ts_data)
+    
+    # 提取标准化后的数据
+    scaled_values = ts_data_scaled.to_dataframe()['value'].values
+    return scaled_values.astype(seq.dtype)
+
+
+def paddlets_minmax_scaler(seq):
+    """使用PaddleTS的MinMaxScaler进行归一化"""
+    if not isinstance(seq, np.ndarray):
+        seq = np.array(seq)
+    
+    # 创建TSDataset格式的数据
+    df = pd.DataFrame(seq, columns=['value'])
+    ts_data = TSDataset.load_from_dataframe(df, target_cols=['value'])
+    
+    # 使用PaddleTS的MinMaxScaler
+    scaler = MinMaxScaler()
+    ts_data_scaled = scaler.fit_transform(ts_data)
+    
+    # 提取归一化后的数据
+    scaled_values = ts_data_scaled.to_dataframe()['value'].values
+    return scaled_values.astype(seq.dtype)
 
 
 def binary_search(sorted_list, value):

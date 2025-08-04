@@ -4,12 +4,12 @@ from typing import Optional, Tuple
 
 import numpy as np
 import pandas as pd
-import torch
-import torch.nn as nn
+import paddle
+import paddle.nn as nn
 import logging
 from sklearn.preprocessing import StandardScaler
-from torch import optim
-from torch.utils.data import DataLoader
+from paddle import optimizer
+from paddle.io import DataLoader
 
 from utils import (
     forecasting_data_provider,
@@ -18,7 +18,7 @@ from utils import (
     EarlyStopping,
     adjust_learning_rate,
 )
-from models.model_base import ModelBase, BatchMaker
+from Predenergy.models.model_base import ModelBase, BatchMaker
 from utils.data_processing import split_time
 
 logger = logging.getLogger(__name__)
@@ -59,16 +59,6 @@ class Config:
 
 
 class DeepForecastingModelBase(ModelBase):
-    """
-    Base class for deep learning model in forecasting tasks, inherited from ModelBase.
-
-    This class provides a framework and default functionalities for adapters in time series forecasting tasks,
-    including model initialization, configuration of loss functions and optimizers, data processing,
-    learning rate adjustment, save checkpoints and early stopping mechanisms.
-
-    Subclasses must implement _init_model and _process methods to define specific data processing and modeling logic.
-
-    """
 
     def __init__(self, model_config, **kwargs):
         super(DeepForecastingModelBase, self).__init__()
@@ -78,55 +68,19 @@ class DeepForecastingModelBase(ModelBase):
         self.win_size = self.config.seq_len
 
     def _init_model(self):
-        """
-        Initialize the model.
 
-        This method is intended to be implemented by subclasses to initialize the specific model.
-        The current implementation raises a NotImplementedError to indicate that this method should
-        be overridden in subclasses.
-
-        :return: The actual model object. The specific type of the return value should be defined by subclasses.
-        """
         raise NotImplementedError("model must be implemented.")
 
     def _adjust_lr(self, optimizer, epoch, config):
-        """
-        Adjusts the learning rate of the optimizer based on the current epoch and configuration.
-
-        This method is typically called to update the learning rate according to a predefined schedule.
-
-        :param optimizer: The optimizer for which the learning rate will be adjusted.
-        :param epoch: The current training epoch used to calculate the new learning rate.
-        :param config: Configuration object containing parameters that control learning rate adjustment.
-        """
+        
         adjust_learning_rate(optimizer, epoch, config)
 
     def save_checkpoint(self, model):
-        """
-        Save the model checkpoint.
-
-        This function saves the model's state dictionary (state_dict) to be used
-        for restoring the model at a later time. A deep copy of the state_dict is returned.
-
-        Parameters:
-        - model (torch.nn.Module): The current instance of the model being trained.
-
-        Returns:
-        - OrderedDict: A deep copy of the model's state_dict, which can be used to restore
-          the model's parameters in the future.
-        """
+        
         return copy.deepcopy(model.state_dict())
 
     def _init_criterion_and_optimizer(self):
-        """
-        Initializes the task loss function and optimizer.
-
-        This method configures the task loss function and the optimizer based on the settings in `self.config`.
-        Default supported loss functions include Mean Squared Error (MSE), Mean Absolute Error (MAE), and Huber Loss.
-        And the Adam optimizer is used with the model's parameters and the learning rate specified in the configuration.
-
-        :return: A tuple containing the initialized task loss function (`criterion`) and the optimizer (`optimizer`).
-        """
+        
         if self.config.loss == "MSE":
             criterion = nn.MSELoss()
         elif self.config.loss == "MAE":
@@ -134,67 +88,19 @@ class DeepForecastingModelBase(ModelBase):
         else:
             criterion = nn.HuberLoss(delta=0.5)
 
-        optimizer = optim.Adam(self.model.parameters(), lr=self.config.lr)
+        optimizer = paddle.optimizer.Adam(self.model.parameters(), lr=self.config.lr)
         return criterion, optimizer
 
     def _process(self, input, target, input_mark, target_mark):
-        """
-        A method that needs to be implemented by subclasses to process data and model, and calculate additional loss.
-
-        This method's purpose is to serve as a template method, defining a standard process for data processing
-        and modeling, as well as calculating any additional losses. Subclasses should implement specific processing
-        and calculation logic based on their own needs.
-
-        Parameters:
-        - input: The input data, the specific form and meaning depend on the implementation of the subclass.
-        - target: The target data, used in conjunction with input data for processing and loss calculation.
-        - input_mark: Marks or metadata for the input data, assisting in data processing or model training.
-        - target_mark: Marks or metadata for the target data, similarly assisting in data processing or model training.
-
-        Returns:
-        - dict: A dictionary containing at least one key:
-            - 'output' (necessary): The model output tensor.
-            - 'additional_loss' (optional): An additional loss if it exists.
-
-        Raises:
-        - NotImplementedError: If the subclass does not implement this method, a NotImplementedError will be raised
-                               when calling this method.
-        """
+        
         raise NotImplementedError("Process must be implemented")
 
     def _post_process(self, output, target):
-        """
-        Performs post-processing on the output and target data.
-
-        This function is designed to process the output and target data after the model's forward computation,
-        and return them directly in this example. The specific post-processing logic may include, but is not limited to,
-        data format conversion, dimensionality matching, data type conversion, etc.
-
-        Parameters:
-        - output: The output data from the model, with no specific data format or type assumed.
-        - target: The target data, which is the expected result, also without a fixed data format or type.
-
-        Returns:
-        - output: The output data after post-processing, which in this case is the same as the input.
-        - target: The target data after post-processing, which in this case is the same as the input.
-        """
+        
         return output, target
 
     def _init_early_stopping(self):
-        """
-        Initializes the early stopping strategy for training.
-
-        This function is used to create an instance of EarlyStopping, which helps prevent overfitting
-        during model training by halting the training process when the validation performance
-        does not improve for a specified number of consecutive iterations.
-
-        Parameters:
-        None directly, but it uses self.config.patience as the patience parameter for EarlyStopping.
-
-        Returns:
-        An instance of EarlyStopping, which monitors the model's performance metrics and determines
-        when to stop the training.
-        """
+        
         return EarlyStopping(patience=self.config.patience)
 
     @property
@@ -203,11 +109,7 @@ class DeepForecastingModelBase(ModelBase):
 
     @staticmethod
     def required_hyper_params() -> dict:
-        """
-        Return the hyperparameters required by model.
-
-        :return: An empty dictionary indicating that model does not require additional hyperparameters.
-        """
+        
         return {
             "seq_len": "input_chunk_length",
             "horizon": "output_chunk_length",
@@ -291,13 +193,7 @@ class DeepForecastingModelBase(ModelBase):
     def _padding_time_stamp_mark(
         self, time_stamps_list: np.ndarray, padding_len: int
     ) -> np.ndarray:
-        """
-        Padding time stamp mark for prediction.
-
-        :param time_stamps_list: A batch of time stamps.
-        :param padding_len: The len of time stamp need to be padded.
-        :return: The padded time stamp mark.
-        """
+        
         padding_time_stamp = []
         for time_stamps in time_stamps_list:
             start = time_stamps[-1]
@@ -315,20 +211,14 @@ class DeepForecastingModelBase(ModelBase):
         return padding_mark
 
     def validate(
-        self, valid_data_loader: DataLoader, series_dim: int, criterion: torch.nn.Module
+        self, valid_data_loader: DataLoader, series_dim: int, criterion: paddle.nn.Layer
     ) -> float:
-        """
-        Validates the model performance on the provided validation dataset.
-        :param valid_data_loader: A PyTorch DataLoader for the validation dataset.
-        :param series_dim : The number of series data‘s dimensions.
-        :param criterion : The loss function to compute the loss between model predictions and ground truth.
-        :returns:The mean loss computed over the validation dataset.
-        """
+        
         config = self.config
         total_loss = []
         self.model.eval()
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        with torch.no_grad():
+        device = paddle.device.get_device()
+        with paddle.no_grad():
             for input, target, input_mark, target_mark in valid_data_loader:
                 input, target, input_mark, target_mark = (
                     input.to(device),
@@ -346,7 +236,7 @@ class DeepForecastingModelBase(ModelBase):
                 output = output[:, -config.horizon :, :series_dim]
                 output, target = self._post_process(output, target)
                 all_loss = criterion(output, target) + additional_loss
-                loss = all_loss.detach().cpu().numpy()
+                loss = all_loss.detach().numpy()
                 total_loss.append(loss)
 
         total_loss = np.mean(total_loss)
@@ -361,13 +251,7 @@ class DeepForecastingModelBase(ModelBase):
         train_ratio_in_tv: float = 1.0,
         **kwargs,
     ) -> "ModelBase":
-        """
-        Train the model.
-        :param train_valid_data: Time series data used for training and validation.
-        :param covariates: Additional external variables.
-        :param train_ratio_in_tv: Represents the splitting ratio of the training set validation set. If it is equal to 1, it means that the validation set is not partitioned.
-        :return: The fitted model object.
-        """
+        
         if covariates is None:
             covariates = {}
         series_dim = train_valid_data.shape[-1]
@@ -384,7 +268,7 @@ class DeepForecastingModelBase(ModelBase):
 
         self.model = self._init_model()
 
-        device_ids = np.arange(torch.cuda.device_count()).tolist()
+        device_ids = np.arange(paddle.device.device_count()).tolist()
         if len(device_ids) > 1 and self.config.parallel_strategy == "DP":
             self.model = nn.DataParallel(self.model, device_ids=device_ids)
         print(
@@ -434,9 +318,9 @@ class DeepForecastingModelBase(ModelBase):
         criterion, optimizer = self._init_criterion_and_optimizer()
 
         if config.use_amp == 1:
-            scaler = torch.cuda.amp.GradScaler()
+            scaler = paddle.amp.GradScaler()
 
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        device = paddle.device.get_device()
 
         self.early_stopping = self._init_early_stopping()
         self.model.to(device)
@@ -502,13 +386,7 @@ class DeepForecastingModelBase(ModelBase):
         *,
         covariates: Optional[dict] = None,
     ) -> np.ndarray:
-        """
-        Make predictions.
-        :param horizon: The predicted length.
-        :param series: Time series data used for prediction.
-        :param covariates: Additional external variables
-        :return: An array of predicted results.
-        """
+        
         if covariates is None:
             covariates = {}
         series_dim = series.shape[-1]
@@ -544,11 +422,11 @@ class DeepForecastingModelBase(ModelBase):
             test, config, timeenc=1, batch_size=1, shuffle=False, drop_last=False
         )
 
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        device = paddle.device.get_device()
         self.model.to(device)
         self.model.eval()
 
-        with torch.no_grad():
+        with paddle.no_grad():
             answer = None
             while answer is None or answer.shape[0] < horizon:
                 for input, target, input_mark, target_mark in test_data_loader:
@@ -563,7 +441,7 @@ class DeepForecastingModelBase(ModelBase):
                     output = out_loss["output"]
 
                 column_num = output.shape[-1]
-                temp = output.cpu().numpy().reshape(-1, column_num)[-config.horizon :]
+                temp = output.numpy().reshape(-1, column_num)[-config.horizon :]
 
                 if answer is None:
                     answer = temp
@@ -577,7 +455,7 @@ class DeepForecastingModelBase(ModelBase):
                         )
                     return answer[-horizon:, :series_dim]
 
-                output = output.cpu().numpy()[:, -config.horizon :]
+                output = output.numpy()[:, -config.horizon :]
                 for i in range(config.horizon):
                     test.iloc[i + config.seq_len] = output[0, i, :]
 
@@ -596,19 +474,13 @@ class DeepForecastingModelBase(ModelBase):
     def batch_forecast(
         self, horizon: int, batch_maker: BatchMaker, **kwargs
     ) -> np.ndarray:
-        """
-        Make predictions by batch.
-
-        :param horizon: The length of each prediction.
-        :param batch_maker: Make batch data used for prediction.
-        :return: An array of predicted results.
-        """
+        
         if self.check_point is not None:
             self.model.load_state_dict(self.check_point)
 
         if self.model is None:
             raise ValueError("Model not trained. Call the fit() function first.")
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        device = paddle.device.get_device()
         self.model.to(device)
         self.model.eval()
 
@@ -657,29 +529,21 @@ class DeepForecastingModelBase(ModelBase):
         horizon: int,
         input_np: np.ndarray,
         all_mark: np.ndarray,
-        device: torch.device,
+        device: paddle.device.Device,
     ) -> list:
-        """
-        Perform rolling predictions using the given input data and marks.
-
-        :param horizon: Length of predictions to be made.
-        :param input_np: Numpy array of input data.
-        :param all_mark: Numpy array of all marks (time stamps mark).
-        :param device: Device to run the model on.
-        :return: List of predicted results for each prediction batch.
-        """
+        
         rolling_time = 0
         input_np, target_np, input_mark_np, target_mark_np = self._get_rolling_data(
             input_np, None, all_mark, rolling_time
         )
-        with torch.no_grad():
+        with paddle.no_grad():
             answers = []
             while not answers or sum(a.shape[1] for a in answers) < horizon:
                 input, dec_input, input_mark, target_mark = (
-                    torch.tensor(input_np, dtype=torch.float32).to(device),
-                    torch.tensor(target_np, dtype=torch.float32).to(device),
-                    torch.tensor(input_mark_np, dtype=torch.float32).to(device),
-                    torch.tensor(target_mark_np, dtype=torch.float32).to(device),
+                    paddle.to_tensor(input_np, dtype=paddle.float32).to(device),
+                    paddle.to_tensor(target_np, dtype=paddle.float32).to(device),
+                    paddle.to_tensor(input_mark_np, dtype=paddle.float32).to(device),
+                    paddle.to_tensor(target_mark_np, dtype=paddle.float32).to(device),
                 )
 
                 out_loss = self._process(input, dec_input, input_mark, target_mark)
@@ -687,8 +551,7 @@ class DeepForecastingModelBase(ModelBase):
                 column_num = output.shape[-1]
                 real_batch_size = output.shape[0]
                 answer = (
-                    output.cpu()
-                    .numpy()
+                    output.numpy()
                     .reshape(real_batch_size, -1, column_num)[
                         :, -self.config.horizon :, :
                     ]
@@ -697,7 +560,7 @@ class DeepForecastingModelBase(ModelBase):
                 if sum(a.shape[1] for a in answers) >= horizon:
                     break
                 rolling_time += 1
-                output = output.cpu().numpy()[:, -self.config.horizon :, :]
+                output = output.numpy()[:, -self.config.horizon :, :]
                 (
                     input_np,
                     target_np,
@@ -715,15 +578,7 @@ class DeepForecastingModelBase(ModelBase):
         all_mark: np.ndarray,
         rolling_time: int,
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-        """
-        Prepare rolling data based on the current rolling time.
-
-        :param input_np: Current input data.
-        :param output: Output from the model prediction.
-        :param all_mark: Numpy array of all marks (time stamps mark).
-        :param rolling_time: Current rolling time step.
-        :return: Updated input data, target data, input marks, and target marks for rolling prediction.
-        """
+        
         if rolling_time > 0:
             input_np = np.concatenate((input_np, output), axis=1)
             input_np = input_np[:, -self.config.seq_len :, :]

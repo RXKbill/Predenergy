@@ -1,11 +1,10 @@
-import torch.nn as nn
-import torch
+import paddle.nn as nn
+import paddle
 from math import sqrt
 
-import torch.nn.functional as F
-from torch.nn.functional import gumbel_softmax
+import paddle.nn.functional as F
+from paddle.nn.functional import gumbel_softmax
 import math
-import torch.fft
 from einops import rearrange
 
 
@@ -78,7 +77,7 @@ class FullAttention(nn.Module):
         _, S, _, D = values.shape
         scale = self.scale or 1. / sqrt(E)
 
-        scores = torch.einsum("blhe,bshe->bhls", queries, keys)
+        scores = paddle.einsum("blhe,bshe->bhls", queries, keys)
 
         # if self.mask_flag:
         #     large_negative = -math.log(1e10)
@@ -87,17 +86,17 @@ class FullAttention(nn.Module):
         #     scores = scores * attention_mask
         if self.mask_flag:
             large_negative = -math.log(1e10)
-            attention_mask = torch.where(attn_mask == 0, large_negative, 0)
+            attention_mask = paddle.where(attn_mask == 0, large_negative, 0)
 
             scores = scores * attn_mask + attention_mask
 
-        A = self.dropout(torch.softmax(scale * scores, dim=-1))
-        V = torch.einsum("bhls,bshd->blhd", A, values)
+        A = self.dropout(paddle.softmax(scale * scores, axis=-1))
+        V = paddle.einsum("bhls,bshd->blhd", A, values)
 
         if self.output_attention:
             return V.contiguous(), A
         else:
-            return V.contiguous(), None
+            return V, None
 
 
 class AttentionLayer(nn.Module):
@@ -141,37 +140,37 @@ class Mahalanobis_mask(nn.Module):
     def __init__(self, input_size):
         super(Mahalanobis_mask, self).__init__()
         frequency_size = input_size // 2 + 1
-        self.A = nn.Parameter(torch.randn(frequency_size, frequency_size), requires_grad=True)
+        self.A = nn.Parameter(paddle.randn([frequency_size, frequency_size]))
 
     def calculate_prob_distance(self, X):
-        XF = torch.abs(torch.fft.rfft(X, dim=-1))
+        XF = paddle.abs(paddle.fft.rfft(X, axis=-1))
         X1 = XF.unsqueeze(2)
         X2 = XF.unsqueeze(1)
 
         # B x C x C x D
         diff = X1 - X2
 
-        temp = torch.einsum("dk,bxck->bxcd", self.A, diff)
+        temp = paddle.einsum("dk,bxck->bxcd", self.A, diff)
 
-        dist = torch.einsum("bxcd,bxcd->bxc", temp, temp)
+        dist = paddle.einsum("bxcd,bxcd->bxc", temp, temp)
 
         # exp_dist = torch.exp(-dist)
         exp_dist = 1 / (dist + 1e-10)
         # 对角线置零
 
-        identity_matrices = 1 - torch.eye(exp_dist.shape[-1])
-        mask = identity_matrices.repeat(exp_dist.shape[0], 1, 1).to(exp_dist.device)
-        exp_dist = torch.einsum("bxc,bxc->bxc", exp_dist, mask)
-        exp_max, _ = torch.max(exp_dist, dim=-1, keepdim=True)
+        identity_matrices = 1 - paddle.eye(exp_dist.shape[-1])
+        mask = identity_matrices.repeat([exp_dist.shape[0], 1, 1])
+        exp_dist = paddle.einsum("bxc,bxc->bxc", exp_dist, mask)
+        exp_max, _ = paddle.max(exp_dist, axis=-1, keepdim=True)
         exp_max = exp_max.detach()
 
         # B x C x C
         p = exp_dist / exp_max
 
-        identity_matrices = torch.eye(p.shape[-1])
-        p1 = torch.einsum("bxc,bxc->bxc", p, mask)
+        identity_matrices = paddle.eye(p.shape[-1])
+        p1 = paddle.einsum("bxc,bxc->bxc", p, mask)
 
-        diag = identity_matrices.repeat(p.shape[0], 1, 1).to(p.device)
+        diag = identity_matrices.repeat([p.shape[0], 1, 1])
         p = (p1 + diag) * 0.99
 
         return p
@@ -182,10 +181,10 @@ class Mahalanobis_mask(nn.Module):
         flatten_matrix = rearrange(distribution_matrix, 'b c d -> (b c d) 1')
         r_flatten_matrix = 1 - flatten_matrix
 
-        log_flatten_matrix = torch.log(flatten_matrix / r_flatten_matrix)
-        log_r_flatten_matrix = torch.log(r_flatten_matrix / flatten_matrix)
+        log_flatten_matrix = paddle.log(flatten_matrix / r_flatten_matrix)
+        log_r_flatten_matrix = paddle.log(r_flatten_matrix / flatten_matrix)
 
-        new_matrix = torch.concat([log_flatten_matrix, log_r_flatten_matrix], dim=-1)
+        new_matrix = paddle.concat([log_flatten_matrix, log_r_flatten_matrix], axis=-1)
         resample_matrix = gumbel_softmax(new_matrix, hard=True)
 
         resample_matrix = rearrange(resample_matrix[..., 0], '(b c d) -> b c d', b=b, c=c, d=d)
@@ -198,5 +197,5 @@ class Mahalanobis_mask(nn.Module):
         sample = self.bernoulli_gumbel_rsample(p)
 
         mask = sample.unsqueeze(1)
-        cnt = torch.sum(mask, dim=-1)
+        cnt = paddle.sum(mask, axis=-1)
         return mask

@@ -1,7 +1,7 @@
 import warnings
 from typing import Any, Dict, List, Optional, Union
 
-import torch
+import paddle
 
 from transformers import GenerationMixin, LogitsProcessorList, StoppingCriteriaList
 from transformers.generation import validate_stopping_criteria, EosTokenCriteria
@@ -13,7 +13,7 @@ class TSGenerationMixin(GenerationMixin):
 
     def _greedy_search(
             self,
-            input_ids: torch.Tensor,
+            input_ids: paddle.Tensor,
             logits_processor: Optional[LogitsProcessorList] = None,
             stopping_criteria: Optional[StoppingCriteriaList] = None,
             max_length: Optional[int] = None,
@@ -27,8 +27,8 @@ class TSGenerationMixin(GenerationMixin):
             synced_gpus: bool = False,
             streamer: Optional["BaseStreamer"] = None,
             **model_kwargs,
-    ) -> Union[GenerateNonBeamOutput, torch.Tensor]:
-        input_ids_origin_device = input_ids.device
+    ) -> Union[GenerateNonBeamOutput, paddle.Tensor]:
+        input_ids_origin_device = input_ids.place
         input_ids = input_ids.to(self.device)
         if len(input_ids.shape) == 2:
             batch_size, cur_len = input_ids.shape
@@ -91,8 +91,8 @@ class TSGenerationMixin(GenerationMixin):
         if "inputs_embeds" in model_kwargs:
             cur_len = model_kwargs["inputs_embeds"].shape[1]
         this_peer_finished = False
-        unfinished_sequences = torch.ones(batch_size, dtype=torch.long, device=input_ids.device)
-        model_kwargs["cache_position"] = torch.arange(cur_len, device=input_ids.device)
+        unfinished_sequences = paddle.ones([batch_size], dtype='int64')
+        model_kwargs["cache_position"] = paddle.arange(cur_len)
 
         max_length = stopping_criteria.max_length
         while self._has_unfinished_sequences(this_peer_finished, synced_gpus, device=input_ids.device):
@@ -139,7 +139,7 @@ class TSGenerationMixin(GenerationMixin):
                     )
 
             # argmax
-            # next_tokens = torch.argmax(next_tokens_scores, dim=-1)
+            # next_tokens = paddle.argmax(next_tokens_scores, axis=-1)
             next_tokens = next_tokens_scores
 
             # finished sentences should have their next token be a padding token
@@ -152,7 +152,7 @@ class TSGenerationMixin(GenerationMixin):
             next_tokens = next_tokens.reshape(batch_size, -1, self.config.input_size)
             horizon_length = next_tokens.shape[1]
 
-            input_ids = torch.cat([input_ids, next_tokens], dim=-2)
+            input_ids = paddle.concat([input_ids, next_tokens], axis=-2)
             if streamer is not None:
                 streamer.put(next_tokens.cpu())
             model_kwargs = self._update_model_kwargs_for_generation(
@@ -171,7 +171,7 @@ class TSGenerationMixin(GenerationMixin):
         if streamer is not None:
             streamer.end()
 
-        input_ids.squeeze_(dim=-1).to(input_ids_origin_device)
+        input_ids = input_ids.squeeze(axis=-1)
         if return_dict_in_generate:
             if self.config.is_encoder_decoder:
                 return GenerateEncoderDecoderOutput(
@@ -215,23 +215,23 @@ class TSGenerationMixin(GenerationMixin):
         # update token_type_ids with last value
         if "token_type_ids" in model_kwargs:
             token_type_ids = model_kwargs["token_type_ids"]
-            model_kwargs["token_type_ids"] = torch.cat([token_type_ids, token_type_ids[:, -1].unsqueeze(-1)], dim=-1)
+            model_kwargs["token_type_ids"] = paddle.concat([token_type_ids, token_type_ids[:, -1].unsqueeze(-1)], axis=-1)
 
         if not is_encoder_decoder:
             # update attention mask
             if "attention_mask" in model_kwargs:
                 attention_mask = model_kwargs["attention_mask"]
-                model_kwargs["attention_mask"] = torch.cat(
-                    [attention_mask, attention_mask.new_ones((attention_mask.shape[0], horizon_length))], dim=-1
-                )
+                model_kwargs["attention_mask"] = paddle.concat(
+                [attention_mask, paddle.ones_like(attention_mask[:, :horizon_length])], axis=-1
+            )
         else:
             # update decoder attention mask
             if "decoder_attention_mask" in model_kwargs:
                 decoder_attention_mask = model_kwargs["decoder_attention_mask"]
-                model_kwargs["decoder_attention_mask"] = torch.cat(
-                    [decoder_attention_mask, decoder_attention_mask.new_ones((decoder_attention_mask.shape[0], horizon_length))],
-                    dim=-1,
-                )
+                model_kwargs["decoder_attention_mask"] = paddle.concat(
+                [decoder_attention_mask, paddle.ones_like(decoder_attention_mask[:, :horizon_length])],
+                axis=-1,
+            )
 
         if "cache_position" in model_kwargs and model_kwargs["cache_position"] is not None:
             model_kwargs["cache_position"] = model_kwargs["cache_position"][-1:] + horizon_length

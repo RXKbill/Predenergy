@@ -7,8 +7,8 @@ from functools import partial
 import inspect
 
 import transformers
-import torch
-from torch.optim.lr_scheduler import LambdaLR
+import paddle
+from paddle.optimizer.lr import LambdaDecay
 from transformers import get_scheduler
 
 
@@ -21,7 +21,7 @@ class PredenergyTrainer(transformers.Trainer):
         self.label_column = label_column
         self.loss_mask_column = loss_mask_column
 
-    def create_scheduler(self, num_training_steps: int, optimizer: torch.optim.Optimizer = None):
+    def create_scheduler(self, num_training_steps: int, optimizer: paddle.optimizer.Optimizer = None):
         optimizer = self.optimizer if optimizer is None else optimizer
         min_lr_ratio = self.args.min_learning_rate / self.args.learning_rate
         if self.lr_scheduler is None:
@@ -77,7 +77,7 @@ def _get_cosine_schedule_with_warmup_and_min_lr_lambda(
 
 
 def get_cosine_schedule_with_warmup_min_lr(
-        optimizer: torch.optim.Optimizer,
+        optimizer: paddle.optimizer.Optimizer,
         num_warmup_steps: int,
         num_training_steps: int,
         num_cycles: float = 0.5,
@@ -91,4 +91,4 @@ def get_cosine_schedule_with_warmup_min_lr(
         num_cycles=num_cycles,
         min_lr_ratio=min_lr_ratio,
     )
-    return LambdaLR(optimizer, lr_lambda, last_epoch) 
+    return LambdaDecay(optimizer, lr_lambda, last_epoch) 

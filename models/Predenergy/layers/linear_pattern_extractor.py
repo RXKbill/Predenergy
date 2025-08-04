@@ -1,5 +1,5 @@
-import torch
-import torch.nn as nn
+import paddle
+import paddle.nn as nn
 from .Autoformer_EncDec import series_decomp
 
 
@@ -31,17 +31,17 @@ class Linear_extractor(nn.Module):
                     nn.Linear(self.seq_len, self.pred_len))
 
                 self.Linear_Seasonal[i].weight = nn.Parameter(
-                    (1 / self.seq_len) * torch.ones([self.pred_len, self.seq_len]))
+                    (1 / self.seq_len) * paddle.ones([self.pred_len, self.seq_len]))
                 self.Linear_Trend[i].weight = nn.Parameter(
-                    (1 / self.seq_len) * torch.ones([self.pred_len, self.seq_len]))
+                    (1 / self.seq_len) * paddle.ones([self.pred_len, self.seq_len]))
         else:
             self.Linear_Seasonal = nn.Linear(self.seq_len, self.pred_len)
             self.Linear_Trend = nn.Linear(self.seq_len, self.pred_len)
 
             self.Linear_Seasonal.weight = nn.Parameter(
-                (1 / self.seq_len) * torch.ones([self.pred_len, self.seq_len]))
+                (1 / self.seq_len) * paddle.ones([self.pred_len, self.seq_len]))
             self.Linear_Trend.weight = nn.Parameter(
-                (1 / self.seq_len) * torch.ones([self.pred_len, self.seq_len]))
+                (1 / self.seq_len) * paddle.ones([self.pred_len, self.seq_len]))
 
 
 
@@ -50,10 +50,10 @@ class Linear_extractor(nn.Module):
         seasonal_init, trend_init = seasonal_init.permute(
             0, 2, 1), trend_init.permute(0, 2, 1)
         if self.individual:
-            seasonal_output = torch.zeros([seasonal_init.size(0), seasonal_init.size(1), self.pred_len],
-                                          dtype=seasonal_init.dtype).to(seasonal_init.device)
-            trend_output = torch.zeros([trend_init.size(0), trend_init.size(1), self.pred_len],
-                                       dtype=trend_init.dtype).to(trend_init.device)
+            seasonal_output = paddle.zeros([seasonal_init.shape[0], seasonal_init.shape[1], self.pred_len],
+                                          dtype=seasonal_init.dtype)
+            trend_output = paddle.zeros([trend_init.shape[0], trend_init.shape[1], self.pred_len],
+                                       dtype=trend_init.dtype)
             for i in range(self.channels):
                 seasonal_output[:, i, :] = self.Linear_Seasonal[i](
                     seasonal_init[:, i, :])
@@ -72,7 +72,7 @@ class Linear_extractor(nn.Module):
 
     def forward(self, x_enc):
         if x_enc.shape[0] == 0:
-            return torch.empty((0, self.pred_len, self.enc_in)).to(x_enc.device)
+            return paddle.empty((0, self.pred_len, self.enc_in))
         dec_out = self.forecast(x_enc)
         return dec_out[:, -self.pred_len:, :]  # [B, L, D]
 

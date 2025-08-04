@@ -10,8 +10,8 @@ from numpy.lib.stride_tricks import sliding_window_view
 from Eval.metrics import regression_metrics
 from Eval.strategy.constants import FieldNames
 from Eval.strategy.forecasting import ForecastingStrategy
-from models.models import ModelFactory
-from models.models.model_base import BatchMaker, ModelBase
+from models.Predenergy.models import ModelFactory
+from models.Predenergy.models.model_base import BatchMaker, ModelBase
 from utils.data_processing import split_before
 
 

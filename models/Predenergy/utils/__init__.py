@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 _*-
+import paddle
 from .log_util import log_in_local_rank_0, get_logger, is_local_rank_0
 
 __all__ = [

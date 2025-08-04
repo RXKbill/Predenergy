@@ -3,6 +3,7 @@
 import json
 import os
 import numpy as np
+import paddle
 
 from .ts_dataset import TimeSeriesDataset
 

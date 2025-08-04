@@ -6,6 +6,7 @@ import pickle
 import gzip
 import yaml
 import numpy as np
+import paddle
 
 from .ts_dataset import TimeSeriesDataset
 

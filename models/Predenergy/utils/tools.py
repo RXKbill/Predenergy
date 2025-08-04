@@ -2,7 +2,7 @@ import copy
 import os
 
 import numpy as np
-import torch
+import paddle
 import matplotlib.pyplot as plt
 import pandas as pd
 

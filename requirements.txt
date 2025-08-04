@@ -1,26 +1,51 @@
-darts==0.25.0
-matplotlib==3.10.0
-numpy==1.26.4
+# Core Dependencies
+numpy>=1.21.0
 pandas>=1.5.1
-safetensors==0.5.3
-scikit-learn==1.6.1
-scipy==1.15.2
-seaborn==0.13.2
+scipy>=1.9.0
+scikit-learn>=1.1.0
+
+# Deep Learning Frameworks - Use PaddlePaddle as primary framework
+paddlepaddle>=2.5.0
+paddlepaddle-gpu>=2.5.0; sys_platform != "darwin"  # GPU version for non-macOS
+paddlets>=1.0.0  # PaddlePaddle Time Series library
+transformers>=4.40.1
+accelerate>=0.20.0
+
+# Time Series and Data Processing
+einops>=0.6.0
 statsmodels>=0.14.0
-tensorboard-data-server==0.7.2
-tensorflow-estimator==2.13.0
-tokenizers
-torch==2.6.0
-tqdm==4.67.1
-transformers==4.40.1
-transformers-stream-generator==0.0.4
-ray>=2.6.3
-dash>=2.9.3
-dash-bootstrap-components>=1.5.0
-reformer-pytorch==1.4.4
-lightgbm>=4.1.0
-llamafactory
-pyyaml
-datasets==2.18.0
-accelerate
-flash-attn
+
+# Configuration and Serialization
+pyyaml>=6.0
+safetensors>=0.3.0
+datasets>=2.18.0
+
+# Visualization and Monitoring
+matplotlib>=3.5.0
+seaborn>=0.11.0
+tensorboard>=2.12.0
+tqdm>=4.64.0
+
+# API and Web Interface
+fastapi>=0.100.0
+uvicorn>=0.22.0
+pydantic>=2.0.0
+
+# Development and Testing
+pytest>=7.0.0
+pytest-cov>=4.0.0
+black>=23.0.0
+flake8>=6.0.0
+
+# Optional Dependencies
+# Uncomment based on specific needs:
+# flash-attn>=2.0.0  # For flash attention (CUDA required)
+# bitsandbytes>=0.41.0  # For quantization
+# peft>=0.4.0  # For parameter-efficient fine-tuning
+
+# Note: Migrated from PyTorch to PaddlePaddle:
+# - Replaced torch/torchvision/torchaudio with paddlepaddle
+# - Added paddlets for time series specific functionality
+# - Removed conflicting PyTorch dependencies
+# - llamafactory (should be installed separately if needed)
+# - dash (for web UI, can be added if needed)

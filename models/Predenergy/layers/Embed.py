@@ -1,60 +1,60 @@
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from torch.nn.utils import weight_norm
+import paddle
+import paddle.nn as nn
+import paddle.nn.functional as F
+from paddle.nn.utils import weight_norm
 import math
 
 
-class PositionalEmbedding(nn.Module):
+class PositionalEmbedding(nn.Layer):
     def __init__(self, d_model, max_len=5000):
         super(PositionalEmbedding, self).__init__()
         # Compute the positional encodings once in log space.
-        pe = torch.zeros(max_len, d_model).float()
-        pe.require_grad = False
+        pe = paddle.zeros([max_len, d_model]).astype(paddle.float32)
+        pe.stop_gradient = True
 
-        position = torch.arange(0, max_len).float().unsqueeze(1)
-        div_term = (torch.arange(0, d_model, 2).float()
+        position = paddle.arange(0, max_len).astype(paddle.float32).unsqueeze(1)
+        div_term = (paddle.arange(0, d_model, 2).astype(paddle.float32)
                     * -(math.log(10000.0) / d_model)).exp()
 
-        pe[:, 0::2] = torch.sin(position * div_term)
-        pe[:, 1::2] = torch.cos(position * div_term)
+        pe[:, 0::2] = paddle.sin(position * div_term)
+        pe[:, 1::2] = paddle.cos(position * div_term)
 
         pe = pe.unsqueeze(0)
         self.register_buffer('pe', pe)
 
     def forward(self, x):
-        return self.pe[:, :x.size(1)]
+        return self.pe[:, :x.shape[1]]
 
 
-class TokenEmbedding(nn.Module):
+class TokenEmbedding(nn.Layer):
     def __init__(self, c_in, d_model):
         super(TokenEmbedding, self).__init__()
-        padding = 1 if torch.__version__ >= '1.5.0' else 2
-        self.tokenConv = nn.Conv1d(in_channels=c_in, out_channels=d_model,
-                                   kernel_size=3, padding=padding, padding_mode='circular', bias=False)
+        padding = 1 if paddle.__version__ >= '2.5.0' else 2
+        self.tokenConv = nn.Conv1D(in_channels=c_in, out_channels=d_model,
+                                   kernel_size=3, padding=padding, padding_mode='circular', bias_attr=False)
         for m in self.modules():
-            if isinstance(m, nn.Conv1d):
-                nn.init.kaiming_normal_(
+            if isinstance(m, nn.Conv1D):
+                nn.initializer.KaimingNormal(
                     m.weight, mode='fan_in', nonlinearity='leaky_relu')
 
     def forward(self, x):
-        x = self.tokenConv(x.permute(0, 2, 1)).transpose(1, 2)
+        x = self.tokenConv(x.transpose([0, 2, 1])).transpose([0, 2, 1])
         return x
 
 
-class FixedEmbedding(nn.Module):
+class FixedEmbedding(nn.Layer):
     def __init__(self, c_in, d_model):
         super(FixedEmbedding, self).__init__()
 
-        w = torch.zeros(c_in, d_model).float()
-        w.require_grad = False
+        w = paddle.zeros([c_in, d_model]).astype(paddle.float32)
+        w.stop_gradient = True
 
-        position = torch.arange(0, c_in).float().unsqueeze(1)
-        div_term = (torch.arange(0, d_model, 2).float()
+        position = paddle.arange(0, c_in).astype(paddle.float32).unsqueeze(1)
+        div_term = (paddle.arange(0, d_model, 2).astype(paddle.float32)
                     * -(math.log(10000.0) / d_model)).exp()
 
-        w[:, 0::2] = torch.sin(position * div_term)
-        w[:, 1::2] = torch.cos(position * div_term)
+        w[:, 0::2] = paddle.sin(position * div_term)
+        w[:, 1::2] = paddle.cos(position * div_term)
 
         self.emb = nn.Embedding(c_in, d_model)
         self.emb.weight = nn.Parameter(w, requires_grad=False)
@@ -63,7 +63,7 @@ class FixedEmbedding(nn.Module):
         return self.emb(x).detach()
 
 
-class TemporalEmbedding(nn.Module):
+class TemporalEmbedding(nn.Layer):
     def __init__(self, d_model, embed_type='fixed', freq='h'):
         super(TemporalEmbedding, self).__init__()
 
@@ -82,7 +82,7 @@ class TemporalEmbedding(nn.Module):
         self.month_embed = Embed(month_size, d_model)
 
     def forward(self, x):
-        x = x.long()
+        x = x.astype(paddle.int64)
         minute_x = self.minute_embed(x[:, :, 4]) if hasattr(
             self, 'minute_embed') else 0.
         hour_x = self.hour_embed(x[:, :, 3])
@@ -93,20 +93,20 @@ class TemporalEmbedding(nn.Module):
         return hour_x + weekday_x + day_x + month_x + minute_x
 
 
-class TimeFeatureEmbedding(nn.Module):
+class TimeFeatureEmbedding(nn.Layer):
     def __init__(self, d_model, embed_type='timeF', freq='h'):
         super(TimeFeatureEmbedding, self).__init__()
 
         freq_map = {'h': 4, 't': 5, 's': 6,
                     'm': 1, 'a': 1, 'w': 2, 'd': 3, 'b': 3}
         d_inp = freq_map[freq]
-        self.embed = nn.Linear(d_inp, d_model, bias=False)
+        self.embed = nn.Linear(d_inp, d_model, bias_attr=False)
 
     def forward(self, x):
         return self.embed(x)
 
 
-class DataEmbedding(nn.Module):
+class DataEmbedding(nn.Layer):
     def __init__(self, c_in, d_model, embed_type='fixed', freq='h', dropout=0.1):
         super(DataEmbedding, self).__init__()
 
@@ -126,24 +126,24 @@ class DataEmbedding(nn.Module):
         return self.dropout(x)
 
 
-class DataEmbedding_inverted(nn.Module):
+class DataEmbedding_inverted(nn.Layer):
     def __init__(self, c_in, d_model, embed_type='fixed', freq='h', dropout=0.1):
         super(DataEmbedding_inverted, self).__init__()
         self.value_embedding = nn.Linear(c_in, d_model)
         self.dropout = nn.Dropout(p=dropout)
 
     def forward(self, x, x_mark):
-        x = x.permute(0, 2, 1)
+        x = x.transpose([0, 2, 1])
         # x: [Batch Variate Time]
         if x_mark is None:
             x = self.value_embedding(x)
         else:
-            x = self.value_embedding(torch.cat([x, x_mark.permute(0, 2, 1)], 1))
+            x = self.value_embedding(paddle.concat([x, x_mark.transpose([0, 2, 1])], axis=1))
         # x: [Batch Variate d_model]
         return self.dropout(x)
 
 
-class DataEmbedding_wo_pos(nn.Module):
+class DataEmbedding_wo_pos(nn.Layer):
     def __init__(self, c_in, d_model, embed_type='fixed', freq='h', dropout=0.1):
         super(DataEmbedding_wo_pos, self).__init__()
 
@@ -162,16 +162,16 @@ class DataEmbedding_wo_pos(nn.Module):
         return self.dropout(x)
 
 
-class PatchEmbedding(nn.Module):
+class PatchEmbedding(nn.Layer):
     def __init__(self, d_model, patch_len, stride, padding, dropout):
         super(PatchEmbedding, self).__init__()
         # Patching
         self.patch_len = patch_len
         self.stride = stride
-        self.padding_patch_layer = nn.ReplicationPad1d((0, padding))
+        self.padding_patch_layer = nn.ReplicationPad1D((0, padding))
 
         # Backbone, Input encoding: projection of feature vectors onto a d-dim vector space
-        self.value_embedding = nn.Linear(patch_len, d_model, bias=False)
+        self.value_embedding = nn.Linear(patch_len, d_model, bias_attr=False)
 
         # Positional embedding
         self.position_embedding = PositionalEmbedding(d_model)
@@ -184,7 +184,7 @@ class PatchEmbedding(nn.Module):
         n_vars = x.shape[1]
         x = self.padding_patch_layer(x)
         x = x.unfold(dimension=-1, size=self.patch_len, step=self.stride)
-        x = torch.reshape(x, (x.shape[0] * x.shape[1], x.shape[2], x.shape[3]))
+        x = paddle.reshape(x, [x.shape[0] * x.shape[1], x.shape[2], x.shape[3]])
         # Input encoding
         x = self.value_embedding(x) + self.position_embedding(x)
         return self.dropout(x), n_vars

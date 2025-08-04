@@ -3,8 +3,8 @@ from typing import Tuple
 
 import numpy as np
 import pandas as pd
-import torch
-from torch.utils.data import DataLoader
+import paddle
+from paddle.io import DataLoader
 
 from utils.timefeatures import (
     time_features,
@@ -116,7 +116,7 @@ class SlidingWindowDataLoader:
         self.current_index = 0
         return self
 
-    def __next__(self) -> Tuple[torch.Tensor, torch.Tensor]:
+    def __next__(self) -> Tuple[paddle.Tensor, paddle.Tensor]:
         """
         Generate data for the next batch.
 
@@ -146,9 +146,9 @@ class SlidingWindowDataLoader:
             batch_targets.append(targets)
             self.current_index += 1
 
-        # Convert NumPy array to PyTorch tensor
-        batch_inputs = torch.tensor(batch_inputs, dtype=torch.float32)
-        batch_targets = torch.tensor(batch_targets, dtype=torch.float32)
+        # Convert NumPy array to PaddlePaddle tensor
+        batch_inputs = paddle.to_tensor(batch_inputs, dtype='float32')
+        batch_targets = paddle.to_tensor(batch_targets, dtype='float32')
 
         return batch_inputs, batch_targets
 
@@ -305,10 +305,10 @@ class DatasetForTransformer:
         seq_x_mark = self.data_stamp[s_begin:s_end]
         seq_y_mark = self.data_stamp[r_begin:r_end]
 
-        seq_x = torch.tensor(seq_x.values, dtype=torch.float32)
-        seq_y = torch.tensor(seq_y.values, dtype=torch.float32)
-        seq_x_mark = torch.tensor(seq_x_mark, dtype=torch.float32)
-        seq_y_mark = torch.tensor(seq_y_mark, dtype=torch.float32)
+        seq_x = paddle.to_tensor(seq_x.values, dtype='float32')
+        seq_y = paddle.to_tensor(seq_y.values, dtype='float32')
+        seq_x_mark = paddle.to_tensor(seq_x_mark, dtype='float32')
+        seq_y_mark = paddle.to_tensor(seq_y_mark, dtype='float32')
         return seq_x, seq_y, seq_x_mark, seq_y_mark
 
 

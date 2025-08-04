@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 _*-
+import paddle
 from .ts_dataset import TimeSeriesDataset
 from .general_dataset import GeneralDataset
 from .binary_dataset import BinaryDataset

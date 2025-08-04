@@ -3,6 +3,7 @@
 import logging
 import os
 import sys
+import paddle
 from typing import Optional, List
 
 

@@ -2,6 +2,7 @@
 # -*- coding:utf-8 _*-
 import random
 import numpy as np
+import paddle
 from datasets.ts_dataset import TimeSeriesDataset
 
 

@@ -2,9 +2,9 @@ import math
 from typing import Optional, Tuple, List, Union
 import warnings
 
-import torch
-from torch import nn
-import torch.nn.functional as F
+import paddle
+from paddle import nn
+import paddle.nn.functional as F
 from transformers import PreTrainedModel, Cache, DynamicCache, StaticCache
 from transformers.activations import ACT2FN
 from transformers.modeling_attn_mask_utils import _prepare_4d_causal_attention_mask
@@ -27,10 +27,10 @@ except:
 
 
 def _get_unpad_data(attention_mask):
-    seqlens_in_batch = attention_mask.sum(dim=-1, dtype=torch.int32)
-    indices = torch.nonzero(attention_mask.flatten(), as_tuple=False).flatten()
+    seqlens_in_batch = attention_mask.sum(axis=-1, dtype=paddle.int32)
+    indices = paddle.nonzero(attention_mask.flatten(), as_tuple=False).flatten()
     max_seqlen_in_batch = seqlens_in_batch.max().item()
-    cu_seqlens = F.pad(torch.cumsum(seqlens_in_batch, dim=0, dtype=torch.int32), (1, 0))
+    cu_seqlens = F.pad(paddle.cumsum(seqlens_in_batch, axis=0, dtype=paddle.int32), (1, 0))
     return (
         indices,
         cu_seqlens,
@@ -39,29 +39,29 @@ def _get_unpad_data(attention_mask):
 
 
 def load_balancing_loss_func(
-        gate_logits: Union[torch.Tensor, Tuple[torch.Tensor], List[torch.Tensor]],
+        gate_logits: Union[paddle.Tensor, Tuple[paddle.Tensor], List[paddle.Tensor]],
         top_k: int,
         num_experts: int = None,
-        attention_mask: Optional[torch.Tensor] = None
-) -> torch.Tensor:
+        attention_mask: Optional[paddle.Tensor] = None
+) -> paddle.Tensor:
     if gate_logits is None or not isinstance(gate_logits, (tuple, list)) or gate_logits[0] is None:
         return 0.0
 
-    compute_device = gate_logits[0].device
-    concatenated_gate_logits = torch.cat([layer_gate.to(compute_device) for layer_gate in gate_logits], dim=0)
+    compute_device = gate_logits[0].place
+    concatenated_gate_logits = paddle.concat([layer_gate.to(compute_device) for layer_gate in gate_logits], axis=0)
 
-    routing_weights = torch.nn.functional.softmax(concatenated_gate_logits, dim=-1)
+    routing_weights = paddle.nn.functional.softmax(concatenated_gate_logits, axis=-1)
 
-    _, selected_experts = torch.topk(routing_weights, top_k, dim=-1)
+    _, selected_experts = paddle.topk(routing_weights, k=top_k, axis=-1)
 
-    expert_mask = torch.nn.functional.one_hot(selected_experts, num_experts)
+    expert_mask = paddle.nn.functional.one_hot(selected_experts, num_classes=num_experts)
 
     if attention_mask is None:
         # Compute the percentage of tokens routed to each expert
-        tokens_per_expert = torch.mean(expert_mask.float(), dim=0)
+        tokens_per_expert = paddle.mean(expert_mask.astype(paddle.float32), axis=0)
 
         # Compute the average probability of routing to these experts
-        router_prob_per_expert = torch.mean(routing_weights, dim=0)
+        router_prob_per_expert = paddle.mean(routing_weights, axis=0)
     else:
         batch_size, sequence_length = attention_mask.shape
         num_hidden_layers = concatenated_gate_logits.shape[0] // (batch_size * sequence_length)
@@ -69,45 +69,45 @@ def load_balancing_loss_func(
         # Compute the mask that masks all padding tokens as 0 with the same shape of expert_mask
         expert_attention_mask = (
             attention_mask[None, :, :, None, None]
-            .expand((num_hidden_layers, batch_size, sequence_length, 2, num_experts))
-            .reshape(-1, 2, num_experts)
+            .expand([num_hidden_layers, batch_size, sequence_length, 2, num_experts])
+            .reshape([-1, 2, num_experts])
             .to(compute_device)
         )
 
         # Compute the percentage of tokens routed to each experts
-        tokens_per_expert = torch.sum(expert_mask.float() * expert_attention_mask, dim=0) / torch.sum(
-            expert_attention_mask, dim=0
+        tokens_per_expert = paddle.sum(expert_mask.astype(paddle.float32) * expert_attention_mask, axis=0) / paddle.sum(
+            expert_attention_mask, axis=0
         )
 
         # Compute the mask that masks all padding tokens as 0 with the same shape of tokens_per_expert
         router_per_expert_attention_mask = (
             attention_mask[None, :, :, None]
-            .expand((num_hidden_layers, batch_size, sequence_length, num_experts))
-            .reshape(-1, num_experts)
+            .expand([num_hidden_layers, batch_size, sequence_length, num_experts])
+            .reshape([-1, num_experts])
             .to(compute_device)
         )
 
         # Compute the average probability of routing to these experts
-        router_prob_per_expert = torch.sum(routing_weights * router_per_expert_attention_mask, dim=0) / torch.sum(
-            router_per_expert_attention_mask, dim=0
+        router_prob_per_expert = paddle.sum(routing_weights * router_per_expert_attention_mask, axis=0) / paddle.sum(
+            router_per_expert_attention_mask, axis=0
         )
 
-    overall_loss = torch.sum(tokens_per_expert * router_prob_per_expert.unsqueeze(dim=0))
+    overall_loss = paddle.sum(tokens_per_expert * router_prob_per_expert.unsqueeze(axis=0))
 
     return overall_loss * num_experts
 
 
 # Copied from transformers.models.llama.modeling_llama.repeat_kv
-def repeat_kv(hidden_states: torch.Tensor, n_rep: int) -> torch.Tensor:
+def repeat_kv(hidden_states: paddle.Tensor, n_rep: int) -> paddle.Tensor:
     """
-    This is the equivalent of torch.repeat_interleave(x, dim=1, repeats=n_rep). The hidden states go from (batch,
+    This is the equivalent of paddle.repeat_interleave(x, axis=1, repeats=n_rep). The hidden states go from (batch,
     num_key_value_heads, seqlen, head_dim) to (batch, num_attention_heads, seqlen, head_dim)
     """
     batch, num_key_value_heads, slen, head_dim = hidden_states.shape
     if n_rep == 1:
         return hidden_states
-    hidden_states = hidden_states[:, :, None, :, :].expand(batch, num_key_value_heads, n_rep, slen, head_dim)
-    return hidden_states.reshape(batch, num_key_value_heads * n_rep, slen, head_dim)
+    hidden_states = hidden_states[:, :, None, :, :].expand([batch, num_key_value_heads, n_rep, slen, head_dim])
+    return hidden_states.reshape([batch, num_key_value_heads * n_rep, slen, head_dim])
 
 
 # Copied from transformers.models.llama.modeling_llama.rotate_half
@@ -115,7 +115,7 @@ def rotate_half(x):
     """Rotates half the hidden dims of the input."""
     x1 = x[..., : x.shape[-1] // 2]
     x2 = x[..., x.shape[-1] // 2:]
-    return torch.cat((-x2, x1), dim=-1)
+    return paddle.concat([-x2, x1], axis=-1)
 
 
 # Copied from transformers.models.mistral.modeling_mistral.apply_rotary_pos_emb
@@ -127,7 +127,7 @@ def apply_rotary_pos_emb(q, k, cos, sin, position_ids, unsqueeze_dim=1):
     return q_embed, k_embed
 
 
-class MoTSEInputEmbedding(nn.Module):
+class MoTSEInputEmbedding(nn.Layer):
     """
     Use a mlp layer to embedding the time-series.
     """
@@ -137,8 +137,8 @@ class MoTSEInputEmbedding(nn.Module):
         self.config = config
         self.input_size = config.input_size  # default 1
         self.hidden_size = config.hidden_size
-        self.emb_layer = nn.Linear(self.input_size, self.hidden_size, bias=False)
-        self.gate_layer = nn.Linear(self.input_size, self.hidden_size, bias=False)
+        self.emb_layer = nn.Linear(self.input_size, self.hidden_size, bias_attr=False)
+        self.gate_layer = nn.Linear(self.input_size, self.hidden_size, bias_attr=False)
         self.act_fn = ACT2FN[config.hidden_act]
 
     def forward(self, x):
@@ -147,65 +147,65 @@ class MoTSEInputEmbedding(nn.Module):
 
 
 # Copied from transformers.models.mistral.modeling_mistral.MistralRotaryEmbedding with Mistral->MoTSE
-class MoTSERotaryEmbedding(torch.nn.Module):
+class MoTSERotaryEmbedding(paddle.nn.Layer):
     def __init__(self, dim, max_position_embeddings=2048, base=10000, device=None):
         super().__init__()
 
         self.dim = dim
         self.max_position_embeddings = max_position_embeddings
         self.base = base
-        inv_freq = 1.0 / (self.base ** (torch.arange(0, self.dim, 2, dtype=torch.int64).float().to(device) / self.dim))
+        inv_freq = 1.0 / (self.base ** (paddle.arange(0, self.dim, 2, dtype=paddle.int64).astype(paddle.float32).to(device) / self.dim))
         self.register_buffer("inv_freq", inv_freq, persistent=False)
 
-        # Build here to make `torch.jit.trace` work.
+        # Build here to make `paddle.jit.trace` work.
         self._set_cos_sin_cache(
-            seq_len=max_position_embeddings, device=self.inv_freq.device, dtype=torch.get_default_dtype()
+            seq_len=max_position_embeddings, device=self.inv_freq.place, dtype=paddle.get_default_dtype()
         )
 
     def _set_cos_sin_cache(self, seq_len, device, dtype):
         self.max_seq_len_cached = seq_len
-        t = torch.arange(self.max_seq_len_cached, device=device, dtype=torch.int64).type_as(self.inv_freq)
+        t = paddle.arange(self.max_seq_len_cached, dtype=paddle.int64).astype(self.inv_freq.dtype).to(device)
 
-        freqs = torch.outer(t, self.inv_freq)
+        freqs = paddle.outer(t, self.inv_freq)
         # Different from paper, but it uses a different permutation in order to obtain the same calculation
-        emb = torch.cat((freqs, freqs), dim=-1)
-        self.register_buffer("cos_cached", emb.cos().to(dtype), persistent=False)
-        self.register_buffer("sin_cached", emb.sin().to(dtype), persistent=False)
+        emb = paddle.concat([freqs, freqs], axis=-1)
+        self.register_buffer("cos_cached", emb.cos().astype(dtype), persistent=False)
+        self.register_buffer("sin_cached", emb.sin().astype(dtype), persistent=False)
 
     def forward(self, x, seq_len=None):
         # x: [bs, num_attention_heads, seq_len, head_size]
         if seq_len > self.max_seq_len_cached:
-            self._set_cos_sin_cache(seq_len=seq_len, device=x.device, dtype=x.dtype)
+            self._set_cos_sin_cache(seq_len=seq_len, device=x.place, dtype=x.dtype)
 
         return (
-            self.cos_cached[:seq_len].to(dtype=x.dtype),
-            self.sin_cached[:seq_len].to(dtype=x.dtype),
+            self.cos_cached[:seq_len].astype(dtype=x.dtype),
+            self.sin_cached[:seq_len].astype(dtype=x.dtype),
         )
 
 
 # Copied from transformers.models.llama.modeling_llama.LlamaRMSNorm with Llama->MoTSE
-class MoTSERMSNorm(torch.nn.Module):
+class MoTSERMSNorm(paddle.nn.Layer):
     def __init__(self, hidden_size, eps=1e-6):
         super().__init__()
-        self.weight = nn.Parameter(torch.ones(hidden_size))
+        self.weight = nn.Parameter(paddle.ones([hidden_size]))
         self.variance_epsilon = eps
 
     def forward(self, hidden_states):
         input_dtype = hidden_states.dtype
-        hidden_states = hidden_states.to(torch.float32)
-        variance = hidden_states.pow(2).mean(-1, keepdim=True)
-        hidden_states = hidden_states * torch.rsqrt(variance + self.variance_epsilon)
-        return self.weight * hidden_states.to(input_dtype)
+        hidden_states = hidden_states.astype(paddle.float32)
+        variance = hidden_states.pow(2).mean(axis=-1, keepdim=True)
+        hidden_states = hidden_states * paddle.rsqrt(variance + self.variance_epsilon)
+        return self.weight * hidden_states.astype(input_dtype)
 
 
-class MoTSETemporalBlock(nn.Module):
+class MoTSETemporalBlock(nn.Layer):
     def __init__(self, hidden_size: int, intermediate_size: int, hidden_act: str):
         super().__init__()
         self.hidden_size = hidden_size
         self.intermediate_size = intermediate_size
-        self.gate_proj = nn.Linear(self.hidden_size, self.intermediate_size, bias=False)
-        self.up_proj = nn.Linear(self.hidden_size, self.intermediate_size, bias=False)
-        self.down_proj = nn.Linear(self.intermediate_size, self.hidden_size, bias=False)
+        self.gate_proj = nn.Linear(self.hidden_size, self.intermediate_size, bias_attr=False)
+        self.up_proj = nn.Linear(self.hidden_size, self.intermediate_size, bias_attr=False)
+        self.down_proj = nn.Linear(self.intermediate_size, self.hidden_size, bias_attr=False)
         self.act_fn = ACT2FN[hidden_act]
 
     def forward(self, hidden_state):
@@ -220,7 +220,7 @@ class MoTSEMLP(MoTSETemporalBlock):
         return super().forward(hidden_state), None
 
 
-class MoTSESparseExpertsLayer(nn.Module):
+class MoTSESparseExpertsLayer(nn.Layer):
     def __init__(self, config):
         super().__init__()
         self.config = config
@@ -232,8 +232,8 @@ class MoTSESparseExpertsLayer(nn.Module):
         moe_intermediate_size = self.config.intermediate_size // self.top_k
 
         # gating
-        self.gate = nn.Linear(config.hidden_size, config.num_experts, bias=False)
-        self.experts = nn.ModuleList(
+        self.gate = nn.Linear(config.hidden_size, config.num_experts, bias_attr=False)
+        self.experts = nn.LayerList(
             [MoTSETemporalBlock(
                 hidden_size=self.config.hidden_size,
                 intermediate_size=moe_intermediate_size,
@@ -246,51 +246,51 @@ class MoTSESparseExpertsLayer(nn.Module):
             intermediate_size=self.config.intermediate_size,
             hidden_act=self.config.hidden_act,
         )
-        self.shared_expert_gate = torch.nn.Linear(config.hidden_size, 1, bias=False)
+        self.shared_expert_gate = paddle.nn.Linear(config.hidden_size, 1, bias_attr=False)
 
-    def forward(self, hidden_states: torch.Tensor):
+    def forward(self, hidden_states: paddle.Tensor):
         """ """
         batch_size, sequence_length, hidden_dim = hidden_states.shape
-        hidden_states = hidden_states.view(-1, hidden_dim)
+        hidden_states = hidden_states.reshape([-1, hidden_dim])
         # router_logits -> (batch * sequence_length, n_experts)
         router_logits = self.gate(hidden_states)
 
-        routing_weights = F.softmax(router_logits, dim=1, dtype=torch.float)
-        routing_weights, selected_experts = torch.topk(routing_weights, self.top_k, dim=-1)
+        routing_weights = F.softmax(router_logits, axis=1, dtype=paddle.float32)
+        routing_weights, selected_experts = paddle.topk(routing_weights, k=self.top_k, axis=-1)
         if self.norm_topk_prob:
-            routing_weights /= routing_weights.sum(dim=-1, keepdim=True)
+            routing_weights /= routing_weights.sum(axis=-1, keepdim=True)
         # we cast back to the input dtype
-        routing_weights = routing_weights.to(hidden_states.dtype)
+        routing_weights = routing_weights.astype(hidden_states.dtype)
 
-        final_hidden_states = torch.zeros(
-            (batch_size * sequence_length, hidden_dim), dtype=hidden_states.dtype, device=hidden_states.device
+        final_hidden_states = paddle.zeros(
+            [batch_size * sequence_length, hidden_dim], dtype=hidden_states.dtype, device=hidden_states.place
         )
 
         # One hot encode the selected experts to create an expert mask
         # this will be used to easily index which expert is going to be sollicitated
-        expert_mask = torch.nn.functional.one_hot(selected_experts, num_classes=self.num_experts).permute(2, 1, 0)
+        expert_mask = paddle.nn.functional.one_hot(selected_experts, num_classes=self.num_experts).transpose([2, 1, 0])
 
         # Loop over all available experts in the model and perform the computation on each expert
         for expert_idx in range(self.num_experts):
             expert_layer = self.experts[expert_idx]
-            idx, top_x = torch.where(expert_mask[expert_idx])
+            idx, top_x = paddle.where(expert_mask[expert_idx])
 
             # Index the correct hidden states and compute the expert hidden state for
             # the current expert. We need to make sure to multiply the output hidden
             # states by `routing_weights` on the corresponding tokens (top-1 and top-2)
-            current_state = hidden_states[None, top_x].reshape(-1, hidden_dim)
+            current_state = hidden_states[None, top_x].reshape([-1, hidden_dim])
             current_hidden_states = expert_layer(current_state) * routing_weights[top_x, idx, None]
 
-            # However `index_add_` only support torch tensors for indexing so we'll use
+            # However `index_add_` only support paddle tensors for indexing so we'll use
             # the `top_x` tensor here.
-            final_hidden_states.index_add_(0, top_x, current_hidden_states.to(hidden_states.dtype))
+            final_hidden_states.index_add_(0, top_x, current_hidden_states.astype(hidden_states.dtype))
 
         shared_expert_output = self.shared_expert(hidden_states)
         shared_expert_output = F.sigmoid(self.shared_expert_gate(hidden_states)) * shared_expert_output
 
         final_hidden_states = final_hidden_states + shared_expert_output
 
-        final_hidden_states = final_hidden_states.reshape(batch_size, sequence_length, hidden_dim)
+        final_hidden_states = final_hidden_states.reshape([batch_size, sequence_length, hidden_dim])
         return final_hidden_states, router_logits
 
 
@@ -340,13 +340,13 @@ class MoTSEAttention(nn.Module):
 
     def forward(
             self,
-            hidden_states: torch.Tensor,
-            attention_mask: Optional[torch.Tensor] = None,
-            position_ids: Optional[torch.LongTensor] = None,
+            hidden_states: paddle.Tensor,
+            attention_mask: Optional[paddle.Tensor] = None,
+            position_ids: Optional[paddle.LongTensor] = None,
             past_key_value: Optional[Cache] = None,
             output_attentions: bool = False,
             **kwargs,
-    ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
+    ) -> Tuple[paddle.Tensor, Optional[paddle.Tensor], Optional[Tuple[paddle.Tensor]]]:
         if "padding_mask" in kwargs:
             warnings.warn(
                 "Passing `padding_mask` is deprecated and will be removed in v4.37. Please make sure use `attention_mask` instead.`"
@@ -381,7 +381,7 @@ class MoTSEAttention(nn.Module):
         key_states = repeat_kv(key_states, self.num_key_value_groups)
         value_states = repeat_kv(value_states, self.num_key_value_groups)
 
-        attn_weights = torch.matmul(query_states, key_states.transpose(2, 3)) / math.sqrt(self.head_dim)
+        attn_weights = paddle.matmul(query_states, key_states.transpose(2, 3)) / math.sqrt(self.head_dim)
 
         if attn_weights.size() != (bsz, self.num_heads, q_len, kv_seq_len):
             raise ValueError(
@@ -398,9 +398,9 @@ class MoTSEAttention(nn.Module):
             attn_weights = attn_weights + attention_mask
 
         # upcast attention to fp32
-        attn_weights = nn.functional.softmax(attn_weights, dim=-1, dtype=torch.float32).to(query_states.dtype)
+        attn_weights = nn.functional.softmax(attn_weights, dim=-1, dtype=paddle.float32).to(query_states.dtype)
         attn_weights = nn.functional.dropout(attn_weights, p=self.attention_dropout, training=self.training)
-        attn_output = torch.matmul(attn_weights, value_states)
+        attn_output = paddle.matmul(attn_weights, value_states)
 
         if attn_output.size() != (bsz, self.num_heads, q_len, self.head_dim):
             raise ValueError(
@@ -427,14 +427,14 @@ class MoTSEFlashAttention2(MoTSEAttention):
 
     def forward(
             self,
-            hidden_states: torch.Tensor,
-            attention_mask: Optional[torch.LongTensor] = None,
-            position_ids: Optional[torch.LongTensor] = None,
+            hidden_states: paddle.Tensor,
+            attention_mask: Optional[paddle.LongTensor] = None,
+            position_ids: Optional[paddle.LongTensor] = None,
             past_key_value: Optional[Cache] = None,
             output_attentions: bool = False,
             use_cache: bool = False,
-            cache_position: Optional[torch.LongTensor] = None,
-    ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
+            cache_position: Optional[paddle.LongTensor] = None,
+    ) -> Tuple[paddle.Tensor, Optional[paddle.Tensor], Optional[Tuple[paddle.Tensor]]]:
         if isinstance(past_key_value, StaticCache):
             raise ValueError(
                 "`static` cache implementation is not compatible with `attn_implementation==flash_attention_2` "
@@ -489,10 +489,10 @@ class MoTSEFlashAttention2(MoTSEAttention):
         # in fp32. (LlamaRMSNorm handles it correctly)
 
         input_dtype = query_states.dtype
-        if input_dtype == torch.float32:
+        if input_dtype == paddle.float32:
 
-            if torch.is_autocast_enabled():
-                target_dtype = torch.get_autocast_gpu_dtype()
+            if paddle.is_autocast_enabled():
+                target_dtype = paddle.get_autocast_gpu_dtype()
             # Handle the case where the model is quantized
             elif hasattr(self.config, "_pre_quantization_dtype"):
                 target_dtype = self.config._pre_quantization_dtype
@@ -529,13 +529,13 @@ class MoTSEFlashAttention2(MoTSEAttention):
         first unpad the input, then computes the attention scores and pad the final attention scores.
 
         Args:
-            query_states (`torch.Tensor`):
+            query_states (`paddle.Tensor`):
                 Input query states to be passed to Flash Attention API
-            key_states (`torch.Tensor`):
+            key_states (`paddle.Tensor`):
                 Input key states to be passed to Flash Attention API
-            value_states (`torch.Tensor`):
+            value_states (`paddle.Tensor`):
                 Input value states to be passed to Flash Attention API
-            attention_mask (`torch.Tensor`):
+            attention_mask (`paddle.Tensor`):
                 The padding mask - corresponds to a tensor of size `(batch_size, seq_len)` where 0 stands for the
                 position of padding tokens and 1 for the position of non-padding tokens.
             dropout (`float`):
@@ -550,10 +550,10 @@ class MoTSEFlashAttention2(MoTSEAttention):
             causal = self.is_causal and query_length != 1
 
         origin_dtype = query_states.dtype
-        if origin_dtype not in [torch.bfloat16, torch.float16]:
-            query_states = query_states.to(dtype=torch.bfloat16)
-            key_states = key_states.to(dtype=torch.bfloat16)
-            value_states = value_states.to(dtype=torch.bfloat16)
+        if origin_dtype not in [paddle.bfloat16, paddle.float16]:
+            query_states = query_states.to(dtype=paddle.bfloat16)
+            key_states = key_states.to(dtype=paddle.bfloat16)
+            value_states = value_states.to(dtype=paddle.bfloat16)
 
         # without attention mask to faster speed
         attn_output = flash_attn_func(
@@ -564,7 +564,7 @@ class MoTSEFlashAttention2(MoTSEAttention):
             softmax_scale=softmax_scale,
             causal=causal
         )
-        if origin_dtype not in [torch.bfloat16, torch.float16]:
+        if origin_dtype not in [paddle.bfloat16, paddle.float16]:
             return attn_output.to(origin_dtype)
         else:
             return attn_output
@@ -588,8 +588,8 @@ class MoTSEFlashAttention2(MoTSEAttention):
             indices_q = indices_k
         elif query_length == 1:
             max_seqlen_in_batch_q = 1
-            cu_seqlens_q = torch.arange(
-                batch_size + 1, dtype=torch.int32, device=query_layer.device
+            cu_seqlens_q = paddle.arange(
+                batch_size + 1, dtype=paddle.int32, device=query_layer.device
             )  # There is a memcpy here, that is very bad.
             indices_q = cu_seqlens_q[:-1]
             query_layer = query_layer.squeeze(1)
@@ -635,14 +635,14 @@ class MoTSEDecoderLayer(nn.Module):
 
     def forward(
             self,
-            hidden_states: torch.Tensor,
-            attention_mask: Optional[torch.Tensor] = None,
-            position_ids: Optional[torch.LongTensor] = None,
-            past_key_value: Optional[Tuple[torch.Tensor]] = None,
+            hidden_states: paddle.Tensor,
+            attention_mask: Optional[paddle.Tensor] = None,
+            position_ids: Optional[paddle.LongTensor] = None,
+            past_key_value: Optional[Tuple[paddle.Tensor]] = None,
             output_attentions: Optional[bool] = False,
             use_cache: Optional[bool] = False,
             **kwargs,
-    ) -> Tuple[torch.FloatTensor, torch.FloatTensor, Optional[torch.FloatTensor], Optional[torch.FloatTensor]]:
+    ) -> Tuple[paddle.FloatTensor, paddle.FloatTensor, Optional[paddle.FloatTensor], Optional[paddle.FloatTensor]]:
         if "padding_mask" in kwargs:
             warnings.warn(
                 "Passing `padding_mask` is deprecated and will be removed in v4.37. "
@@ -650,8 +650,8 @@ class MoTSEDecoderLayer(nn.Module):
             )
         """
         Args:
-            hidden_states (`torch.FloatTensor`): input to the layer of shape `(batch, seq_len, embed_dim)`
-            attention_mask (`torch.FloatTensor`, *optional*): attention mask of size
+            hidden_states (`paddle.FloatTensor`): input to the layer of shape `(batch, seq_len, embed_dim)`
+            attention_mask (`paddle.FloatTensor`, *optional*): attention mask of size
                 `(batch, sequence_length)` where padding elements are indicated by 0.
             output_attentions (`bool`, *optional*):
                 Whether or not to return the attentions tensors of all attention layers. See `attentions` under
@@ -659,7 +659,7 @@ class MoTSEDecoderLayer(nn.Module):
             use_cache (`bool`, *optional*):
                 If set to `True`, `past_key_values` key value states are returned and can be used to speed up decoding
                 (see `past_key_values`).
-            past_key_value (`Tuple(torch.FloatTensor)`, *optional*): cached past key and value projection states
+            past_key_value (`Tuple(paddle.FloatTensor)`, *optional*): cached past key and value projection states
         """
 
         residual = hidden_states
@@ -703,11 +703,11 @@ class MoTSEPreTrainedModel(PreTrainedModel):
 
     def _init_weights(self, module):
         std = self.config.initializer_range
-        if isinstance(module, torch.nn.Linear):
+        if isinstance(module, paddle.nn.Linear):
             module.weight.data.normal_(mean=0.0, std=std)
             if module.bias is not None:
                 module.bias.data.zero_()
-        elif isinstance(module, torch.nn.Embedding):
+        elif isinstance(module, paddle.nn.Embedding):
             module.weight.data.normal_(mean=0.0, std=std)
             if module.padding_idx is not None:
                 module.weight.data[module.padding_idx].zero_()
@@ -736,11 +736,11 @@ class MoTSEModel(MoTSEPreTrainedModel):
 
     def forward(
             self,
-            input_ids: torch.FloatTensor = None,
-            attention_mask: Optional[torch.Tensor] = None,
-            position_ids: Optional[torch.LongTensor] = None,
-            past_key_values: Optional[List[torch.FloatTensor]] = None,
-            inputs_embeds: Optional[torch.FloatTensor] = None,
+            input_ids: paddle.FloatTensor = None,
+            attention_mask: Optional[paddle.Tensor] = None,
+            position_ids: Optional[paddle.LongTensor] = None,
+            past_key_values: Optional[List[paddle.FloatTensor]] = None,
+            inputs_embeds: Optional[paddle.FloatTensor] = None,
             use_cache: Optional[bool] = None,
             output_attentions: Optional[bool] = None,
             output_hidden_states: Optional[bool] = None,
@@ -784,13 +784,13 @@ class MoTSEModel(MoTSEPreTrainedModel):
 
         if position_ids is None:
             device = input_ids.device if input_ids is not None else inputs_embeds.device
-            position_ids = torch.arange(
-                past_key_values_length, seq_length + past_key_values_length, dtype=torch.long, device=device
+            position_ids = paddle.arange(
+                past_key_values_length, seq_length + past_key_values_length, dtype=paddle.long, device=device
             )
             # position_ids = position_ids.unsqueeze(0).view(-1, seq_length)
-            position_ids = position_ids.view(-1, seq_length)
+            position_ids = position_ids.reshape([-1, seq_length])
         else:
-            position_ids = position_ids.view(-1, seq_length).long()
+            position_ids = position_ids.reshape([-1, seq_length]).long()
 
         if inputs_embeds is None:
             inputs_embeds = self.embed_layer(input_ids)
@@ -886,10 +886,10 @@ class MoTSEOutputLayer(nn.Module):
         """
 
         Args:
-            x (torch.FloatTensor): with shape [B, seq_len, hidden_size]
+            x (paddle.FloatTensor): with shape [B, seq_len, hidden_size]
 
         Returns:
-    `       torch.FloatTensor: final prediction with shape [B, seq_len, input_size]
+    `       paddle.FloatTensor: final prediction with shape [B, seq_len, input_size]
         """
         return self.out_layer(x)
 
@@ -918,7 +918,7 @@ class MoTSEForPrediction(MoTSEPreTrainedModel, TSGenerationMixin):
             self.horizon_length_map[horizon_length] = i
         self.lm_heads = nn.ModuleList(lm_head_list)
 
-        self.loss_function = torch.nn.HuberLoss(reduction='none', delta=2.0)
+        self.loss_function = paddle.nn.HuberLoss(reduction='none', delta=2.0)
 
         # Initialize weights and apply final processing
         self.post_init()
@@ -931,13 +931,13 @@ class MoTSEForPrediction(MoTSEPreTrainedModel, TSGenerationMixin):
 
     def forward(
             self,
-            input_ids: torch.FloatTensor = None,
-            attention_mask: Optional[torch.Tensor] = None,
-            position_ids: Optional[torch.LongTensor] = None,
-            past_key_values: Optional[List[torch.FloatTensor]] = None,
-            inputs_embeds: Optional[torch.FloatTensor] = None,
-            labels: Optional[torch.FloatTensor] = None,
-            loss_masks: Optional[torch.FloatTensor] = None,
+            input_ids: paddle.FloatTensor = None,
+            attention_mask: Optional[paddle.Tensor] = None,
+            position_ids: Optional[paddle.LongTensor] = None,
+            past_key_values: Optional[List[paddle.FloatTensor]] = None,
+            inputs_embeds: Optional[paddle.FloatTensor] = None,
+            labels: Optional[paddle.FloatTensor] = None,
+            loss_masks: Optional[paddle.FloatTensor] = None,
             use_cache: Optional[bool] = None,
             output_attentions: Optional[bool] = None,
             output_hidden_states: Optional[bool] = None,
@@ -989,7 +989,7 @@ class MoTSEForPrediction(MoTSEPreTrainedModel, TSGenerationMixin):
                     num_experts=self.config.num_experts,
                     attention_mask=attention_mask
                 )
-                loss += self.router_aux_loss_factor * temporal_aux_loss.to(loss.device)
+                loss += self.router_aux_loss_factor * temporal_aux_loss.to(loss.place)
         else:
             if max_horizon_length is None:
                 horizon_length = self.config.horizon_lengths[0]
@@ -1023,30 +1023,30 @@ class MoTSEForPrediction(MoTSEPreTrainedModel, TSGenerationMixin):
         if len(labels.shape) == 2:
             labels.unsqueeze_(dim=-1)
             # enable model parallelism
-            labels = labels.to(predictions.device)
+            labels = labels.to(predictions.place)
         if loss_masks is not None and len(loss_masks.shape) == 2:
             loss_masks.unsqueeze_(dim=-1)
             # enable model parallelism
-            loss_masks = loss_masks.to(predictions.device)
+            loss_masks = loss_masks.to(predictions.place)
 
         if horizon_length > 1:
             batch_size, seq_len, output_size = predictions.shape
-            shift_predictions = predictions.view(batch_size, seq_len, horizon_length, -1)
+            shift_predictions = predictions.reshape([batch_size, seq_len, horizon_length, -1])
 
             # pad to the same length with predictions
             # shape -> [B, input_size, seq_len + horizon_length -1]
-            labels = F.pad(labels.transpose(-1, -2), (0, horizon_length - 1), mode='constant', value=0)
+            labels = F.pad(labels.transpose([0, 2, 1]), (0, horizon_length - 1), mode='constant', value=0)
 
             # shape -> [B, input_size, seq_len, horizon_length]
             shift_labels = labels.unfold(dimension=-1, size=horizon_length, step=1)
-            shift_labels = shift_labels.permute(0, 2, 3, 1)
+            shift_labels = shift_labels.transpose([0, 2, 3, 1])
 
             if loss_masks is not None:
                 # pad to the same length with predictions
-                loss_masks = F.pad(loss_masks.transpose(-1, -2), (0, horizon_length - 1), mode='constant', value=0)
+                loss_masks = F.pad(loss_masks.transpose([0, 2, 1]), (0, horizon_length - 1), mode='constant', value=0)
 
                 loss_masks = loss_masks.unfold(dimension=-1, size=horizon_length, step=1)
-                loss_masks = loss_masks.permute(0, 2, 3, 1)
+                loss_masks = loss_masks.transpose([0, 2, 3, 1])
 
         else:
             shift_predictions = predictions
@@ -1059,7 +1059,7 @@ class MoTSEForPrediction(MoTSEPreTrainedModel, TSGenerationMixin):
             losses = losses * loss_masks
             loss = losses.sum() / loss_masks.sum()
         else:
-            loss = torch.mean(losses)
+            loss = paddle.mean(losses)
 
         return loss
 
@@ -1130,6 +1130,6 @@ class MoTSEForPrediction(MoTSEPreTrainedModel, TSGenerationMixin):
         reordered_past = ()
         for layer_past in past_key_values:
             reordered_past += (
-                tuple(past_state.index_select(0, beam_idx.to(past_state.device)) for past_state in layer_past),
+                tuple(past_state.index_select(0, beam_idx.to(past_state.place)) for past_state in layer_past),
             )
         return reordered_past

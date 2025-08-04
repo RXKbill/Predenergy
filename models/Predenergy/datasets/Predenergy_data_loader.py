@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 _*-
-import torch
-from torch.utils.data import DataLoader, random_split
+import paddle
+from paddle.io import DataLoader
+from paddle.io import random_split
 from typing import Dict, List, Optional, Tuple, Union
 import numpy as np
 import pandas as pd
@@ -81,7 +82,7 @@ class PredenergyDataLoader:
         train_dataset, val_dataset, test_dataset = random_split(
             self.window_dataset,
             [train_size, val_size, test_size],
-            generator=torch.Generator().manual_seed(42)
+            generator=paddle.Generator().manual_seed(42)
         )
         
         return train_dataset, val_dataset, test_dataset
@@ -203,7 +204,7 @@ def create_Predenergy_data_loader(
         raise ValueError(f"Unknown loader type: {loader_type}")
 
 
-def collate_fn(batch: List[Dict[str, torch.Tensor]]) -> Dict[str, torch.Tensor]:
+def collate_fn(batch: List[Dict[str, paddle.Tensor]]) -> Dict[str, paddle.Tensor]:
     """自定义的collate函数，用于处理批次数据"""
     
     # 收集所有键
@@ -228,33 +229,33 @@ def collate_fn(batch: List[Dict[str, torch.Tensor]]) -> Dict[str, torch.Tensor]:
                             # 填充到最大长度
                             padding_size = max_len - len(tensor)
                             if key == 'loss_masks':
-                                padding = torch.zeros(padding_size, dtype=tensor.dtype)
+                                padding = paddle.zeros([padding_size], dtype=tensor.dtype)
                             else:
-                                padding = torch.zeros(padding_size, dtype=tensor.dtype)
-                            tensor = torch.cat([tensor, padding], dim=0)
+                                padding = paddle.zeros([padding_size], dtype=tensor.dtype)
+                            tensor = paddle.concat([tensor, padding], axis=0)
                     else:
                         # 如果是多维张量，确保维度正确
                         if tensor.shape[0] < max_len:
                             padding_size = max_len - tensor.shape[0]
                             if key == 'loss_masks':
-                                padding = torch.zeros(padding_size, *tensor.shape[1:], dtype=tensor.dtype)
+                                padding = paddle.zeros([padding_size] + list(tensor.shape[1:]), dtype=tensor.dtype)
                             else:
-                                padding = torch.zeros(padding_size, *tensor.shape[1:], dtype=tensor.dtype)
-                            tensor = torch.cat([tensor, padding], dim=0)
+                                padding = paddle.zeros([padding_size] + list(tensor.shape[1:]), dtype=tensor.dtype)
+                            tensor = paddle.concat([tensor, padding], axis=0)
                     padded_tensors.append(tensor)
                 else:
                     # 如果某个样本没有这个键，创建一个零张量
                     if key == 'loss_masks':
-                        dummy_tensor = torch.zeros(max_len, dtype=torch.int32)
+                        dummy_tensor = paddle.zeros([max_len], dtype='int32')
                     else:
-                        dummy_tensor = torch.zeros(max_len, dtype=torch.float32)
+                        dummy_tensor = paddle.zeros([max_len], dtype='float32')
                     padded_tensors.append(dummy_tensor)
             
-            batch_data[key] = torch.stack(padded_tensors)
+            batch_data[key] = paddle.stack(padded_tensors)
         else:
             # 对于其他键，直接堆叠
             tensors = [sample[key] for sample in batch if key in sample]
             if tensors:
-                batch_data[key] = torch.stack(tensors)
+                batch_data[key] = paddle.stack(tensors)
     
     return batch_data 

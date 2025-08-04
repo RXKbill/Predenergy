@@ -2,7 +2,7 @@
 import abc
 from typing import NoReturn
 
-from ts_benchmark.data.data_source import DataSource
+from data_source import DataSource
 
 
 class DataServer(metaclass=abc.ABCMeta):

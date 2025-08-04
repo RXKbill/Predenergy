@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 _*-
 import random
-import torch
-from models.modeling_Predenergy import PredenergyForPrediction, PredenergyConfig
+import paddle
+from models.modeling_Predenergy import PredenergyForPrediction
+from models.Predenergy.models.unified_config import PredenergyUnifiedConfig
 from trainer.hf_trainer import PredenergyTrainingArguments, PredenergyTrainer
 from datasets.Predenergy_data_loader import PredenergyDataLoader
 
@@ -18,7 +19,7 @@ class PredenergyRunner:
             model_path = self.model_path
             
         if from_scratch:
-            config = PredenergyConfig.from_pretrained(model_path)
+            config = PredenergyUnifiedConfig.from_pretrained(model_path)
             model = PredenergyForPrediction(config)
         else:
             model = PredenergyForPrediction.from_pretrained(model_path, **kwargs)
@@ -32,9 +33,9 @@ class PredenergyRunner:
         precision = train_config.get('precision', 'bf16')
         
         if precision == 'bf16':
-            torch_dtype = torch.bfloat16
+            paddle_dtype = paddle.bfloat16
         else:
-            torch_dtype = torch.float32
+            paddle_dtype = paddle.float32
 
         training_args = PredenergyTrainingArguments(
             output_dir=self.output_path,
@@ -48,7 +49,7 @@ class PredenergyRunner:
 
         model_path = train_config.pop('model_path', None) or self.model_path
         if model_path is not None:
-            model = self.load_model(model_path=model_path, from_scratch=from_scratch, torch_dtype=torch_dtype)
+            model = self.load_model(model_path=model_path, from_scratch=from_scratch, paddle_dtype=paddle_dtype)
         else:
             raise ValueError('Model path is None')
 
@@ -76,7 +77,7 @@ class PredenergyRunner:
         return self._convert_loader_to_dataset(train_loader)
 
     def _convert_loader_to_dataset(self, data_loader):
-        class PredenergyHFDataset(torch.utils.data.Dataset):
+        class PredenergyHFDataset(paddle.io.Dataset):
             def __init__(self, data_loader):
                 self.data = []
                 for batch in data_loader:
@@ -114,9 +115,8 @@ def setup_seed(seed: int = 9899):
     except ImportError:
         pass
     try:
-        import torch
-        torch.manual_seed(seed)
-        torch.cuda.manual_seed_all(seed)
+        import paddle
+        paddle.seed(seed)
     except ImportError:
         pass
 

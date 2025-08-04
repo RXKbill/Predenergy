@@ -6,9 +6,9 @@ from typing import Optional, Dict, NoReturn, List
 
 import pandas as pd
 
-from ts_benchmark.common.constant import FORECASTING_DATASET_PATH
-from ts_benchmark.data.dataset import Dataset
-from ts_benchmark.data.utils import load_series_info, read_data
+from common.constant import FORECASTING_DATASET_PATH
+from dataset import Dataset
+from utils import load_series_info, read_data
 
 
 logger = logging.getLogger(__name__)

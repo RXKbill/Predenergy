@@ -3,8 +3,8 @@ from typing import Tuple
 
 import numpy as np
 import pandas as pd
-import torch
-from torch.utils.data import DataLoader
+import paddle
+from paddle.io import DataLoader
 
 from Predenergy.utils.timefeatures import (
     time_features,
@@ -81,15 +81,7 @@ class SlidingWindowDataLoader:
         prediction_length: int = 2,
         shuffle: bool = True,
     ):
-        """
-        Initialize SlidingWindDataLoader.
-
-        :param dataset: Pandas DataFrame containing time series data.
-        :param batch_size: Batch size.
-        :param history_length: The length of historical data.
-        :param prediction_length: The length of the predicted data.
-        :param shuffle: Whether to shuffle the dataset.
-        """
+        
         self.dataset = dataset
         self.batch_size = batch_size
         self.history_length = history_length
@@ -98,30 +90,18 @@ class SlidingWindowDataLoader:
         self.current_index = 0
 
     def __len__(self) -> int:
-        """
-        Returns the length of the data loader.
-
-        :return: The length of the data loader.
-        """
+        
         return len(self.dataset) - self.history_length - self.prediction_length + 1
 
     def __iter__(self) -> "SlidingWindowDataLoader":
-        """
-        Create an iterator and return.
-
-        :return: Data loader iterator.
-        """
+        
         if self.shuffle:
             self._shuffle_dataset()
         self.current_index = 0
         return self
 
-    def __next__(self) -> Tuple[torch.Tensor, torch.Tensor]:
-        """
-        Generate data for the next batch.
-
-        :return: A tuple containing input data and target data.
-        """
+    def __next__(self) -> Tuple[paddle.Tensor, paddle.Tensor]:
+        
         if self.current_index >= len(self):
             raise StopIteration
 
@@ -146,9 +126,9 @@ class SlidingWindowDataLoader:
             batch_targets.append(targets)
             self.current_index += 1
 
-        # Convert NumPy array to PyTorch tensor
-        batch_inputs = torch.tensor(batch_inputs, dtype=torch.float32)
-        batch_targets = torch.tensor(batch_targets, dtype=torch.float32)
+        # Convert NumPy array to PaddlePaddle tensor
+        batch_inputs = paddle.to_tensor(batch_inputs, dtype='float32')
+        batch_targets = paddle.to_tensor(batch_targets, dtype='float32')
 
         return batch_inputs, batch_targets
 
@@ -180,13 +160,7 @@ def decompose_time(
     time: np.ndarray,
     freq: str,
 ) -> np.ndarray:
-    """
-    Split the given array of timestamps into components based on the frequency.
-
-    :param time: Array of timestamps.
-    :param freq: The frequency of the time stamp.
-    :return: Array of timestamp components.
-    """
+    
     df_stamp = pd.DataFrame(pd.to_datetime(time), columns=["date"])
     freq_scores = {
         "m": 0,
@@ -217,14 +191,7 @@ def get_time_mark(
     timeenc: int,
     freq: str,
 ) -> np.ndarray:
-    """
-    Extract temporal features from the time stamp.
-
-    :param time_stamp: The time stamp ndarray.
-    :param timeenc: The time encoding type.
-    :param freq: The frequency of the time stamp.
-    :return: The mark of the time stamp.
-    """
+    
     if timeenc == 0:
         origin_size = time_stamp.shape
         data_stamp = decompose_time(time_stamp.flatten(), freq)
@@ -305,10 +272,10 @@ class DatasetForTransformer:
         seq_x_mark = self.data_stamp[s_begin:s_end]
         seq_y_mark = self.data_stamp[r_begin:r_end]
 
-        seq_x = torch.tensor(seq_x.values, dtype=torch.float32)
-        seq_y = torch.tensor(seq_y.values, dtype=torch.float32)
-        seq_x_mark = torch.tensor(seq_x_mark, dtype=torch.float32)
-        seq_y_mark = torch.tensor(seq_y_mark, dtype=torch.float32)
+        seq_x = paddle.to_tensor(seq_x.values, dtype='float32')
+        seq_y = paddle.to_tensor(seq_y.values, dtype='float32')
+        seq_x_mark = paddle.to_tensor(seq_x_mark, dtype='float32')
+        seq_y_mark = paddle.to_tensor(seq_y_mark, dtype='float32')
         return seq_x, seq_y, seq_x_mark, seq_y_mark
 
 

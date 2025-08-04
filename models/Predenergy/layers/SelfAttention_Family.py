@@ -1,5 +1,5 @@
-import torch
-import torch.nn as nn
+import paddle
+import paddle.nn as nn
 import numpy as np
 from math import sqrt
 from utils.masking import TriangularCausalMask, ProbMask
@@ -7,7 +7,7 @@ from reformer_pytorch import LSHSelfAttention
 from einops import rearrange, repeat
 
 
-class DSAttention(nn.Module):
+class DSAttention(nn.Layer):
     '''De-stationary Attention'''
 
     def __init__(self, mask_flag=True, factor=5, scale=None, attention_dropout=0.1, output_attention=False):
@@ -28,16 +28,16 @@ class DSAttention(nn.Module):
             1).unsqueeze(1)  # B x 1 x 1 x S
 
         # De-stationary Attention, rescaling pre-softmax score with learned de-stationary factors
-        scores = torch.einsum("blhe,bshe->bhls", queries, keys) * tau + delta
+        scores = paddle.einsum("blhe,bshe->bhls", queries, keys) * tau + delta
 
         if self.mask_flag:
             if attn_mask is None:
-                attn_mask = TriangularCausalMask(B, L, device=queries.device)
+                attn_mask = TriangularCausalMask(B, L, device=queries.place)
 
-            scores.masked_fill_(attn_mask.mask, -np.inf)
+            scores = paddle.where(attn_mask.mask, paddle.full_like(scores, -np.inf), scores)
 
-        A = self.dropout(torch.softmax(scale * scores, dim=-1))
-        V = torch.einsum("bhls,bshd->blhd", A, values)
+        A = self.dropout(paddle.nn.functional.softmax(scale * scores, axis=-1))
+        V = paddle.einsum("bhls,bshd->blhd", A, values)
 
         if self.output_attention:
             return V.contiguous(), A
@@ -45,7 +45,7 @@ class DSAttention(nn.Module):
             return V.contiguous(), None
 
 
-class FullAttention(nn.Module):
+class FullAttention(nn.Layer):
     def __init__(self, mask_flag=True, factor=5, scale=None, attention_dropout=0.1, output_attention=False):
         super(FullAttention, self).__init__()
         self.scale = scale
@@ -58,16 +58,16 @@ class FullAttention(nn.Module):
         _, S, _, D = values.shape
         scale = self.scale or 1. / sqrt(E)
 
-        scores = torch.einsum("blhe,bshe->bhls", queries, keys)
+        scores = paddle.einsum("blhe,bshe->bhls", queries, keys)
 
         if self.mask_flag:
             if attn_mask is None:
-                attn_mask = TriangularCausalMask(B, L, device=queries.device)
+                attn_mask = TriangularCausalMask(B, L, device=queries.place)
 
-            scores.masked_fill_(attn_mask.mask, -np.inf)
+            scores = paddle.where(attn_mask.mask, paddle.full_like(scores, -np.inf), scores)
 
-        A = self.dropout(torch.softmax(scale * scores, dim=-1))
-        V = torch.einsum("bhls,bshd->blhd", A, values)
+        A = self.dropout(paddle.nn.functional.softmax(scale * scores, axis=-1))
+        V = paddle.einsum("bhls,bshd->blhd", A, values)
 
         if self.output_attention:
             return V.contiguous(), A
@@ -75,7 +75,7 @@ class FullAttention(nn.Module):
             return V.contiguous(), None
 
 
-class ProbAttention(nn.Module):
+class ProbAttention(nn.Layer):
     def __init__(self, mask_flag=True, factor=5, scale=None, attention_dropout=0.1, output_attention=False):
         super(ProbAttention, self).__init__()
         self.factor = factor
@@ -90,23 +90,23 @@ class ProbAttention(nn.Module):
         _, _, L_Q, _ = Q.shape
 
         # calculate the sampled Q_K
-        K_expand = K.unsqueeze(-3).expand(B, H, L_Q, L_K, E)
+        K_expand = K.unsqueeze(-3).expand([B, H, L_Q, L_K, E])
         # real U = U_part(factor*ln(L_k))*L_q
-        index_sample = torch.randint(L_K, (L_Q, sample_k))
-        K_sample = K_expand[:, :, torch.arange(
+        index_sample = paddle.randint(L_K, (L_Q, sample_k))
+        K_sample = K_expand[:, :, paddle.arange(
             L_Q).unsqueeze(1), index_sample, :]
-        Q_K_sample = torch.matmul(
-            Q.unsqueeze(-2), K_sample.transpose(-2, -1)).squeeze()
+        Q_K_sample = paddle.matmul(
+            Q.unsqueeze(-2), K_sample.transpose([0, 1, 2, 4, 3])).squeeze()
 
         # find the Top_k query with sparisty measurement
-        M = Q_K_sample.max(-1)[0] - torch.div(Q_K_sample.sum(-1), L_K)
-        M_top = M.topk(n_top, sorted=False)[1]
+        M = Q_K_sample.max(axis=-1)[0] - paddle.divide(Q_K_sample.sum(axis=-1), L_K)
+        M_top = paddle.topk(M, k=n_top, sorted=False)[1]
 
         # use the reduced Q to calculate Q_K
-        Q_reduce = Q[torch.arange(B)[:, None, None],
-                   torch.arange(H)[None, :, None],
+        Q_reduce = Q[paddle.arange(B)[:, None, None],
+                   paddle.arange(H)[None, :, None],
                    M_top, :]  # factor*ln(L_q)
-        Q_K = torch.matmul(Q_reduce, K.transpose(-2, -1))  # factor*ln(L_q)*L_k
+        Q_K = paddle.matmul(Q_reduce, K.transpose([0, 1, 2, 4, 3]))  # factor*ln(L_q)*L_k
 
         return Q_K, M_top
 
@@ -114,31 +114,31 @@ class ProbAttention(nn.Module):
         B, H, L_V, D = V.shape
         if not self.mask_flag:
             # V_sum = V.sum(dim=-2)
-            V_sum = V.mean(dim=-2)
-            contex = V_sum.unsqueeze(-2).expand(B, H,
-                                                L_Q, V_sum.shape[-1]).clone()
+            V_sum = V.mean(axis=-2)
+            contex = V_sum.unsqueeze(-2).expand([B, H,
+                                                L_Q, V_sum.shape[-1]]).clone()
         else:  # use mask
             # requires that L_Q == L_V, i.e. for self-attention only
             assert (L_Q == L_V)
-            contex = V.cumsum(dim=-2)
+            contex = V.cumsum(axis=-2)
         return contex
 
     def _update_context(self, context_in, V, scores, index, L_Q, attn_mask):
         B, H, L_V, D = V.shape
 
         if self.mask_flag:
-            attn_mask = ProbMask(B, H, L_Q, index, scores, device=V.device)
-            scores.masked_fill_(attn_mask.mask, -np.inf)
+            attn_mask = ProbMask(B, H, L_Q, index, scores, device=V.place)
+            scores = paddle.where(attn_mask.mask, paddle.full_like(scores, -np.inf), scores)
 
-        attn = torch.softmax(scores, dim=-1)  # nn.Softmax(dim=-1)(scores)
+        attn = paddle.nn.functional.softmax(scores, axis=-1)  # nn.Softmax(dim=-1)(scores)
 
-        context_in[torch.arange(B)[:, None, None],
-        torch.arange(H)[None, :, None],
-        index, :] = torch.matmul(attn, V).type_as(context_in)
+        context_in[paddle.arange(B)[:, None, None],
+        paddle.arange(H)[None, :, None],
+        index, :] = paddle.matmul(attn, V).astype(context_in.dtype)
         if self.output_attention:
-            attns = (torch.ones([B, H, L_V, L_V]) /
-                     L_V).type_as(attn).to(attn.device)
-            attns[torch.arange(B)[:, None, None], torch.arange(H)[
+            attns = (paddle.ones([B, H, L_V, L_V]) /
+                     L_V).astype(attn.dtype).to(attn.place)
+            attns[paddle.arange(B)[:, None, None], paddle.arange(H)[
                                                   None, :, None], index, :] = attn
             return context_in, attns
         else:
@@ -148,9 +148,9 @@ class ProbAttention(nn.Module):
         B, L_Q, H, D = queries.shape
         _, L_K, _, _ = keys.shape
 
-        queries = queries.transpose(2, 1)
-        keys = keys.transpose(2, 1)
-        values = values.transpose(2, 1)
+        queries = queries.transpose([0, 1, 3, 2])
+        keys = keys.transpose([0, 1, 3, 2])
+        values = values.transpose([0, 1, 3, 2])
 
         U_part = self.factor * \
                  np.ceil(np.log(L_K)).astype('int').item()  # c*ln(L_k)
@@ -176,7 +176,7 @@ class ProbAttention(nn.Module):
         return context.contiguous(), attn
 
 
-class AttentionLayer(nn.Module):
+class AttentionLayer(nn.Layer):
     def __init__(self, attention, d_model, n_heads, d_keys=None,
                  d_values=None):
         super(AttentionLayer, self).__init__()
@@ -196,9 +196,9 @@ class AttentionLayer(nn.Module):
         _, S, _ = keys.shape
         H = self.n_heads
 
-        queries = self.query_projection(queries).view(B, L, H, -1)
-        keys = self.key_projection(keys).view(B, S, H, -1)
-        values = self.value_projection(values).view(B, S, H, -1)
+        queries = self.query_projection(queries).reshape([B, L, H, -1])
+        keys = self.key_projection(keys).reshape([B, S, H, -1])
+        values = self.value_projection(values).reshape([B, S, H, -1])
 
         out, attn = self.inner_attention(
             queries,
@@ -208,12 +208,12 @@ class AttentionLayer(nn.Module):
             tau=tau,
             delta=delta
         )
-        out = out.view(B, L, -1)
+        out = out.reshape([B, L, -1])
 
         return self.out_projection(out), attn
 
 
-class ReformerLayer(nn.Module):
+class ReformerLayer(nn.Layer):
     def __init__(self, attention, d_model, n_heads, d_keys=None,
                  d_values=None, causal=False, bucket_size=4, n_hashes=4):
         super().__init__()
@@ -234,7 +234,7 @@ class ReformerLayer(nn.Module):
         else:
             # fill the time data
             fill_len = (self.bucket_size * 2) - (N % (self.bucket_size * 2))
-            return torch.cat([queries, torch.zeros([B, fill_len, C]).to(queries.device)], dim=1)
+            return paddle.concat([queries, paddle.zeros([B, fill_len, C]).to(queries.place)], axis=1)
 
     def forward(self, queries, keys, values, attn_mask, tau, delta):
         # in Reformer: defalut queries=keys
@@ -243,7 +243,7 @@ class ReformerLayer(nn.Module):
         return queries, None
 
 
-class TwoStageAttentionLayer(nn.Module):
+class TwoStageAttentionLayer(nn.Layer):
     '''
     The Two Stage Attention (TSA) Layer
     input/output shape: [batch_size, Data_dim(D), Seg_num(L), d_model]
@@ -259,7 +259,7 @@ class TwoStageAttentionLayer(nn.Module):
                                                        output_attention=configs.output_attention), d_model, n_heads)
         self.dim_receiver = AttentionLayer(FullAttention(False, configs.factor, attention_dropout=configs.dropout,
                                                          output_attention=configs.output_attention), d_model, n_heads)
-        self.router = nn.Parameter(torch.randn(seg_num, factor, d_model))
+        self.router = nn.Parameter(paddle.randn([seg_num, factor, d_model]))
 
         self.dropout = nn.Dropout(dropout)
 

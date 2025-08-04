@@ -1,12 +1,12 @@
 import math
 import warnings
 from typing import Optional, Tuple, List, Union
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+import paddle
+import paddle.nn as nn
+import paddle.nn.functional as F
 from transformers import Cache, DynamicCache, StaticCache
 
-def repeat_kv(hidden_states: torch.Tensor, n_rep: int) -> torch.Tensor:
+def repeat_kv(hidden_states: paddle.Tensor, n_rep: int) -> paddle.Tensor:
     """
     This is the equivalent of torch.repeat_interleave(x, dim=1, repeats=n_rep)
     The hidden states go from (batch, num_key_value_heads, seq_len, head_dim)
@@ -23,7 +23,7 @@ def rotate_half(x):
     """Rotates half the hidden dims of the input."""
     x1 = x[..., : x.shape[-1] // 2]
     x2 = x[..., x.shape[-1] // 2 :]
-    return torch.cat((-x2, x1), dim=-1)
+    return paddle.concat((-x2, x1), axis=-1)
 
 
 def apply_rotary_pos_emb(q, k, cos, sin, position_ids, unsqueeze_dim=1):
@@ -49,12 +49,12 @@ class MoTSEInputEmbedding(nn.Module):
         return self.embedding(x)
 
 
-class MoTSERotaryEmbedding(torch.nn.Module):
+class MoTSERotaryEmbedding(paddle.nn.Layer):
     """Rotary position embedding for MoTSE model."""
     
     def __init__(self, dim, max_position_embeddings=2048, base=10000, device=None):
         super().__init__()
-        inv_freq = 1.0 / (base ** (torch.arange(0, dim, 2).float().to(device) / dim))
+        inv_freq = 1.0 / (base ** (paddle.arange(0, dim, 2).astype('float32') / dim))
         self.register_buffer("inv_freq", inv_freq)
         self.max_position_embeddings = max_position_embeddings
         self.base = base
@@ -62,11 +62,11 @@ class MoTSERotaryEmbedding(torch.nn.Module):
 
     def _set_cos_sin_cache(self, seq_len, device, dtype):
         self.max_seq_len_cached = seq_len
-        t = torch.arange(self.max_seq_len_cached, device=device, dtype=self.inv_freq.dtype)
-        freqs = torch.outer(t, self.inv_freq)
-        emb = torch.cat((freqs, freqs), dim=-1)
-        self.register_buffer("cos_cached", emb.cos().to(dtype), persistent=False)
-        self.register_buffer("sin_cached", emb.sin().to(dtype), persistent=False)
+        t = paddle.arange(self.max_seq_len_cached, dtype=self.inv_freq.dtype)
+        freqs = paddle.outer(t, self.inv_freq)
+        emb = paddle.concat((freqs, freqs), axis=-1)
+        self.register_buffer("cos_cached", emb.cos().astype(dtype), persistent=False)
+        self.register_buffer("sin_cached", emb.sin().astype(dtype), persistent=False)
 
     def forward(self, x, seq_len=None):
         # x: [bs, num_attention_heads, seq_len, head_size]
@@ -74,25 +74,25 @@ class MoTSERotaryEmbedding(torch.nn.Module):
             self._set_cos_sin_cache(seq_len, x.device, x.dtype)
 
         return (
-            self.cos_cached[:seq_len].to(dtype=x.dtype),
-            self.sin_cached[:seq_len].to(dtype=x.dtype),
+            self.cos_cached[:seq_len].astype(x.dtype),
+            self.sin_cached[:seq_len].astype(x.dtype),
         )
 
 
-class MoTSERMSNorm(torch.nn.Module):
+class MoTSERMSNorm(paddle.nn.Layer):
     """RMS normalization for MoTSE model."""
     
     def __init__(self, hidden_size, eps=1e-6):
         super().__init__()
-        self.weight = nn.Parameter(torch.ones(hidden_size))
+        self.weight = nn.Parameter(paddle.ones(hidden_size))
         self.variance_epsilon = eps
 
     def forward(self, hidden_states):
         input_dtype = hidden_states.dtype
-        hidden_states = hidden_states.to(torch.float32)
+        hidden_states = hidden_states.astype('float32')
         variance = hidden_states.pow(2).mean(-1, keepdim=True)
-        hidden_states = hidden_states * torch.rsqrt(variance + self.variance_epsilon)
-        return self.weight * hidden_states.to(input_dtype)
+        hidden_states = hidden_states * paddle.rsqrt(variance + self.variance_epsilon)
+        return self.weight * hidden_states.astype(input_dtype)
 
 
 class MoTSETemporalBlock(nn.Module):
@@ -147,9 +147,9 @@ class MoTSESparseExpertsLayer(nn.Module):
             intermediate_size=self.config.intermediate_size if hasattr(config, 'intermediate_size') else self.config.motse_intermediate_size,
             hidden_act=self.config.hidden_act if hasattr(config, 'hidden_act') else self.config.motse_hidden_act,
         )
-        self.shared_expert_gate = torch.nn.Linear(self.hidden_size, 1, bias=False)
+        self.shared_expert_gate = paddle.nn.Linear(self.hidden_size, 1, bias_attr=False)
 
-    def forward(self, hidden_states: torch.Tensor):
+    def forward(self, hidden_states: paddle.Tensor):
         batch_size, sequence_length, hidden_dim = hidden_states.shape
         hidden_states = hidden_states.view(-1, hidden_dim)
         # router_logits -> (batch * sequence_length, n_experts)
@@ -236,13 +236,13 @@ class MoTSEAttention(nn.Module):
 
     def forward(
             self,
-            hidden_states: torch.Tensor,
-            attention_mask: Optional[torch.Tensor] = None,
-            position_ids: Optional[torch.LongTensor] = None,
+            hidden_states: paddle.Tensor,
+            attention_mask: Optional[paddle.Tensor] = None,
+            position_ids: Optional[paddle.LongTensor] = None,
             past_key_value: Optional[Cache] = None,
             output_attentions: bool = False,
             **kwargs,
-    ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
+    ) -> Tuple[paddle.Tensor, Optional[paddle.Tensor], Optional[Tuple[paddle.Tensor]]]:
         if "padding_mask" in kwargs:
             warnings.warn(
                 "Passing `padding_mask` is deprecated and will be removed in v4.37. Please make sure use `attention_mask` instead.`"
@@ -329,14 +329,14 @@ class MoTSEDecoderLayer(nn.Module):
 
     def forward(
             self,
-            hidden_states: torch.Tensor,
-            attention_mask: Optional[torch.Tensor] = None,
-            position_ids: Optional[torch.LongTensor] = None,
-            past_key_value: Optional[Tuple[torch.Tensor]] = None,
+            hidden_states: paddle.Tensor,
+            attention_mask: Optional[paddle.Tensor] = None,
+            position_ids: Optional[paddle.LongTensor] = None,
+            past_key_value: Optional[Tuple[paddle.Tensor]] = None,
             output_attentions: Optional[bool] = False,
             use_cache: Optional[bool] = False,
             **kwargs,
-    ) -> Tuple[torch.FloatTensor, torch.FloatTensor, Optional[torch.FloatTensor], Optional[torch.FloatTensor]]:
+    ) -> Tuple[paddle.FloatTensor, paddle.FloatTensor, Optional[paddle.FloatTensor], Optional[paddle.FloatTensor]]:
         if "padding_mask" in kwargs:
             warnings.warn(
                 "Passing `padding_mask` is deprecated and will be removed in v4.37. Please make sure use `attention_mask` instead.`"
@@ -417,14 +417,14 @@ class MoTSEFlashAttention2(MoTSEAttention):
 
     def forward(
             self,
-            hidden_states: torch.Tensor,
-            attention_mask: Optional[torch.LongTensor] = None,
-            position_ids: Optional[torch.LongTensor] = None,
+            hidden_states: paddle.Tensor,
+            attention_mask: Optional[paddle.LongTensor] = None,
+            position_ids: Optional[paddle.LongTensor] = None,
             past_key_value: Optional[Cache] = None,
             output_attentions: bool = False,
             use_cache: bool = False,
-            cache_position: Optional[torch.LongTensor] = None,
-    ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
+            cache_position: Optional[paddle.LongTensor] = None,
+    ) -> Tuple[paddle.Tensor, Optional[paddle.Tensor], Optional[Tuple[paddle.Tensor]]]:
         if isinstance(past_key_value, StaticCache):
             raise ValueError(
                 "`static` cache implementation is not compatible with `attn_implementation==flash_attention_2` "
@@ -608,11 +608,11 @@ class MoTSEFlashAttention2(MoTSEAttention):
 
 # Loss Functions
 def load_balancing_loss_func(
-        gate_logits: Union[torch.Tensor, Tuple[torch.Tensor], List[torch.Tensor]],
+        gate_logits: Union[paddle.Tensor, Tuple[paddle.Tensor], List[paddle.Tensor]],
         top_k: int,
         num_experts: int = None,
-        attention_mask: Optional[torch.Tensor] = None
-) -> torch.Tensor:
+        attention_mask: Optional[paddle.Tensor] = None
+) -> paddle.Tensor:
     """
     Compute the load balancing loss for MoE models.
     

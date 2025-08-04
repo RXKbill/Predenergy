@@ -5,11 +5,11 @@ from typing import NoReturn, Optional, Dict
 
 import pandas as pd
 
-from ts_benchmark.data.data_server_base import DataServer
-from ts_benchmark.data.data_pool_impl_base import DataPoolImpl
-from ts_benchmark.data.data_pool import DataPool
-from ts_benchmark.data.data_source import DataSource
-from ts_benchmark.utils.parallel import ParallelBackend, SharedStorage
+from dataset.data_server_base import DataServer
+from dataset.data_pool_impl_base import DataPoolImpl
+from dataset.data_pool import DataPool
+from dataset.data_source import DataSource
+from utils.parallel import ParallelBackend, SharedStorage
 
 
 logger = logging.getLogger(__name__)
