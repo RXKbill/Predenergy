@@ -7,8 +7,8 @@ from typing import Dict, List, Optional, Tuple, Union
 import numpy as np
 import pandas as pd
 
-from datasets.Predenergy_dataset import PredenergyDataset
-from datasets.Predenergy_window_dataset import PredenergyWindowDataset, UniversalPredenergyWindowDataset
+from .Predenergy_dataset import PredenergyDataset
+from .Predenergy_window_dataset import PredenergyWindowDataset, UniversalPredenergyWindowDataset
 
 
 class PredenergyDataLoader:

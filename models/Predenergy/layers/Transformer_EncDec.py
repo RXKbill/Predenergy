@@ -3,7 +3,7 @@ import paddle.nn as nn
 import paddle.nn.functional as F
 
 
-class ConvLayer(nn.Module):
+class ConvLayer(nn.Layer):
     def __init__(self, c_in):
         super(ConvLayer, self).__init__()
         self.downConv = nn.Conv1d(in_channels=c_in,
@@ -24,7 +24,7 @@ class ConvLayer(nn.Module):
         return x
 
 
-class EncoderLayer(nn.Module):
+class EncoderLayer(nn.Layer):
     def __init__(self, attention, d_model, d_ff=None, dropout=0.1, activation="relu"):
         super(EncoderLayer, self).__init__()
         d_ff = d_ff or 4 * d_model
@@ -51,11 +51,11 @@ class EncoderLayer(nn.Module):
         return self.norm2(x + y), attn
 
 
-class Encoder(nn.Module):
+class Encoder(nn.Layer):
     def __init__(self, attn_layers, conv_layers=None, norm_layer=None):
         super(Encoder, self).__init__()
-        self.attn_layers = nn.ModuleList(attn_layers)
-        self.conv_layers = nn.ModuleList(conv_layers) if conv_layers is not None else None
+        self.attn_layers = nn.LayerList(attn_layers)
+        self.conv_layers = nn.LayerList(conv_layers) if conv_layers is not None else None
         self.norm = norm_layer
 
     def forward(self, x, attn_mask=None, tau=None, delta=None):
@@ -80,7 +80,7 @@ class Encoder(nn.Module):
         return x, attns
 
 
-class DecoderLayer(nn.Module):
+class DecoderLayer(nn.Layer):
     def __init__(self, self_attention, cross_attention, d_model, d_ff=None,
                  dropout=0.1, activation="relu"):
         super(DecoderLayer, self).__init__()
@@ -116,10 +116,10 @@ class DecoderLayer(nn.Module):
         return self.norm3(x + y)
 
 
-class Decoder(nn.Module):
+class Decoder(nn.Layer):
     def __init__(self, layers, norm_layer=None, projection=None):
         super(Decoder, self).__init__()
-        self.layers = nn.ModuleList(layers)
+        self.layers = nn.LayerList(layers)
         self.norm = norm_layer
         self.projection = projection
 

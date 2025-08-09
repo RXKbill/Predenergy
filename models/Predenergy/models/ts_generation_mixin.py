@@ -154,7 +154,7 @@ class TSGenerationMixin(GenerationMixin):
 
             input_ids = paddle.concat([input_ids, next_tokens], axis=-2)
             if streamer is not None:
-                streamer.put(next_tokens.cpu())
+                streamer.put(next_tokens.detach())
             model_kwargs = self._update_model_kwargs_for_generation(
                 outputs,
                 model_kwargs,

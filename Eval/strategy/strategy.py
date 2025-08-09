@@ -62,6 +62,7 @@ class Strategy(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def execute(self, series_name: str, model_factory: ModelFactory) -> Any:
+        pass
 
     def get_config_str(self, required_configs_only: bool = False) -> str:
         if required_configs_only:

@@ -8,9 +8,9 @@ from paddlets.datasets import TSDataset
 from paddlets.transform import StandardScaler, MinMaxScaler
 from paddlets.utils import get_target_cols
 
-from ts_dataset import TimeSeriesDataset
-from general_dataset import GeneralDataset
-from binary_dataset import BinaryDataset
+from .ts_dataset import TimeSeriesDataset
+from .general_dataset import GeneralDataset
+from .binary_dataset import BinaryDataset
 
 
 class PredenergyDataset(TimeSeriesDataset):

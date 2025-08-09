@@ -2,7 +2,7 @@
 # -*- coding:utf-8 _*-
 import random
 import paddle
-from models.modeling_Predenergy import PredenergyForPrediction
+from .models.predenergy_model import PredenergyForPrediction
 from models.Predenergy.models.unified_config import PredenergyUnifiedConfig
 from trainer.hf_trainer import PredenergyTrainingArguments, PredenergyTrainer
 from datasets.Predenergy_data_loader import PredenergyDataLoader

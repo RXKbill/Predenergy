@@ -3,7 +3,7 @@ import paddle.nn as nn
 import paddle.nn.functional as F
 
 
-class my_Layernorm(nn.Module):
+class my_Layernorm(nn.Layer):
     """
     Special designed layernorm for the seasonal part
     """
@@ -18,7 +18,7 @@ class my_Layernorm(nn.Module):
         return x_hat - bias
 
 
-class moving_avg(nn.Module):
+class moving_avg(nn.Layer):
     """
     Moving average block to highlight the trend of time data
     """
@@ -38,7 +38,7 @@ class moving_avg(nn.Module):
         return x
 
 
-class series_decomp(nn.Module):
+class series_decomp(nn.Layer):
     """
     Series decomposition block
     """
@@ -53,7 +53,7 @@ class series_decomp(nn.Module):
         return res, moving_mean
 
 
-class series_decomp_multi(nn.Module):
+class series_decomp_multi(nn.Layer):
     """
     Multiple Series decomposition block from FEDformer
     """
@@ -76,7 +76,7 @@ class series_decomp_multi(nn.Module):
         return sea, moving_mean
 
 
-class EncoderLayer(nn.Module):
+class EncoderLayer(nn.Layer):
     """
     Autoformer encoder layer with the progressive decomposition architecture
     """
@@ -106,15 +106,15 @@ class EncoderLayer(nn.Module):
         return res, attn
 
 
-class Encoder(nn.Module):
+class Encoder(nn.Layer):
     """
     Autoformer encoder
     """
 
     def __init__(self, attn_layers, conv_layers=None, norm_layer=None):
         super(Encoder, self).__init__()
-        self.attn_layers = nn.ModuleList(attn_layers)
-        self.conv_layers = nn.ModuleList(conv_layers) if conv_layers is not None else None
+        self.attn_layers = nn.LayerList(attn_layers)
+        self.conv_layers = nn.LayerList(conv_layers) if conv_layers is not None else None
         self.norm = norm_layer
 
     def forward(self, x, attn_mask=None):
@@ -137,7 +137,7 @@ class Encoder(nn.Module):
         return x, attns
 
 
-class DecoderLayer(nn.Module):
+class DecoderLayer(nn.Layer):
     """
     Autoformer decoder layer with the progressive decomposition architecture
     """
@@ -179,14 +179,14 @@ class DecoderLayer(nn.Module):
         return x, residual_trend
 
 
-class Decoder(nn.Module):
+class Decoder(nn.Layer):
     """
     Autoformer encoder
     """
 
     def __init__(self, layers, norm_layer=None, projection=None):
         super(Decoder, self).__init__()
-        self.layers = nn.ModuleList(layers)
+        self.layers = nn.LayerList(layers)
         self.norm = norm_layer
         self.projection = projection
 

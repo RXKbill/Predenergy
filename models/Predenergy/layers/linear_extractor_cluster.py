@@ -48,7 +48,7 @@ class SparseDispatcher(object):
         return paddle.split(self._nonzero_gates, self._part_sizes, axis=0)
 
 
-class Linear_extractor_cluster(nn.Module):
+class Linear_extractor_cluster(nn.Layer):
 
     def __init__(self, config):
         super(Linear_extractor_cluster, self).__init__()
@@ -57,7 +57,7 @@ class Linear_extractor_cluster(nn.Module):
         self.input_size = config.seq_len
         self.k = config.k
         # instantiate experts
-        self.experts = nn.ModuleList([expert(config) for _ in range(self.num_experts)])
+        self.experts = nn.LayerList([expert(config) for _ in range(self.num_experts)])
         self.W_h = nn.Parameter(paddle.eye(self.num_experts))
         self.gate = encoder(config)
         self.noise = encoder(config)

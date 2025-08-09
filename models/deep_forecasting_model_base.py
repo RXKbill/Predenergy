@@ -11,13 +11,12 @@ from sklearn.preprocessing import StandardScaler
 from paddle import optimizer
 from paddle.io import DataLoader
 
-from utils import (
+from models.Predenergy.utils import (
     forecasting_data_provider,
     train_val_split,
     get_time_mark,
-    EarlyStopping,
-    adjust_learning_rate,
 )
+from models.Predenergy.utils.tools import EarlyStopping, adjust_learning_rate
 from Predenergy.models.model_base import ModelBase, BatchMaker
 from utils.data_processing import split_time
 

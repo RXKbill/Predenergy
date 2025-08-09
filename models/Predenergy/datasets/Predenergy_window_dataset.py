@@ -3,7 +3,7 @@
 import random
 import numpy as np
 import paddle
-from datasets.ts_dataset import TimeSeriesDataset
+from .ts_dataset import TimeSeriesDataset
 
 
 class PredenergyWindowDataset:

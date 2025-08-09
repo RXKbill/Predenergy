@@ -7,7 +7,6 @@ import warnings
 from typing import Dict, Any, Optional, List, Union
 from dataclasses import dataclass, field
 import paddle
-from transformers import PretrainedConfig
 
 
 @dataclass
@@ -52,7 +51,6 @@ class PredenergyUnifiedConfig:
     embed: str = "timeF"                 # Embedding type
     
     # ===== Advanced Model Options =====
-    use_combined_model: bool = False     # Use STDM+MoTSE combined architecture
     use_layer_norm: bool = True          # Use layer normalization
     use_revin: bool = True               # Use RevIN normalization
     moving_avg: int = 25                 # Moving average window
@@ -61,7 +59,7 @@ class PredenergyUnifiedConfig:
     CI: bool = True                      # Channel independence
     distil: bool = True                  # Use distillation
     
-    # ===== MoTSE Specific Parameters (when use_combined_model=True) =====
+    # ===== MoTSE Architecture Parameters =====
     num_experts: int = 8                 # Number of experts
     num_experts_per_tok: int = 2         # Experts per token
     connection_type: str = "adaptive"    # Connection type: linear, attention, concat, adaptive
@@ -71,6 +69,13 @@ class PredenergyUnifiedConfig:
     motse_intermediate_size: int = 4096  # MoTSE intermediate size
     router_aux_loss_factor: float = 0.02 # Router auxiliary loss factor
     apply_aux_loss: bool = True          # Apply auxiliary loss
+    
+    # ===== PaddleNLP Decoder Parameters =====
+    use_paddlenlp_decoder: bool = True   # Use PaddleNLP decoder for feature decoding
+    decoder_hidden_size: int = 512       # Decoder hidden size
+    decoder_num_layers: int = 3          # Number of decoder layers
+    decoder_num_heads: int = 8           # Number of attention heads in decoder
+    decoder_dropout: float = 0.1         # Decoder dropout rate
     
     # ===== Generation Parameters =====
     max_position_embeddings: int = 2048  # Maximum position embeddings
@@ -121,13 +126,10 @@ class PredenergyUnifiedConfig:
         
         # Device configuration
         if self.device == "auto":
-            self.device = "gpu" if paddle.device.is_compiled_with_cuda() else "cpu"
+            self.device = "gpu" if paddle.device.cuda.device_count() > 0 else "cpu"
     
     def get_motse_config(self) -> Dict[str, Any]:
         """Get MoTSE-specific configuration parameters."""
-        if not self.use_combined_model:
-            warnings.warn("Getting MoTSE config for non-combined model")
-        
         return {
             "input_size": self.input_size,
             "hidden_size": self.motse_hidden_size,
@@ -142,6 +144,18 @@ class PredenergyUnifiedConfig:
             "router_aux_loss_factor": self.router_aux_loss_factor,
             "apply_aux_loss": self.apply_aux_loss,
             "use_cache": self.use_cache,
+        }
+    
+    def get_decoder_config(self) -> Dict[str, Any]:
+        """Get PaddleNLP Decoder configuration parameters."""
+        return {
+            "hidden_size": self.decoder_hidden_size,
+            "num_layers": self.decoder_num_layers,
+            "num_heads": self.decoder_num_heads,
+            "dropout": self.decoder_dropout,
+            "vocab_size": self.horizon * self.c_out,  # Output vocabulary size
+            "max_position_embeddings": self.max_position_embeddings,
+            "layer_norm_eps": 1e-5,
         }
     
     def get_stdm_config(self) -> Dict[str, Any]:
@@ -220,6 +234,8 @@ class PredenergyUnifiedConfig:
 
 
 # Compatibility aliases for backward compatibility
+PredenergyConfig = PredenergyUnifiedConfig
+TransformerConfig = PredenergyUnifiedConfig
 PredenergyMoTSEConfig = PredenergyUnifiedConfig
 
 

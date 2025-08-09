@@ -1,5 +1,4 @@
 from typing import List
-import paddle
 from transformers import PretrainedConfig
 
 class MoTSEConfig(PretrainedConfig):

@@ -187,13 +187,13 @@ python quick_test.py
 #### 测试训练脚本
 ```bash
 # 查看帮助信息
-python scripts/train_predenergy.py --help
+python scripts/fixed_train_predenergy.py --help
 ```
 
 #### 测试 API 服务器
 ```bash
 # 启动服务器 (在另一个终端)
-python src/api_predenergy.py
+python src/fixed_api_predenergy.py
 
 # 在原终端测试
 curl http://localhost:8000/health
@@ -321,7 +321,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 8000
 
 # 启动命令
-CMD ["python", "src/api_predenergy.py", "--host", "0.0.0.0"]
+CMD ["python", "src/fixed_api_predenergy.py", "--host", "0.0.0.0"]
 ```
 
 ### 构建和运行容器
@@ -341,8 +341,8 @@ docker run predenergy:fixed python quick_test.py
 安装完成后，您可以：
 
 1. **阅读文档**: 查看 `README.md` 了解详细使用方法
-2. **运行示例**: 尝试 `scripts/train_predenergy.py`
-3. **使用 API**: 启动 `src/api_predenergy.py`
+2. **运行示例**: 尝试 `scripts/fixed_train_predenergy.py`
+3. **使用 API**: 启动 `src/fixed_api_predenergy.py`
 4. **查看修复**: 阅读 `FIXES_SUMMARY.md` 了解改进内容
 
 ## 🆘 获取帮助

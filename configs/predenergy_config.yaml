@@ -1,6 +1,3 @@
-# Predenergy Standard Configuration
-# This configuration uses the standard STDM-only architecture
-
 # === Core Prediction Parameters ===
 seq_len: 96                    # Input sequence length
 horizon: 24                    # Prediction horizon
@@ -36,7 +33,6 @@ freq: "h"                      # Frequency string
 embed: "timeF"                 # Embedding type
 
 # === Advanced Model Options ===
-use_combined_model: false      # Use STDM+MoTSE combined architecture
 use_layer_norm: true           # Use layer normalization
 use_revin: true                # Use RevIN normalization
 moving_avg: 25                 # Moving average window
@@ -44,6 +40,29 @@ moving_avg: 25                 # Moving average window
 # === STDM Specific Parameters ===
 CI: true                       # Channel independence
 distil: true                   # Use distillation
+
+# === MoTSE Architecture Parameters ===
+num_experts: 8                 # Number of experts
+num_experts_per_tok: 2         # Experts per token
+connection_type: "adaptive"    # Connection type: linear, attention, concat, adaptive
+motse_hidden_size: 1024        # MoTSE hidden size
+motse_num_layers: 6            # MoTSE number of layers
+motse_num_heads: 16            # MoTSE attention heads
+motse_intermediate_size: 4096  # MoTSE intermediate size
+router_aux_loss_factor: 0.02   # Router auxiliary loss factor
+apply_aux_loss: true           # Apply auxiliary loss
+
+# === PaddleNLP Decoder Parameters ===
+use_paddlenlp_decoder: true    # Use PaddleNLP decoder for feature decoding
+decoder_hidden_size: 512       # Decoder hidden size
+decoder_num_layers: 3          # Number of decoder layers
+decoder_num_heads: 8           # Number of attention heads in decoder
+decoder_dropout: 0.1           # Decoder dropout rate
+
+# === Generation Parameters ===
+max_position_embeddings: 2048  # Maximum position embeddings
+rope_theta: 10000.0            # RoPE theta parameter
+use_cache: true                # Use KV cache
 
 # === Device and Performance ===
 device: "auto"                 # Device selection (auto/cuda/cpu)

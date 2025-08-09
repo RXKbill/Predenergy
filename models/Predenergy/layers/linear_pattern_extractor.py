@@ -3,7 +3,7 @@ import paddle.nn as nn
 from .Autoformer_EncDec import series_decomp
 
 
-class Linear_extractor(nn.Module):
+class Linear_extractor(nn.Layer):
     """
     Paper link: https://arxiv.org/pdf/2205.13504.pdf
     """
@@ -21,8 +21,8 @@ class Linear_extractor(nn.Module):
         self.channels = configs.enc_in
         self.enc_in = 1 if configs.CI else configs.enc_in
         if self.individual:
-            self.Linear_Seasonal = nn.ModuleList()
-            self.Linear_Trend = nn.ModuleList()
+            self.Linear_Seasonal = nn.LayerList()
+            self.Linear_Trend = nn.LayerList()
 
             for i in range(self.channels):
                 self.Linear_Seasonal.append(

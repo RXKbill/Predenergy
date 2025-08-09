@@ -2,7 +2,7 @@ import paddle
 import paddle.nn as nn
 
 
-class RevIN(nn.Module):
+class RevIN(nn.Layer):
     def __init__(self, num_features: int, eps=1e-5, affine=True, subtract_last=False):
         """
         :param num_features: the number of features or channels
@@ -37,8 +37,8 @@ class RevIN(nn.Module):
         if self.subtract_last:
             self.last = x[:, -1, :].unsqueeze(1)
         else:
-            self.mean = torch.mean(x, dim=dim2reduce, keepdim=True).detach()  # 沿时间维度求平均，得到各通道的时间均值
-        self.stdev = torch.sqrt(torch.var(x, dim=dim2reduce, keepdim=True, unbiased=False) + self.eps).detach()
+            self.mean = paddle.mean(x, axis=dim2reduce, keepdim=True).detach()  # 沿时间维度求平均，得到各通道的时间均值
+        self.stdev = paddle.sqrt(paddle.var(x, axis=dim2reduce, keepdim=True, unbiased=False) + self.eps).detach()
 
     def _normalize(self, x):
         if self.subtract_last:

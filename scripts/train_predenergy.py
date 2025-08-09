@@ -3,8 +3,8 @@
 """
 Predenergy Training Script
 
-This script provides a corrected training interface for the Predenergy model,
-with proper configuration management and framework compatibility.
+This script provides a training interface for the Predenergy model,
+with proper configuration management and PaddlePaddle framework compatibility.
 """
 
 import os
@@ -17,18 +17,16 @@ import pandas as pd
 from pathlib import Path
 import warnings
 import paddle
-from paddle.io import DataLoader
-from typing import Dict, Any, Optional
 
 # Add project root to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Import components
 from models.Predenergy.models.unified_config import PredenergyUnifiedConfig, load_config_from_file
-from models.Predenergy.models.modeling_Predenergy import PredenergyForPrediction
+from models.Predenergy.models.predenergy_model import PredenergyForPrediction
 from models.Predenergy.utils.config_loader import ConfigLoader, create_config_from_args
 from models.Predenergy.datasets.Predenergy_data_loader import create_Predenergy_data_loader
-from models.utils import EarlyStopping
+from models.Predenergy.utils.tools import EarlyStopping
 from utils.data_processing import split_before
 
 
@@ -123,7 +121,7 @@ def parse_args():
     
     # Device parameters
     parser.add_argument('--device', type=str, default='auto',
-                       choices=['auto', 'cuda', 'cpu'],
+                       choices=['auto', 'gpu', 'cpu'],
                        help='Device to use for training')
     
     return parser.parse_args()
@@ -137,9 +135,12 @@ def setup_device_and_seed(args: argparse.Namespace) -> str:
     
     # Setup device
     if args.device == 'auto':
-        device = 'gpu' if paddle.device.is_compiled_with_cuda() else 'cpu'
+        device = 'gpu' if paddle.device.cuda.device_count() > 0 else 'cpu'
     else:
         device = args.device
+    
+    # Set default device
+    paddle.device.set_device(device)
     
     print(f"Using device: {device}")
     print(f"Random seed: {args.seed}")
@@ -157,16 +158,10 @@ def load_and_validate_config(args: argparse.Namespace) -> PredenergyUnifiedConfi
         
         # Override with command line arguments if provided
         args_dict = vars(args)
-        parser = argparse.ArgumentParser()
-        for action in parser._actions:
-            if action.dest != 'help':
-                parser.set_defaults(**{action.dest: action.default})
         for key, value in args_dict.items():
-            if hasattr(config, key):
-                default_value = parser.get_default(key)
-                if value != default_value:
-                    setattr(config, key, value)
-                    print(f"Overriding config.{key} = {value}")
+            if hasattr(config, key) and value is not None:
+                setattr(config, key, value)
+                print(f"Overriding config.{key} = {value}")
     else:
         print("Creating configuration from command line arguments")
         config = create_config_from_args(vars(args))
@@ -232,14 +227,10 @@ def create_model(config: PredenergyUnifiedConfig, device: str) -> PredenergyForP
     
     try:
         model = PredenergyForPrediction(config)
-        if device == 'gpu':
-            paddle.set_device('gpu')
-        else:
-            paddle.set_device('cpu')
         
         # Count parameters
         total_params = sum(p.numel() for p in model.parameters())
-        trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+        trainable_params = sum(p.numel() for p in model.parameters() if not p.stop_gradient)
         
         print(f"Model created successfully!")
         print(f"Total parameters: {total_params:,}")
@@ -257,15 +248,15 @@ def setup_training_components(model: PredenergyForPrediction, config: Predenergy
     print("Setting up training components...")
     
     # Optimizer
-    optimizer = paddle.optim.AdamW(
-        model.parameters(),
-        lr=config.learning_rate,
+    optimizer = paddle.optimizer.AdamW(
+        parameters=model.parameters(),
+        learning_rate=config.learning_rate,
         weight_decay=0.01
     )
     
     # Learning rate scheduler
-    scheduler = paddle.optim.lr_scheduler.ReduceLROnPlateau(
-        optimizer,
+    scheduler = paddle.optimizer.lr.ReduceOnPlateau(
+        learning_rate=config.learning_rate,
         mode='min',
         factor=0.5,
         patience=config.patience // 2,
@@ -288,19 +279,25 @@ def train_epoch(model, train_loader, optimizer, device, config):
     num_batches = 0
     
     for batch_idx, batch in enumerate(train_loader):
-        optimizer.zero_grad()
+        optimizer.clear_grad()
         
-        # Move batch to device
+        # Move batch to device and convert to paddle tensors
         if isinstance(batch, dict):
-            input_data = batch['input_ids'].to(device)
-            labels = batch.get('labels', batch.get('target')).to(device)
+            input_data = batch['input_ids']
+            labels = batch.get('labels', batch.get('target'))
             loss_masks = batch.get('loss_mask', None)
-            if loss_masks is not None:
-                loss_masks = loss_masks.to(device)
         else:
             # Handle tuple format
-            input_data, labels = batch[0].to(device), batch[1].to(device)
+            input_data, labels = batch[0], batch[1]
             loss_masks = None
+        
+        # Convert to paddle tensors if needed
+        if not isinstance(input_data, paddle.Tensor):
+            input_data = paddle.to_tensor(input_data, dtype='float32')
+        if not isinstance(labels, paddle.Tensor):
+            labels = paddle.to_tensor(labels, dtype='float32')
+        if loss_masks is not None and not isinstance(loss_masks, paddle.Tensor):
+            loss_masks = paddle.to_tensor(loss_masks, dtype='float32')
         
         # Forward pass
         outputs = model(
@@ -337,17 +334,23 @@ def validate(model, val_loader, device):
     
     with paddle.no_grad():
         for batch in val_loader:
-            # Move batch to device
+            # Move batch to device and convert to paddle tensors
             if isinstance(batch, dict):
-                input_data = batch['input_ids'].to(device)
-                labels = batch.get('labels', batch.get('target')).to(device)
+                input_data = batch['input_ids']
+                labels = batch.get('labels', batch.get('target'))
                 loss_masks = batch.get('loss_mask', None)
-                if loss_masks is not None:
-                    loss_masks = loss_masks.to(device)
             else:
                 # Handle tuple format
-                input_data, labels = batch[0].to(device), batch[1].to(device)
+                input_data, labels = batch[0], batch[1]
                 loss_masks = None
+            
+            # Convert to paddle tensors if needed
+            if not isinstance(input_data, paddle.Tensor):
+                input_data = paddle.to_tensor(input_data, dtype='float32')
+            if not isinstance(labels, paddle.Tensor):
+                labels = paddle.to_tensor(labels, dtype='float32')
+            if loss_masks is not None and not isinstance(loss_masks, paddle.Tensor):
+                loss_masks = paddle.to_tensor(loss_masks, dtype='float32')
             
             # Forward pass
             outputs = model(
@@ -370,13 +373,13 @@ def save_model_and_config(model, config, args, epoch, val_loss):
     output_dir.mkdir(parents=True, exist_ok=True)
     
     # Save model
-    model_path = output_dir / f"{args.model_name}_epoch_{epoch}.pth"
+    model_path = output_dir / f"{args.model_name}_epoch_{epoch}.pdparams"
     paddle.save({
         'epoch': epoch,
         'model_state_dict': model.state_dict(),
         'val_loss': val_loss,
         'config': config.to_dict()
-    }, model_path)
+    }, str(model_path))
     
     print(f"Model saved to: {model_path}")
     

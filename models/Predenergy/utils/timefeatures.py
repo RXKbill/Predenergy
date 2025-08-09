@@ -1,10 +1,20 @@
 from typing import List
 import paddle
+import warnings
 
 import numpy as np
 import pandas as pd
 from pandas.tseries import offsets
 from pandas.tseries.frequencies import to_offset
+
+# PaddleTS集成
+try:
+    from paddlets.datasets.tsdataset import TSDataset
+    from paddlets.transform.time_feature import TimeFeatureGenerator
+    PADDLETS_AVAILABLE = True
+except ImportError:
+    PADDLETS_AVAILABLE = False
+    warnings.warn("PaddleTS not available. Some advanced time features will be disabled.")
 
 
 class TimeFeature:
@@ -133,3 +143,75 @@ def time_features_from_frequency_str(freq_str: str) -> List[TimeFeature]:
 
 def time_features(dates, freq='h'):
     return np.vstack([feat(dates) for feat in time_features_from_frequency_str(freq)])
+
+
+def paddlets_time_features(dates, freq='h', use_cyclical=True):
+    """
+    使用PaddleTS生成高级时间特征
+    
+    Args:
+        dates: 日期索引
+        freq: 频率字符串
+        use_cyclical: 是否使用循环编码
+    
+    Returns:
+        np.ndarray: 时间特征矩阵
+    """
+    if not PADDLETS_AVAILABLE:
+        # 降级到基础时间特征
+        return time_features(dates, freq)
+    
+    try:
+        # 创建简单的时序数据
+        df = pd.DataFrame(index=dates, data={'value': np.ones(len(dates))})
+        ts_data = TSDataset.load_from_dataframe(df, target_cols=['value'])
+        
+        # 配置时间特征生成器
+        time_features_config = {
+            'hour_of_day': True,
+            'day_of_week': True,
+            'day_of_month': True,
+            'day_of_year': True,
+            'month_of_year': True,
+            'week_of_year': True,
+        }
+        
+        if use_cyclical:
+            # 添加循环编码
+            time_features_config.update({
+                'hour_of_day_cyclical': True,
+                'day_of_week_cyclical': True,
+                'month_of_year_cyclical': True,
+            })
+        
+        feature_generator = TimeFeatureGenerator(**time_features_config)
+        ts_data_with_features = feature_generator.fit_transform(ts_data)
+        
+        # 提取特征（排除原始的value列）
+        feature_df = ts_data_with_features.to_dataframe()
+        feature_columns = [col for col in feature_df.columns if col != 'value']
+        features = feature_df[feature_columns].values.T
+        
+        return features
+        
+    except Exception as e:
+        warnings.warn(f"PaddleTS time feature extraction failed: {e}. Using basic features.")
+        return time_features(dates, freq)
+
+
+def enhanced_time_features(dates, freq='h', method='paddlets'):
+    """
+    增强的时间特征提取函数
+    
+    Args:
+        dates: 日期索引
+        freq: 频率字符串
+        method: 特征提取方法 ('basic', 'paddlets')
+    
+    Returns:
+        np.ndarray: 时间特征矩阵
+    """
+    if method == 'paddlets' and PADDLETS_AVAILABLE:
+        return paddlets_time_features(dates, freq)
+    else:
+        return time_features(dates, freq)

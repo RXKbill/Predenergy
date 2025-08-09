@@ -2,7 +2,7 @@ import paddle
 import paddle.nn as nn
 
 
-class encoder(nn.Module):
+class encoder(nn.Layer):
     def __init__(self, config):
         super(encoder, self).__init__()
         input_size = config.seq_len
@@ -13,6 +13,6 @@ class encoder(nn.Module):
                                               nn.Linear(encoder_hidden_size, num_experts, bias=False))
 
     def forward(self, x):
-        mean = torch.mean(x, dim=-1)
+        mean = paddle.mean(x, axis=-1)
         out = self.distribution_fit(mean)
         return out

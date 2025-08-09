@@ -1,6 +1,6 @@
 """
 Predenergy Main Model Class
-This module provides a corrected main Predenergy model class with proper framework compatibility.
+This module provides the main Predenergy model class with PaddlePaddle framework.
 """
 
 import os
@@ -12,19 +12,19 @@ from typing import Dict, Any, Optional, Union, List
 import warnings
 from pathlib import Path
 
-from models.unified_config import PredenergyUnifiedConfig
-from models.modeling_Predenergy import PredenergyForPrediction
-from datasets.Predenergy_data_loader import create_Predenergy_data_loader
-from utils.config_loader import ConfigLoader, load_predenergy_config
-from models.model_base import ModelBase
+from .models.unified_config import PredenergyUnifiedConfig
+from .models.predenergy_model import PredenergyForPrediction
+from .datasets.Predenergy_data_loader import create_Predenergy_data_loader
+from .utils.config_loader import ConfigLoader, load_predenergy_config
+from .models.model_base import ModelBase
 
 
 class Predenergy(ModelBase):
     """
-    Predenergy model class with proper framework compatibility and unified configuration.
+    Predenergy model class with PaddlePaddle framework and unified configuration.
     This class serves as the main interface for the Predenergy model.
     """
-
+   
     def __init__(self, **kwargs):
         """
         Initialize the Predenergy model.
@@ -70,13 +70,16 @@ class Predenergy(ModelBase):
     def _setup_device(self) -> str:
         """Setup device for training/inference"""
         if self.config.device == "auto":
-            device = "gpu" if paddle.device.is_compiled_with_cuda() else "cpu"
+            device = "gpu" if paddle.device.cuda.device_count() > 0 else "cpu"
         else:
-            device = self.config.device
+            device = "gpu" if self.config.device == "cuda" else self.config.device
         
-        if device == "gpu" and not paddle.device.is_compiled_with_cuda():
+        if device == "gpu" and paddle.device.cuda.device_count() == 0:
             warnings.warn("GPU requested but not available, falling back to CPU")
             device = "cpu"
+        
+        # Set default device
+        paddle.device.set_device(device)
         
         return device
 
@@ -114,17 +117,17 @@ class Predenergy(ModelBase):
                 setattr(self.config, key, value)
         
         # Create data loader
-        self.data_loader = create_Predenergy_data_loader(
-            data=data,
+            self.data_loader = create_Predenergy_data_loader(
+                data=data,
             seq_len=self.config.seq_len,
-            pred_len=self.config.horizon,
+                pred_len=self.config.horizon,
             batch_size=self.config.batch_size,
             features=self.config.features,
             target=self.config.target,
             normalize=self.config.normalize,
-            train_ratio=kwargs.get('train_ratio', 0.7),
-            val_ratio=kwargs.get('val_ratio', 0.2),
-            shuffle=kwargs.get('shuffle', True),
+                train_ratio=kwargs.get('train_ratio', 0.7),
+                val_ratio=kwargs.get('val_ratio', 0.2),
+                shuffle=kwargs.get('shuffle', True),
             num_workers=kwargs.get('num_workers', 0),
             loader_type='standard'
         )
@@ -144,14 +147,13 @@ class Predenergy(ModelBase):
         if self.model is None:
             print("Creating model...")
             self.model = PredenergyForPrediction(self.config)
-            self.model = self.model.to(self.device)
             
             # Setup training components
             self._setup_training_components()
             
             # Count parameters
             total_params = sum(p.numel() for p in self.model.parameters())
-            trainable_params = sum(p.numel() for p in self.model.parameters() if p.requires_grad)
+            trainable_params = sum(p.numel() for p in self.model.parameters() if not p.stop_gradient)
             
             print(f"Model created:")
             print(f"  - Total parameters: {total_params:,}")
@@ -164,9 +166,9 @@ class Predenergy(ModelBase):
         
         # Optimizer
         self.optimizer = paddle.optimizer.AdamW(
+            parameters=self.model.parameters(),
             learning_rate=self.config.learning_rate,
-            weight_decay=0.01,
-            parameters=self.model.parameters()
+            weight_decay=0.01
         )
         
         # Learning rate scheduler
@@ -178,9 +180,9 @@ class Predenergy(ModelBase):
             verbose=True
         )
         
-        # Mixed precision scaler (PaddlePaddle handles this automatically)
+        # Mixed precision scaler
         if self.config.mixed_precision and self.device == "gpu":
-            paddle.set_amp_level('O1')
+            self.scaler = paddle.amp.GradScaler()
 
     def forecast_fit(
         self,
@@ -256,13 +258,13 @@ class Predenergy(ModelBase):
         num_batches = 0
         
         for batch in self.train_loader:
-            self.optimizer.zero_grad()
+            self.optimizer.clear_grad()
             
             # Move batch to device
             input_data, labels = self._process_batch(batch)
             
             # Forward pass with mixed precision if enabled
-            if self.config.mixed_precision and self.device == "gpu":
+            if self.scaler is not None:
                 with paddle.amp.auto_cast():
                     outputs = self.model(
                         input_data=input_data,
@@ -272,11 +274,12 @@ class Predenergy(ModelBase):
                     loss = outputs['loss']
                 
                 # Backward pass
-                scaled_loss = paddle.amp.scale_loss(loss, self.optimizer)
+                scaled_loss = self.scaler.scale(loss)
                 scaled_loss.backward()
-                paddle.nn.ClipGradByGlobalNorm(self.model.parameters(), max_norm=1.0)
-                self.optimizer.step()
-                self.optimizer.clear_grad()
+                self.scaler.unscale_(self.optimizer)
+                paddle.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=1.0)
+                self.scaler.step(self.optimizer)
+                self.scaler.update()
             else:
                 outputs = self.model(
                     input_data=input_data,
@@ -287,9 +290,8 @@ class Predenergy(ModelBase):
                 
                 # Backward pass
                 loss.backward()
-                paddle.nn.ClipGradByGlobalNorm(self.model.parameters(), max_norm=1.0)
+                paddle.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=1.0)
                 self.optimizer.step()
-                self.optimizer.clear_grad()
             
             total_loss += loss.item()
             num_batches += 1
@@ -315,7 +317,7 @@ class Predenergy(ModelBase):
                 )
                 
                 loss = outputs['loss']
-                total_loss += loss.numpy().item()
+                total_loss += loss.item()
                 num_batches += 1
         
         return total_loss / num_batches
@@ -323,12 +325,17 @@ class Predenergy(ModelBase):
     def _process_batch(self, batch):
         """Process batch and move to device"""
         if isinstance(batch, dict):
-            input_data = paddle.to_tensor(batch['input_ids'], dtype='float32')
-            labels = paddle.to_tensor(batch.get('labels', batch.get('target')), dtype='float32')
+            input_data = batch['input_ids']
+            labels = batch.get('labels', batch.get('target'))
         else:
             # Handle tuple format
-            input_data = paddle.to_tensor(batch[0], dtype='float32')
-            labels = paddle.to_tensor(batch[1], dtype='float32')
+            input_data, labels = batch[0], batch[1]
+        
+        # Convert to paddle tensors if needed
+        if not isinstance(input_data, paddle.Tensor):
+            input_data = paddle.to_tensor(input_data, dtype='float32')
+        if not isinstance(labels, paddle.Tensor):
+            labels = paddle.to_tensor(labels, dtype='float32')
         
         return input_data, labels
 
@@ -355,7 +362,7 @@ class Predenergy(ModelBase):
         
         if self.model is None:
             raise ValueError("Model not initialized")
-        
+
         self.model.eval()
         
         # Convert series to tensor
@@ -395,11 +402,11 @@ class Predenergy(ModelBase):
         """
         if self.model is None:
             raise ValueError("No model to save")
-        
+
         save_dict = {
             'model_state_dict': self.model.state_dict(),
             'config': self.config.to_dict(),
-            'is_fitted': self.is_fitted,
+                'is_fitted': self.is_fitted,
         }
         
         if self.optimizer is not None:
@@ -429,11 +436,11 @@ class Predenergy(ModelBase):
         self._create_model()
         
         # Load model state
-        self.model.load_state_dict(checkpoint['model_state_dict'])
+        self.model.set_state_dict(checkpoint['model_state_dict'])
         
         # Load optimizer state if available
         if 'optimizer_state_dict' in checkpoint and self.optimizer is not None:
-            self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+            self.optimizer.set_state_dict(checkpoint['optimizer_state_dict'])
         
         self.is_fitted = checkpoint.get('is_fitted', True)
         
@@ -458,7 +465,7 @@ class Predenergy(ModelBase):
         
         if self.model is not None:
             total_params = sum(p.numel() for p in self.model.parameters())
-            trainable_params = sum(p.numel() for p in self.model.parameters() if p.requires_grad)
+            trainable_params = sum(p.numel() for p in self.model.parameters() if not p.stop_gradient)
             
             info.update({
                 'total_parameters': total_params,

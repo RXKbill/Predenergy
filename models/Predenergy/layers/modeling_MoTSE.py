@@ -295,7 +295,7 @@ class MoTSESparseExpertsLayer(nn.Layer):
 
 
 # Copied from transformers.models.qwen2.modeling_qwen2.Qwen2Attention with Qwen2->MoTSE
-class MoTSEAttention(nn.Module):
+class MoTSEAttention(nn.Layer):
     """
     Multi-headed attention from 'Attention Is All You Need' paper. Modified to use sliding window attention: Longformer
     and "Generating Long Sequences with Sparse Transformers".
@@ -614,7 +614,7 @@ TIME_MOE_ATTENTION_CLASSES = {
 }
 
 
-class MoTSEDecoderLayer(nn.Module):
+class MoTSEDecoderLayer(nn.Layer):
     def __init__(self, config: MoTSEConfig, layer_idx: int):
         super().__init__()
         self.config = config
@@ -724,7 +724,7 @@ class MoTSEModel(MoTSEPreTrainedModel):
     def __init__(self, config: MoTSEConfig):
         super().__init__(config)
         self.embed_layer = MoTSEInputEmbedding(config)
-        self.layers = nn.ModuleList(
+        self.layers = nn.LayerList(
             [MoTSEDecoderLayer(config, layer_idx) for layer_idx in range(config.num_hidden_layers)]
         )
         self._attn_implementation = config._attn_implementation
@@ -871,7 +871,7 @@ class MoTSEModel(MoTSEPreTrainedModel):
         )
 
 
-class MoTSEOutputLayer(nn.Module):
+class MoTSEOutputLayer(nn.Layer):
 
     def __init__(self, hidden_size: int, horizon_length: int, input_size: int = 1):
         super().__init__()
@@ -916,7 +916,7 @@ class MoTSEForPrediction(MoTSEPreTrainedModel, TSGenerationMixin):
                 )
             )
             self.horizon_length_map[horizon_length] = i
-        self.lm_heads = nn.ModuleList(lm_head_list)
+        self.lm_heads = nn.LayerList(lm_head_list)
 
         self.loss_function = paddle.nn.HuberLoss(reduction='none', delta=2.0)
 

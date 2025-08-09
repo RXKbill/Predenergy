@@ -1,6 +1,6 @@
 """
-Fixed Predenergy API Server
-This module provides a corrected RESTful API for the Predenergy time series forecasting model.
+Predenergy API Server
+This module provides a RESTful API for the Predenergy time series forecasting model.
 """
 
 import os
@@ -21,7 +21,7 @@ import uvicorn
 # Add project root to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from models.Predenergy.Predenergy import FixedPredenergy
+from models.Predenergy.Predenergy import Predenergy
 from models.Predenergy.models.unified_config import PredenergyUnifiedConfig
 
 
@@ -61,27 +61,27 @@ class HealthResponse(BaseModel):
     gpu_available: bool = Field(..., description="Whether GPU is available")
 
 
-class FixedPredenergyAPI:
+class PredenergyAPI:
     """
-    Fixed Predenergy API server with proper error handling and configuration management.
+    Predenergy API server with proper error handling and configuration management.
     """
     
     def __init__(self):
         self.app = FastAPI(
-            title="Fixed Predenergy API",
+            title="Predenergy API",
             description="RESTful API for Predenergy time series forecasting",
-            version="2.0.0",
+            version="2.1.0",
             docs_url="/docs",
             redoc_url="/redoc"
         )
         
-        self.model: Optional[FixedPredenergy] = None
+        self.model: Optional[Predenergy] = None
         self.model_path: Optional[str] = None
         self.config: Optional[PredenergyUnifiedConfig] = None
         
         self.setup_routes()
         
-        print("Fixed Predenergy API initialized")
+        print("Predenergy API initialized")
     
     def setup_routes(self):
         """Setup API routes"""
@@ -90,9 +90,10 @@ class FixedPredenergyAPI:
         async def root():
             """Root endpoint with API information"""
             return {
-                "message": "Fixed Predenergy API",
-                "version": "2.0.0",
+                "message": "Predenergy API",
+                "version": "2.1.0",
                 "status": "running",
+                "framework": "PaddlePaddle",
                 "docs": "/docs"
             }
         
@@ -102,8 +103,8 @@ class FixedPredenergyAPI:
             return HealthResponse(
                 status="healthy",
                 model_loaded=self.model is not None and self.model.is_fitted,
-                paddle_available=paddle.device.is_compiled_with_cuda() if hasattr(paddle, 'device') else False,
-                gpu_available=paddle.device.is_compiled_with_cuda() if hasattr(paddle, 'device') else False
+                paddle_available=True,
+                gpu_available=paddle.device.cuda.device_count() > 0
             )
         
         @self.app.post("/load_model")
@@ -114,7 +115,7 @@ class FixedPredenergyAPI:
                     raise HTTPException(status_code=404, detail=f"Model file not found: {model_path}")
                 
                 # Initialize model with default config
-                self.model = FixedPredenergy()
+                self.model = Predenergy()
                 
                 # Apply config overrides if provided
                 if config_overrides:
@@ -144,7 +145,7 @@ class FixedPredenergyAPI:
                 self.config = PredenergyUnifiedConfig.from_dict(config)
                 
                 # Create model
-                self.model = FixedPredenergy(**config)
+                self.model = Predenergy(**config)
                 
                 return {
                     "message": "Model created successfully",
@@ -351,7 +352,7 @@ class FixedPredenergyAPI:
     
     def run(self, host: str = "0.0.0.0", port: int = 8000, **kwargs):
         """Run the API server"""
-        print(f"Starting Fixed Predenergy API server on {host}:{port}")
+        print(f"Starting Predenergy API server on {host}:{port}")
         print(f"API documentation available at: http://{host}:{port}/docs")
         
         uvicorn.run(
@@ -366,7 +367,7 @@ def main():
     """Main function to run the API server"""
     import argparse
     
-    parser = argparse.ArgumentParser(description="Fixed Predenergy API Server")
+    parser = argparse.ArgumentParser(description="Predenergy API Server")
     parser.add_argument("--host", type=str, default="0.0.0.0", help="Host address")
     parser.add_argument("--port", type=int, default=8000, help="Port number")
     parser.add_argument("--reload", action="store_true", help="Enable auto-reload")
@@ -375,7 +376,7 @@ def main():
     args = parser.parse_args()
     
     # Create API instance
-    api = FixedPredenergyAPI()
+    api = PredenergyAPI()
     
     # Pre-load model if specified
     if args.model_path:

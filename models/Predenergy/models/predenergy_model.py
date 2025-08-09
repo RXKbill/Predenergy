@@ -10,21 +10,116 @@ from einops import rearrange
 from typing import Dict, Any, Optional, Tuple, Union
 import warnings
 
-from models.unified_config import PredenergyUnifiedConfig
-from Predenergy.layers.linear_extractor_cluster import Linear_extractor_cluster
-from Predenergy.layers.MoTSE_components import (
+from .unified_config import PredenergyUnifiedConfig
+from ..layers.linear_extractor_cluster import Linear_extractor_cluster
+from ..layers.modeling_MoTSE import (
     MoTSEInputEmbedding, MoTSEDecoderLayer, MoTSEOutputLayer, 
     MoTSERMSNorm, load_balancing_loss_func
 )
-from Predenergy.utils.masked_attention import (
+
+# PaddleNLP Decoder imports
+try:
+    from paddlenlp.transformers import TransformerDecoderLayer
+    PADDLENLP_AVAILABLE = True
+except ImportError:
+    print("Warning: PaddleNLP not available. Decoder functionality will be limited.")
+    PADDLENLP_AVAILABLE = False
+from ..utils.masked_attention import (
     Mahalanobis_mask, Encoder, EncoderLayer, FullAttention, AttentionLayer
 )
-from layers.configuration_MoTSE import MoTSEConfig
-from layers.modeling_MoTSE import MoTSEModel
-from models.ts_generation_mixin import TSGenerationMixin
+from ..layers.configuration_MoTSE import MoTSEConfig
+from ..layers.modeling_MoTSE import MoTSEModel
+from .ts_generation_mixin import TSGenerationMixin
 
 
-class PredenergyAdaptiveConnection(nn.Module):
+class PredenergyTimeSeriesDecoder(nn.Layer):
+    """
+    Custom Decoder for Time Series Prediction using PaddleNLP components.
+    This decoder is specifically designed for forecasting tasks.
+    """
+    
+    def __init__(self, config: PredenergyUnifiedConfig):
+        super(PredenergyTimeSeriesDecoder, self).__init__()
+        self.config = config
+        
+        if not PADDLENLP_AVAILABLE:
+            raise ImportError("PaddleNLP is required for decoder functionality")
+        
+        # Input projection from MoTSE output to decoder input
+        self.input_projection = nn.Linear(config.motse_hidden_size, config.decoder_hidden_size)
+        
+        # Positional encoding for decoder
+        self.pos_embedding = nn.Embedding(config.max_position_embeddings, config.decoder_hidden_size)
+        
+        # Multi-layer decoder
+        self.decoder_layers = nn.LayerList([
+            TransformerDecoderLayer(
+                d_model=config.decoder_hidden_size,
+                nhead=config.decoder_num_heads,
+                dim_feedforward=config.decoder_hidden_size * 4,
+                dropout=config.decoder_dropout,
+                activation="gelu",
+                normalize_before=True
+            ) for _ in range(config.decoder_num_layers)
+        ])
+        
+        # Layer normalization
+        self.norm = nn.LayerNorm(config.decoder_hidden_size)
+        
+        # Output projection to forecast
+        self.output_projection = nn.Linear(config.decoder_hidden_size, config.c_out)
+        
+        # Causal mask for autoregressive decoding
+        self.register_buffer("causal_mask", self._generate_causal_mask(config.horizon))
+        
+    def _generate_causal_mask(self, size):
+        """Generate causal mask for autoregressive decoding"""
+        mask = paddle.triu(paddle.ones([size, size]), diagonal=1).astype('bool')
+        return mask
+    
+    def forward(self, motse_output: paddle.Tensor, target_length: Optional[int] = None) -> paddle.Tensor:
+        """
+        Forward pass of the decoder.
+        
+        Args:
+            motse_output: Output from MoTSE model [batch_size, seq_len, motse_hidden_size]
+            target_length: Target sequence length for prediction
+            
+        Returns:
+            Decoded predictions [batch_size, horizon, c_out]
+        """
+        batch_size, seq_len, _ = motse_output.shape
+        target_length = target_length or self.config.horizon
+        
+        # Project MoTSE output to decoder dimension
+        decoder_input = self.input_projection(motse_output)  # [B, L, D_dec]
+        
+        # Create target sequence for decoder (start with zeros)
+        target_seq = paddle.zeros([batch_size, target_length, self.config.decoder_hidden_size])
+        
+        # Add positional encoding
+        positions = paddle.arange(target_length).unsqueeze(0).expand([batch_size, -1])
+        pos_embeddings = self.pos_embedding(positions)
+        target_seq = target_seq + pos_embeddings
+        
+        # Apply decoder layers with causal masking
+        for layer in self.decoder_layers:
+            target_seq = layer(
+                tgt=target_seq,
+                memory=decoder_input,
+                tgt_mask=self.causal_mask[:target_length, :target_length]
+            )
+        
+        # Layer normalization
+        target_seq = self.norm(target_seq)
+        
+        # Project to output dimension
+        predictions = self.output_projection(target_seq)  # [B, H, C_out]
+        
+        return predictions
+
+
+class PredenergyAdaptiveConnection(nn.Layer):
     """
     adaptive connection layer between STDM and MoTSE components.
     Handles dimension mismatches and provides multiple connection strategies.
@@ -42,11 +137,10 @@ class PredenergyAdaptiveConnection(nn.Module):
             self.projection = nn.Linear(stdm_output_dim, motse_input_dim)
         
         elif self.connection_type == "attention":
-            self.cross_attention = nn.MultiheadAttention(
+            self.cross_attention = nn.MultiHeadAttention(
                 embed_dim=motse_input_dim,
                 num_heads=config.n_heads,
-                dropout=config.dropout,
-                batch_first=True
+                dropout=config.dropout
             )
             self.projection = nn.Linear(stdm_output_dim, motse_input_dim)
             
@@ -89,7 +183,7 @@ class PredenergyAdaptiveConnection(nn.Module):
                 output, _ = self.cross_attention(projected, motse_input, motse_input)
             else:
                 # Self-attention on projected features
-                output, _ = self.cross_attention(projected, projected, projected)
+                output = self.cross_attention(projected, projected, projected)
                 
         elif self.connection_type == "concat":
             if motse_input is None:
@@ -115,7 +209,7 @@ class PredenergyAdaptiveConnection(nn.Module):
         return output
 
 
-class PredenergyModel(nn.Module):
+class PredenergyModel(nn.Layer):
     """
      Predenergy model with proper data flow and dimension handling.
     This version resolves the issues in the original implementation.
@@ -159,28 +253,30 @@ class PredenergyModel(nn.Module):
                 norm_layer=nn.LayerNorm(config.d_model)
             )
         
-        # Combined model components
-        if config.use_combined_model:
-            self.connection = PredenergyAdaptiveConnection(
-                stdm_output_dim=config.d_model,
-                motse_input_dim=config.motse_hidden_size,
-                config=config
-            )
-            
-            # MoTSE configuration
-            motse_config = self._create_motse_config(config)
-            self.motse_model = MoTSEModel(motse_config)
+        # STDM-MoTSE Connection Layer
+        self.connection = PredenergyAdaptiveConnection(
+            stdm_output_dim=config.d_model,
+            motse_input_dim=config.motse_hidden_size,
+            config=config
+        )
+        
+        # MoTSE Model
+        motse_config = self._create_motse_config(config)
+        self.motse_model = MoTSEModel(motse_config)
+        
+        # PaddleNLP Decoder (optional)
+        if config.use_paddlenlp_decoder and PADDLENLP_AVAILABLE:
+            self.decoder = PredenergyTimeSeriesDecoder(config)
+            print("✓ PaddleNLP Decoder initialized successfully")
+        else:
+            self.decoder = None
+            # Fallback: Simple output projection
             self.motse_output_layer = MoTSEOutputLayer(
                 hidden_size=config.motse_hidden_size,
                 horizon_length=config.horizon,
                 input_size=config.input_size
             )
-            
-            # Final output projection
             self.final_output = nn.Linear(config.motse_hidden_size, config.horizon * config.c_out)
-        else:
-            # Standard model final projection
-            self.final_output = nn.Linear(config.d_model, config.horizon * config.c_out)
         
         # Optional layer normalization
         if config.use_layer_norm:
@@ -196,8 +292,8 @@ class PredenergyModel(nn.Module):
             'enc_in': getattr(config, 'enc_in', config.input_size),
             'dropout': config.dropout,
             'factor': config.factor,
-            'num_experts': config.num_experts if config.use_combined_model else 1,
-            'num_experts_per_tok': config.num_experts_per_tok if config.use_combined_model else 1,
+            'num_experts': config.num_experts,
+            'num_experts_per_tok': config.num_experts_per_tok,
         }
     
     def _create_motse_config(self, config: PredenergyUnifiedConfig) -> MoTSEConfig:
@@ -275,69 +371,67 @@ class PredenergyModel(nn.Module):
             stdm_output = temporal_feature
             attention = None
         
-        # Final processing
-        if self.config.use_combined_model:
-            # Combined model: STDM + MoTSE
-            connected_features = self.connection(stdm_output)
-            
-            # MoTSE forward pass
-            motse_outputs = self.motse_model(
-                input_ids=connected_features,
-                attention_mask=None,
-                position_ids=None,
-                past_key_values=None,
-                use_cache=False,
-                output_attentions=return_attention,
-                output_hidden_states=False,
-                return_dict=True
-            )
-            
-            # Get MoTSE hidden states and router logits
-            motse_hidden_states = motse_outputs.last_hidden_state
-            router_logits = getattr(motse_outputs, 'router_logits', None)
-            
-            # MoTSE output layer
+        # Predenergy Architecture: STDM -> MoTSE -> Decoder
+        # Step 1: Connect STDM output to MoTSE input
+        connected_features = self.connection(stdm_output)
+        
+        # Step 2: MoTSE forward pass
+        motse_outputs = self.motse_model(
+            input_ids=connected_features,
+            attention_mask=None,
+            position_ids=None,
+            past_key_values=None,
+            use_cache=False,
+            output_attentions=return_attention,
+            output_hidden_states=False,
+            return_dict=True
+        )
+        
+        # Get MoTSE hidden states and router logits
+        motse_hidden_states = motse_outputs.last_hidden_state
+        router_logits = getattr(motse_outputs, 'router_logits', None)
+        
+        # Step 3: Decoder forward pass
+        if self.decoder is not None:
+            # Use PaddleNLP Decoder for sophisticated sequence decoding
+            final_output = self.decoder(motse_hidden_states)  # [B, H, C_out]
+            motse_predictions = final_output  # For compatibility
+        else:
+            # Fallback: Use simple MoTSE output layer
             motse_predictions = self.motse_output_layer(motse_hidden_states)
             
             # Final output projection
             final_hidden = motse_hidden_states.mean(axis=1)  # Global average pooling
             final_output = self.final_output(final_hidden)
             
-        else:
-            # Standard model: STDM only
-            final_hidden = stdm_output.mean(axis=1)  # Global average pooling
-            final_output = self.final_output(final_hidden)
-            motse_predictions = None
-            router_logits = None
+            # Reshape output: [batch_size, horizon, c_out]
+            final_output = final_output.reshape([batch_size, self.config.horizon, self.config.c_out])
         
-        # Apply layer normalization if enabled
-        if hasattr(self, 'final_norm'):
+        # Apply layer normalization if enabled (only for fallback mode)
+        if hasattr(self, 'final_norm') and self.decoder is None:
             final_output = self.final_norm(final_output)
         
-        # Reshape output: [batch_size, horizon, c_out]
-        final_output = final_output.reshape([batch_size, self.config.horizon, self.config.c_out])
+        # For decoder mode, output is already in correct shape [B, H, C_out]
+        # For fallback mode, reshape is handled above
         
         # Prepare return dictionary
         outputs = {
             'predictions': final_output,
             'L_importance': L_importance,
+            'motse_predictions': motse_predictions,
+            'router_logits': router_logits,
+            'decoder_used': self.decoder is not None,
         }
-        
-        if self.config.use_combined_model:
-            outputs.update({
-                'motse_predictions': motse_predictions,
-                'router_logits': router_logits,
-            })
         
         if return_attention:
             outputs['attention_weights'] = attention
-            if self.config.use_combined_model and hasattr(motse_outputs, 'attentions'):
+            if hasattr(motse_outputs, 'attentions'):
                 outputs['motse_attention_weights'] = motse_outputs.attentions
         
         return outputs
 
 
-class PredenergyForPrediction(nn.Module, TSGenerationMixin):
+class PredenergyForPrediction(nn.Layer, TSGenerationMixin):
     """
     Predenergy model for prediction tasks with proper loss calculation and generation support.
     """
@@ -359,9 +453,10 @@ class PredenergyForPrediction(nn.Module, TSGenerationMixin):
         
         # Multi-scale prediction heads (if needed)
         if hasattr(config, 'horizon_lengths') and len(config.horizon_lengths) > 1:
-            self.multi_scale_heads = nn.ModuleList([
-                nn.Linear(config.motse_hidden_size if config.use_combined_model else config.d_model, 
-                         horizon_length * config.c_out)
+            # Use decoder output size if available, otherwise MoTSE size
+            output_dim = config.decoder_hidden_size if config.use_paddlenlp_decoder else config.motse_hidden_size
+            self.multi_scale_heads = nn.LayerList([
+                nn.Linear(output_dim, horizon_length * config.c_out)
                 for horizon_length in config.horizon_lengths
             ])
             
@@ -410,8 +505,8 @@ class PredenergyForPrediction(nn.Module, TSGenerationMixin):
         if labels is not None:
             loss = self._calc_prediction_loss(predictions, labels, loss_masks)
             
-            # Calculate auxiliary loss for combined model
-            if self.config.use_combined_model and outputs.get('router_logits') is not None:
+            # Calculate auxiliary loss for MoTSE router
+            if outputs.get('router_logits') is not None:
                 aux_loss = self._calc_load_balancing_loss(outputs['router_logits'])
                 loss = loss + aux_loss
         
@@ -447,7 +542,7 @@ class PredenergyForPrediction(nn.Module, TSGenerationMixin):
         
         # Apply loss masks if provided
         if loss_masks is not None:
-            if loss_masks.ndim == 2:  # [batch_size, horizon]
+            if loss_masks.dim() == 2:  # [batch_size, horizon]
                 loss_masks = loss_masks.unsqueeze(-1)  # [batch_size, horizon, 1]
             element_loss = element_loss * loss_masks
         
@@ -461,7 +556,7 @@ class PredenergyForPrediction(nn.Module, TSGenerationMixin):
     ) -> paddle.Tensor:
         """Calculate load balancing loss for MoE."""
         if router_logits is None:
-            return paddle.to_tensor(0.0, dtype='float32')
+            return paddle.to_tensor(0.0)
         
         return load_balancing_loss_func(
             router_logits,

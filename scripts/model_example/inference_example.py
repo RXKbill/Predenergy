@@ -6,10 +6,10 @@ Predenergy Inference Example
 This script demonstrates how to use a trained Predenergy model for inference.
 """
 
-import torch
+import paddle
 import numpy as np
 from models.Predenergy.runner import PredenergyRunner
-from models.Predenergy.models.modeling_Predenergy import PredenergyForPrediction
+from models.Predenergy.models.predenergy_model import PredenergyForPrediction
 
 
 def main():
@@ -27,13 +27,13 @@ def main():
     pred_len = 24
     
     # Create dummy input data
-    x_enc = torch.randn(batch_size, seq_len, 1)  # [batch_size, seq_len, input_size]
-    x_mark_enc = torch.randn(batch_size, seq_len, 4)  # [batch_size, seq_len, time_features]
-    x_dec = torch.randn(batch_size, pred_len, 1)  # [batch_size, pred_len, output_size]
-    x_mark_dec = torch.randn(batch_size, pred_len, 4)  # [batch_size, pred_len, time_features]
+    x_enc = paddle.randn([batch_size, seq_len, 1])  # [batch_size, seq_len, input_size]
+    x_mark_enc = paddle.randn([batch_size, seq_len, 4])  # [batch_size, seq_len, time_features]
+    x_dec = paddle.randn([batch_size, pred_len, 1])  # [batch_size, pred_len, output_size]
+    x_mark_dec = paddle.randn([batch_size, pred_len, 4])  # [batch_size, pred_len, time_features]
     
     # Run inference
-    with torch.no_grad():
+    with paddle.no_grad():
         predictions = model.predict(x_enc, x_mark_enc, x_dec, x_mark_dec)
     
     print(f"Input shape: {x_enc.shape}")

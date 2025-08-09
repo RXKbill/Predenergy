@@ -8,7 +8,7 @@ import math
 from einops import rearrange
 
 
-class EncoderLayer(nn.Module):
+class EncoderLayer(nn.Layer):
     def __init__(self, attention, d_model, d_ff=None, dropout=0.1, activation="relu"):
         super(EncoderLayer, self).__init__()
         d_ff = d_ff or 4 * d_model
@@ -35,11 +35,11 @@ class EncoderLayer(nn.Module):
         return self.norm2(x + y), attn
 
 
-class Encoder(nn.Module):
+class Encoder(nn.Layer):
     def __init__(self, attn_layers, conv_layers=None, norm_layer=None):
         super(Encoder, self).__init__()
-        self.attn_layers = nn.ModuleList(attn_layers)
-        self.conv_layers = nn.ModuleList(conv_layers) if conv_layers is not None else None
+        self.attn_layers = nn.LayerList(attn_layers)
+        self.conv_layers = nn.LayerList(conv_layers) if conv_layers is not None else None
         self.norm = norm_layer
 
     def forward(self, x, attn_mask=None, tau=None, delta=None):
@@ -64,7 +64,7 @@ class Encoder(nn.Module):
         return x, attns
 
 
-class FullAttention(nn.Module):
+class FullAttention(nn.Layer):
     def __init__(self, mask_flag=True, factor=5, scale=None, attention_dropout=0.1, output_attention=False):
         super(FullAttention, self).__init__()
         self.scale = scale
@@ -99,7 +99,7 @@ class FullAttention(nn.Module):
             return V, None
 
 
-class AttentionLayer(nn.Module):
+class AttentionLayer(nn.Layer):
     def __init__(self, attention, d_model, n_heads, d_keys=None,
                  d_values=None):
         super(AttentionLayer, self).__init__()
@@ -136,7 +136,7 @@ class AttentionLayer(nn.Module):
         return self.out_projection(out), attn
 
 
-class Mahalanobis_mask(nn.Module):
+class Mahalanobis_mask(nn.Layer):
     def __init__(self, input_size):
         super(Mahalanobis_mask, self).__init__()
         frequency_size = input_size // 2 + 1
